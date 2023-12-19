@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
         $a = Group::create([
             'name' => 'Grupo A',
         ]);
@@ -26,84 +25,84 @@ class DatabaseSeeder extends Seeder
             'name' => 'Grupo C',
         ]);
 
-        $pepe = \App\Models\User::factory()->create([
+        $pepe = \App\Models\User::create([
             'name' => 'Pepe Garcia',
             'username' => 'pepegarciag',
             'email' => 'pgarciag93@gmail.com',
         ]);
         $pepe->groups()->attach($a);
 
-        $pablo = \App\Models\User::factory()->create([
+        $pablo = \App\Models\User::create([
             'name' => 'Pablo Peña',
             'username' => 'pablopese',
             'email' => 'pablo@pablo.es',
         ]);
         $pablo->groups()->attach($a);
 
-        $javi = \App\Models\User::factory()->create([
+        $javi = \App\Models\User::create([
             'name' => 'Javi',
             'username' => 'javicidoncha',
             'email' => 'javi@javi.es',
         ]);
         $javi->groups()->attach($a);
 
-        $domingo = \App\Models\User::factory()->create([
+        $domingo = \App\Models\User::create([
             'name' => 'Domingo',
             'username' => 'dogarcial',
             'email' => 'domingo@domingo.es',
         ]);
         $domingo->groups()->attach($a);
 
-        $sampe = \App\Models\User::factory()->create([
+        $sampe = \App\Models\User::create([
             'name' => 'Sampe',
             'username' => 'rubensampe',
             'email' => 'sampe@sampe.es',
         ]);
         $sampe->groups()->attach($b);
 
-        $nito = \App\Models\User::factory()->create([
+        $nito = \App\Models\User::create([
             'name' => 'Antonio',
             'username' => 'antoniohs',
             'email' => 'antonio@antonio.es',
         ]);
         $nito->groups()->attach($b);
 
-        $tolosa = \App\Models\User::factory()->create([
+        $tolosa = \App\Models\User::create([
             'name' => 'Tolosa',
             'username' => 'carlostolosa',
             'email' => 'tolosa@tolosa.es',
         ]);
         $tolosa->groups()->attach($b);
 
-        $bulio = \App\Models\User::factory()->create([
+        $bulio = \App\Models\User::create([
             'name' => 'Bulio',
             'username' => 'bulio',
             'email' => 'bulio@bulio.es',
         ]);
         $bulio->groups()->attach($b);
 
-        $fer = \App\Models\User::factory()->create([
+        $fer = \App\Models\User::create([
             'name' => 'Fernando',
             'username' => 'fereclu',
             'email' => 'fernando@fernando.es',
         ]);
         $fer->groups()->attach($c);
 
-        $carlos = \App\Models\User::factory()->create([
+        $carlos = \App\Models\User::create([
             'name' => 'Carlos',
             'username' => 'carlosmiguelgij',
             'email' => 'carlos@carlos.es',
         ]);
         $carlos->groups()->attach($c);
 
-        $gon = \App\Models\User::factory()->create([
+        $gon = \App\Models\User::create([
             'name' => 'Gon',
             'username' => 'gvilgue',
             'email' => 'gon@gon.es',
         ]);
         $gon->groups()->attach($c);
 
-        $juanjo = \App\Models\User::factory()->create([
+        $juanjo = \App\Models\User::create([
             'name' => 'Juanjo',
             'username' => 'juanjog',
             'email' => 'juanjo@juanjo.es',
