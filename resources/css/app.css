@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.court {
+  width: 100%;
+  height: 150px;
+  display: block;
+  margin: auto;
+}
+.court__grid {
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(26, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+.court__cell {
+  @apply bg-green-700;
+  box-shadow: inset 0 0 0 2px white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.court__nml--left {
+  grid-row: 1 / 8;
+  grid-column: 1 / 3;
+}
+
+.court__ad--left {
+  grid-row: 1 / 4;
+  grid-column: 3 / 14;
+}
+.court__ad--right {
+  grid-row: 1 / 4;
+  grid-column: 14 / 25;
+}
+.court__dc--left {
+  grid-row: 4 / 8;
+  grid-column: 3 / 14;
+}
+.court__dc--right {
+  grid-row: 4 / 8;
+  grid-column: 14 / 25;
+}
+.court__nml--right {
+  grid-row: 1 / 8;
+  grid-column: 25 / 27;
+}

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,32 +23,41 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    $group_a = Group::where('name', 'Grupo A')->with(['games', 'games.users'])->first();
-    $group_b = Group::where('name', 'Grupo B')->with(['games', 'games.users'])->first();
-    $group_c = Group::where('name', 'Grupo C')->with(['games', 'games.users'])->first();
+    $league = Group::where('name', 'Liga 1ª')->first();
+    $group = Group::where('name', 'Grupo A')->first();
 
     return Inertia::render('Welcome', [
-        'groupA' => $group_a,
-        'groupB' => $group_b,
-        'groupC' => $group_c,
+        'group' => $group,
+        'league' => $league,
     ]);
-});
+})->name('index');
+
+Route::get('/groups/{group}', function (Request $request, Group $group) {
+    $all_groups = collect([]);
+
+    if (Str::of($group->name)->startsWith('Grupo')) {
+        $section = 'groups';
+        $groups = collect(['Grupo A', 'Grupo B', 'Grupo C']);
+        // Puede que sea mejor devolver los tres grupos
+        $groups->each(function ($item) use ($group, $all_groups) {
+            $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
+        });
+    } else {
+        $section = 'leagues';
+        $leagues = collect(['Liga 1ª', 'Liga 2ª', 'Liga 3ª']);
+        $leagues->each(function ($item) use ($group, $all_groups) {
+            $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
+        });
+    }
+
+    return Inertia::render('Group/Show', [
+        'activeGroup' => $group->load(['games', 'games.users']),
+        'allGroups' => $all_groups,
+        'section' => $section,
+    ]);
+})->name('group.show');
 
 Route::put('/game/{game}', [GameController::class, 'update'])->name('game.update');
-
-Route::get('/league/create', function() {
-    $group_a = Group::find(1)->load(['games', 'games.users']);
-    $group_b = Group::find(2)->load(['games', 'games.users']);
-    $group_c = Group::find(3)->load(['games', 'games.users']);
-    $users = User::all();
-
-    return Inertia::render('League/Create', [
-        'groupA' => $group_a,
-        'groupB' => $group_b,
-        'groupC' => $group_c,
-        'users' => $users,
-    ]);
-});
 
 Route::get('/ligas', function(Request $request) {
     $group_a = Group::where('name', 'Liga 1º')->with(['games', 'games.users'])->first();
