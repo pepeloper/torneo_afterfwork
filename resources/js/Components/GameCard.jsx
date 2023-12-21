@@ -13,6 +13,8 @@ export default function GameCard({ game }) {
     second_team_points: game.users[2].pivot.points_in_favor ?? '',
   })
 
+  console.log('game', game);
+
   const handleEditGame = () => {
     if (data.first_team_points == 0 && data.first_team_points === 0) {
       setEditMode(false)
@@ -45,20 +47,16 @@ export default function GameCard({ game }) {
             <div className="court__grid">
               <div className="court__cell court__nml--left" />
               <div className="court__cell court__ad--left">
-                <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
+                <img src={game.users[0].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__ad--right">
-              <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
+                <img src={game.users[1].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__dc--left">
-                <div
-                  className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"
-                >
-                  <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
-                </div>
+                  <img src={game.users[2].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__dc--right">
-                <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
+                <img src={game.users[3].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__nml--right" />
             </div>

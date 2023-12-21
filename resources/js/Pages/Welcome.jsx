@@ -3,8 +3,6 @@ import { Link, Head } from '@inertiajs/react';
 const stats = [
   { id: 1, name: 'Participantes entre todas las ediciones', value: '+15' },
   { id: 2, name: 'Celebrando el torneo navideño', value: '3 años' },
-  { id: 3, name: 'Entregados en premios', value: '+50€' },
-  { id: 4, name: 'Disfrutando del padel', value: '+7h' },
 ]
 
 export default function Welcome({ group, league }) {

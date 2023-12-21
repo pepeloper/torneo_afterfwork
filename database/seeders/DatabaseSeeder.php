@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'pepegarciag',
             'email' => 'pgarciag93@gmail.com',
             'password' => Hash::make('password'),
+            'photo' => '/storage/pepe.jpg',
             'email_verified_at' => now(),
         ]);
         $pepe->groups()->attach($a);
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'pablopese',
             'email' => 'pablo@pablo.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/pablo.jpg',
             'email_verified_at' => now(),
         ]);
         $pablo->groups()->attach($a);
@@ -49,6 +51,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'javicidoncha',
             'email' => 'javi@javi.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/javi.jpg',
             'email_verified_at' => now(),
         ]);
         $javi->groups()->attach($a);
@@ -58,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'dogarcial',
             'email' => 'domingo@domingo.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/domingo.jpg',
             'email_verified_at' => now(),
         ]);
         $domingo->groups()->attach($a);
@@ -67,6 +71,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'rubensampe',
             'email' => 'sampe@sampe.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/sampe.jpg',
             'email_verified_at' => now(),
         ]);
         $sampe->groups()->attach($b);
@@ -76,6 +81,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'antoniohs',
             'email' => 'antonio@antonio.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/antonio.jpg',
             'email_verified_at' => now(),
         ]);
         $nito->groups()->attach($b);
@@ -85,6 +91,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'carlostolosa',
             'email' => 'tolosa@tolosa.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/tolosa.jpg',
             'email_verified_at' => now(),
         ]);
         $tolosa->groups()->attach($b);
@@ -94,6 +101,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'bulio',
             'email' => 'bulio@bulio.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/bulio.jpg',
             'email_verified_at' => now(),
         ]);
         $bulio->groups()->attach($b);
@@ -103,6 +111,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'fereclu',
             'email' => 'fernando@fernando.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/fer.jpg',
             'email_verified_at' => now(),
         ]);
         $fer->groups()->attach($c);
@@ -112,6 +121,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'carlosmiguelgij',
             'email' => 'carlos@carlos.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/carlos.jpg',
             'email_verified_at' => now(),
         ]);
         $carlos->groups()->attach($c);
@@ -121,6 +131,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'gvilgue',
             'email' => 'gon@gon.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/gon.jpg',
             'email_verified_at' => now(),
         ]);
         $gon->groups()->attach($c);
@@ -130,6 +141,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'juanjog',
             'email' => 'juanjo@juanjo.es',
             'password' => Hash::make('password'),
+            'photo' => '/storage/juanjo.jpg',
             'email_verified_at' => now(),
         ]);
         $juanjo->groups()->attach($c);

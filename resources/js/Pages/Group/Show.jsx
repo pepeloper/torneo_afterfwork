@@ -5,10 +5,6 @@ import { Link, Head, useForm } from '@inertiajs/react';
 import { useMemo } from "react";
 
 export default function Welcome({ activeGroup, allGroups, section }) {
-  // section = groups | leagues
-  console.log(activeGroup);
-  console.log(allGroups);
-  // TODO: Addapt this to the new payload;
   const allMatchesPlayed = useMemo(() => {
     const groupOne = allGroups[0].games.every(m => m.played)
     const groupTwo = allGroups[1].games.every(m => m.played)
@@ -16,8 +12,6 @@ export default function Welcome({ activeGroup, allGroups, section }) {
 
     return groupOne && groupTwo && groupThree;
   }, [activeGroup, allGroups]);
-
-  console.log("allMatchesPlayed", allMatchesPlayed);
 
   const firstGroupRanking = ranking(allGroups[0].games);
   const secondGroupRanking = ranking(allGroups[1].games);
@@ -47,7 +41,7 @@ export default function Welcome({ activeGroup, allGroups, section }) {
   const { data, post, processing, errors } = useForm({
     first_league: firstLeague.map(u => u.id),
     second_league: secondLeague.map(u => u.id),
-    third_league: firstLeague.map(u => u.id),
+    third_league: thirdLeague.map(u => u.id),
   })
 
   const handleCreateLeagues = () => {
