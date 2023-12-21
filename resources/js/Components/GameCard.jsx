@@ -76,12 +76,12 @@ export default function GameCard({ game }) {
             </div>
             <div className="flex items-center justify-center space-x-4 text-xl">
               {editMode ?
-                <input inputmode="numeric" className="w-6 h-10 p-0 text-gray-900 text-center" autoFocus type="text" value={data.first_team_points} onChange={e => setData('first_team_points', e.target.value)} /> :
+                <input type="tel" inputmode="numeric" className="w-6 h-10 p-0 text-gray-900 text-center" autoFocus value={data.first_team_points} onChange={e => setData('first_team_points', e.target.value)} /> :
                 <p>{data.first_team_points}</p>
               }
               <p className="text-center">vs</p>
               {editMode ?
-                <input inputmode="numeric" className="w-6 h-10 p-0 text-gray-900 text-center" type="text" value={data.second_team_points} onChange={e => setData('second_team_points', e.target.value)} /> :
+                <input type="tel" inputmode="numeric" className="w-6 h-10 p-0 text-gray-900 text-center" value={data.second_team_points} onChange={e => setData('second_team_points', e.target.value)} /> :
                 <p>{data.second_team_points}</p>
               }
             </div>
