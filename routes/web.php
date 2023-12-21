@@ -23,7 +23,7 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', function () {
-    $league = Group::where('name', 'Liga 1ª')->first();
+    $league = Group::where('name', 'Liga 1º')->first();
     $group = Group::where('name', 'Grupo A')->first();
 
     return Inertia::render('Welcome', [
@@ -39,13 +39,13 @@ Route::get('/groups/{group}', function (Request $request, Group $group) {
         $section = 'groups';
         $groups = collect(['Grupo A', 'Grupo B', 'Grupo C']);
         // Puede que sea mejor devolver los tres grupos
-        $groups->each(function ($item) use ($group, $all_groups) {
+        $groups->each(function ($item) use ($all_groups) {
             $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
         });
     } else {
         $section = 'leagues';
-        $leagues = collect(['Liga 1ª', 'Liga 2ª', 'Liga 3ª']);
-        $leagues->each(function ($item) use ($group, $all_groups) {
+        $leagues = collect(['Liga 1º', 'Liga 2º', 'Liga 3º']);
+        $leagues->each(function ($item) use ($all_groups) {
             $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
         });
     }
@@ -59,41 +59,29 @@ Route::get('/groups/{group}', function (Request $request, Group $group) {
 
 Route::put('/game/{game}', [GameController::class, 'update'])->name('game.update');
 
-Route::get('/ligas', function(Request $request) {
-    $group_a = Group::where('name', 'Liga 1º')->with(['games', 'games.users'])->first();
-    $group_b = Group::where('name', 'Liga 2º')->with(['games', 'games.users'])->first();
-    $group_c = Group::where('name', 'Liga 3º')->with(['games', 'games.users'])->first();
-
-    return Inertia::render('Welcome', [
-        'groupA' => $group_a,
-        'groupB' => $group_b,
-        'groupC' => $group_c,
-    ]);
-})->name('leagues');
-
 Route::post('league/create', function(Request $request) {
     // FIRST LEAGUE
-    $league = Group::create([
+    $first_league = Group::create([
         'name' => 'Liga 1º',
     ]);
 
     foreach ($request->first_league as $user_id) {
         $user = User::find($user_id);
-        $user->groups()->attach($league);
+        $user->groups()->attach($first_league);
     }
 
     $game = Game::create([
-        'group_id' => $league->id,
+        'group_id' => $first_league->id,
     ]);
     $game->users()->attach([$request->first_league[0], $request->first_league[1], $request->first_league[2], $request->first_league[3]]);
 
     $game = Game::create([
-        'group_id' => $league->id,
+        'group_id' => $first_league->id,
     ]);
     $game->users()->attach([$request->first_league[0], $request->first_league[2], $request->first_league[1], $request->first_league[3]]);
 
     $game = Game::create([
-        'group_id' => $league->id,
+        'group_id' => $first_league->id,
     ]);
     $game->users()->attach([$request->first_league[1], $request->first_league[2], $request->first_league[0], $request->first_league[3]]);
 
@@ -147,7 +135,7 @@ Route::post('league/create', function(Request $request) {
     ]);
     $game->users()->attach([$request->third_league[1], $request->third_league[2], $request->third_league[0], $request->third_league[3]]);
 
-    return redirect('/ligas');
+    return redirect()->route('group.show', ['group' => $first_league]);
 })->name('league.create.multiple');
 
 Route::get('/dashboard', function () {

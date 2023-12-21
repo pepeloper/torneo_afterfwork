@@ -15,8 +15,8 @@
   grid-template-rows: repeat(6, 1fr);
 }
 .court__cell {
-  @apply bg-green-700;
-  box-shadow: inset 0 0 0 2px white;
+  @apply bg-light-green-900/80;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6);
   display: flex;
   justify-content: center;
   align-items: center;
