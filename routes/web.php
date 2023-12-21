@@ -50,10 +50,13 @@ Route::get('/groups/{group}', function (Request $request, Group $group) {
         });
     }
 
+    $has_leagues = Group::where('name', 'Liga 1º')->first() ? true : false;
+
     return Inertia::render('Group/Show', [
         'activeGroup' => $group->load(['games', 'games.users']),
         'allGroups' => $all_groups,
         'section' => $section,
+        'hasLeagues' => $has_leagues,
     ]);
 })->name('group.show');
 

@@ -1,10 +1,9 @@
-import GameCard from "@/Components/GameCard";
 import GroupSection from "@/Components/GroupSection";
 import { ranking } from "@/utils";
-import { Link, Head, useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { useMemo } from "react";
 
-export default function Welcome({ activeGroup, allGroups, section }) {
+export default function Welcome({ activeGroup, allGroups, section, hasLeagues }) {
   const allMatchesPlayed = useMemo(() => {
     const groupOne = allGroups[0].games.every(m => m.played)
     const groupTwo = allGroups[1].games.every(m => m.played)
@@ -100,11 +99,13 @@ export default function Welcome({ activeGroup, allGroups, section }) {
                       alt="Your Company"
                     />
                   </Link>
-                  <button className="inline-flex space-x-6 disabled:opacity-60" disabled={!allMatchesPlayed} onClick={handleCreateLeagues}>
-                    <span className="rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20">
-                      Crear ligas
-                    </span>
-                  </button>
+                  {!hasLeagues &&
+                    <button className="inline-flex space-x-6 disabled:opacity-60" disabled={!allMatchesPlayed} onClick={handleCreateLeagues}>
+                      <span className="rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20">
+                        Crear ligas
+                      </span>
+                    </button>
+                  }
                 </div>
                 <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
                   Torneo Americano Afterwork

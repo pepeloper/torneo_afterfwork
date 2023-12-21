@@ -13,8 +13,6 @@ export default function GameCard({ game }) {
     second_team_points: game.users[2].pivot.points_in_favor ?? '',
   })
 
-  console.log('game', game);
-
   const handleEditGame = () => {
     if (!data.first_team_points.length && !data.first_team_points.length) {
       setEditMode(false)
