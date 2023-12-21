@@ -44,11 +44,6 @@ export default function Welcome({ activeGroup, allGroups, section }) {
     thirdGroupRanking[3],
   ];
 
-  console.log(firstLeague);
-  console.log(secondLeague);
-  console.log(thirdLeague);
-
-  // Make the useForm
   const { data, post, processing, errors } = useForm({
     first_league: firstLeague.map(u => u.id),
     second_league: secondLeague.map(u => u.id),
@@ -101,8 +96,8 @@ export default function Welcome({ activeGroup, allGroups, section }) {
                 }}
               />
             </div>
-            <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-40 lg:flex lg:px-8 lg:pt-40">
-              <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
+            <div className="mx-auto flex flex-col max-w-7xl px-6 pb-24 pt-10 sm:pb-40 lg:flex lg:px-8 lg:pt-40">
+              <div className="mx-auto flex flex-col max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
                 <div className="w-full flex items-center justify-between">
                   <Link href={route('index')}>
                     <img

@@ -13,7 +13,7 @@ export default function Welcome({ group, league }) {
   return (
     <>
       <Head title="Torneo Afterwork" />
-      <div className="bg-gray-900">
+      <div className="bg-gray-900 min-h-screen">
         <main className="pb-12">
           {/* Hero section */}
           <div className="isolate relative overflow-hidden pb-20">
