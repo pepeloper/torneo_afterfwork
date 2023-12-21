@@ -13,6 +13,7 @@ export const ranking = (games) => {
           email: user.email,
           total_points_in_favor: user.pivot.points_in_favor,
           total_points_against: user.pivot.points_against,
+          last_year_position: user.last_year_position,
         })
       }
     });
@@ -25,6 +26,12 @@ export const ranking = (games) => {
 
       if (a.total_points_against < b.total_points_against) return -1;
       if (a.total_points_against > b.total_points_against) return 1;
+
+      if (a.last_year_position && !b.last_year_position) return -1;
+      if (!a.last_year_position && b.last_year_position) return 1;
+
+      if (a.last_year_position > b.last_year_position) return 1;
+      if (a.last_year_position < b.last_year_position) return -1;
 
       return 0;
     });

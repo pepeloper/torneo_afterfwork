@@ -1,6 +1,5 @@
 import GameCard from "@/Components/GameCard";
 import { ranking } from "@/utils";
-import { Link, Head } from '@inertiajs/react';
 
 export default function GroupSection({ group, onlyRanking = false }) {
   return (
@@ -10,7 +9,7 @@ export default function GroupSection({ group, onlyRanking = false }) {
         <div className="space-y-2.5 mt-4">
           {ranking(group.games).map((u, index) => {
             return (
-              <div className="w-full flex items-center justify-between">
+              <div key={u.id} className="w-full flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {index === 0 ? <span className="text-2xl">🥇</span> : ''}
                   {index === 1 ? <span className="text-2xl">🥈</span> : ''}

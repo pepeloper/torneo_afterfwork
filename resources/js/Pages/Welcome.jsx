@@ -55,8 +55,7 @@ export default function Welcome({ group, league }) {
               <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
                 <img
                   className="h-11"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=green&shade=500"
-                  alt="Your Company"
+                  src="/storage/ball.png"
                 />
                 <div className="mt-12 sm:mt-16 lg:mt-16">
                   <a href="#" className="inline-flex space-x-6">

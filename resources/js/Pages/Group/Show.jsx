@@ -95,8 +95,7 @@ export default function Welcome({ activeGroup, allGroups, section, hasLeagues })
                   <Link href={route('index')}>
                     <img
                       className="h-11"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=green&shade=500"
-                      alt="Your Company"
+                      src="/storage/ball.png"
                     />
                   </Link>
                   {!hasLeagues &&
@@ -115,8 +114,8 @@ export default function Welcome({ activeGroup, allGroups, section, hasLeagues })
               <div className="grid grid-cols-3 mt-5 py-2 space-x-1">
                 {allGroups.map(group => {
                   return group.name === activeGroup.name ?
-                    <Link className="text-center rounded-full bg-light-green-800/40 px-3 py-1 text-sm font-semibold leading-6 text-light-green-200 ring-1 ring-inset ring-light-green-500/60" href={route('group.show', { group })}>{group.name}</Link> :
-                    <Link className="text-center rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20" href={route('group.show', { group })}>{group.name}</Link>
+                    <Link key={group.id} className="text-center rounded-full bg-light-green-800/40 px-3 py-1 text-sm font-semibold leading-6 text-light-green-200 ring-1 ring-inset ring-light-green-500/60" href={route('group.show', { group })}>{group.name}</Link> :
+                    <Link key={group.id} className="text-center rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20" href={route('group.show', { group })}>{group.name}</Link>
                 })}
               </div>
               <GroupSection group={activeGroup} />
