@@ -16,7 +16,7 @@ export default function GameCard({ game }) {
   console.log('game', game);
 
   const handleEditGame = () => {
-    if (data.first_team_points == 0 && data.first_team_points === 0) {
+    if (!data.first_team_points.length && !data.first_team_points.length) {
       setEditMode(false)
       return
     }
@@ -50,10 +50,10 @@ export default function GameCard({ game }) {
                 <img src={game.users[0].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__ad--right">
-                <img src={game.users[1].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
+                <img src={game.users[2].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__dc--left">
-                  <img src={game.users[2].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
+                  <img src={game.users[1].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
               </div>
               <div className="court__cell court__dc--right">
                 <img src={game.users[3].photo} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white border-2 border-white text-sm shadow-lg"/>
