@@ -14,14 +14,14 @@ export default function GameCard({ game }) {
   })
 
   const handleEditGame = () => {
-    if (!data.first_team_points.length && !data.first_team_points.length) {
+    // if (!data.first_team_points.length && !data.first_team_points.length) {
       setEditMode(false)
-      return
-    }
-    put(route('game.update', { game }), {
-      onSuccess: () => setEditMode(false),
-      preserveScroll: true,
-    });
+    //   return
+    // }
+    // put(route('game.update', { game }), {
+    //   onSuccess: () => setEditMode(false),
+    //   preserveScroll: true,
+    // });
   };
 
   return (
