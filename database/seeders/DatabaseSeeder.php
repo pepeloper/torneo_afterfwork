@@ -26,13 +26,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Grupo C',
         ]);
 
+        // Antonio pasa a ser pepe
         $pepe = \App\Models\User::create([
-            'name' => 'Pepe Garcia',
-            'username' => 'pepegarciag',
-            'email' => 'pgarciag93@gmail.com',
+            'name' => 'Antonio',
+            'username' => 'antoniohs',
+            'email' => 'antonio@antonio.es',
             'password' => Hash::make('password'),
-            'photo' => '/storage/pepe.jpg',
-            'last_year_position' => 1,
+            'photo' => '/storage/antonio.jpg',
+            'last_year_position' => 4,
             'email_verified_at' => now(),
         ]);
         $pepe->groups()->attach($a);
@@ -81,13 +82,14 @@ class DatabaseSeeder extends Seeder
         ]);
         $sampe->groups()->attach($b);
 
+        // Real Antonio es Pablo
         $nito = \App\Models\User::create([
-            'name' => 'Antonio',
-            'username' => 'antoniohs',
-            'email' => 'antonio@antonio.es',
+            'name' => 'Pablo',
+            'username' => 'pablo',
+            'email' => 'pablo_2@pablo_2.es',
             'password' => Hash::make('password'),
-            'photo' => '/storage/antonio.jpg',
-            'last_year_position' => 4,
+            'photo' => '/storage/avatar.webp',
+            'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
         $nito->groups()->attach($b);
