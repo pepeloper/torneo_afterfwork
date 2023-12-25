@@ -1,12 +1,14 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, usePage } from '@inertiajs/react';
+import Dropdown from '@/Components/Dropdown';
 
 const stats = [
   { id: 1, name: 'Participantes entre todas las ediciones', value: '+15' },
   { id: 2, name: 'Celebrando el torneo navideño', value: '3 años' },
 ]
 
-export default function Welcome({ group, league }) {
+export default function Welcome({ group, league, auth }) {
 
+  const { user } = auth;
 
   return (
     <>
@@ -53,10 +55,46 @@ export default function Welcome({ group, league }) {
             </div>
             <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-40 lg:flex lg:px-8 lg:pt-40">
               <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-                <img
-                  className="h-11"
-                  src="/storage/ball.png"
-                />
+
+                <div className="w-full flex items-center justify-between">
+                  <img
+                    className="h-11"
+                    src="/storage/ball.png"
+                  />
+                  <div className="relative">
+                    <Dropdown>
+                      <Dropdown.Trigger>
+                        <span className="inline-flex rounded-md">
+                          <button
+                            type="button"
+                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-800/60 hover:text-gray-500 focus:outline-none transition ease-in-out duration-150"
+                          >
+                            {user.name}
+
+                            <svg
+                              className="ms-2 -me-0.5 h-4 w-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </span>
+                      </Dropdown.Trigger>
+
+                      <Dropdown.Content>
+                        <Dropdown.Link href={route('logout')} method="post" as="button">
+                          Cerrar sesión
+                        </Dropdown.Link>
+                      </Dropdown.Content>
+                    </Dropdown>
+                  </div>
+                </div>
                 <div className="mt-12 sm:mt-16 lg:mt-16">
                   <a href="#" className="inline-flex space-x-6">
                     <span className="rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20">
