@@ -19,14 +19,13 @@ class EnsureSquadBelongsToUser
         $user = $request->user();
 
         $hasRelation = User::where('id', $user->id)->whereHas('squads', function ($query) use ($request) {
-            $query->where('squads.id', $request->input('squad'));
+            $query->where('squads.id', $request->route('squad')->id);
         })->first();
 
         if (!$hasRelation) {
-            return redirect('index');
+            return redirect('/');
         }
 
-        dd($request->input('squad'));
         return $next($request);
     }
 }
