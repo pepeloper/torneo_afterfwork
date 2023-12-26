@@ -25,16 +25,16 @@ use Illuminate\Support\Str;
 */
 
 // Show list of squads for user
-Route::get('/clubs', [SquadsController::class, 'index']);
+// Route::get('/clubs', [SquadsController::class, 'index'])->name('clubs.index');
 
 // Show list of tournaments for the given squad
-Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user']);
+Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
 
 // Show list of groups with games for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->middleware(['auth', 'squad.user']);
+Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('tournament.show');
 
 // Create a tournament
-Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user']);
+Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.create');
 
 Route::get('/torneo/crear', function() {
     return Inertia::render('Tournament/Create', [
