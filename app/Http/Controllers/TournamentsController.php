@@ -13,6 +13,9 @@ class TournamentsController extends Controller
     {
         $tournament->load(['groups', 'groups.games', 'groups.games.users']);
 
-        return Inertia::render('Tournament/Show', ['tournament' => $tournament]);
+        return Inertia::render('Tournament/Show', [
+            'squad' => $squad,
+            'tournament' => $tournament,
+        ]);
     }
 }

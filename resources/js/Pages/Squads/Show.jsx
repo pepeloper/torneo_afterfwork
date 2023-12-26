@@ -11,6 +11,8 @@ import {
   MenuItem,
   Avatar,
 } from "@material-tailwind/react"
+import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+
 
 export default function Show({ squad }) {
   console.log('squad', squad)
@@ -19,12 +21,57 @@ export default function Show({ squad }) {
   console.log('auth', auth)
 
   return (
-    <div className="max-w-2xl w-full mx-auto">
-      <section className="px-6 border-b border-gray-200 w-full py-3 flex justify-between items-center">
+    <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh] relative">
+      <section className="flex-1">
+        <div className="w-full flex justify-between items-center px-6 mt-5">
+          <div>
+            <Typography variant="h3">{squad.name}</Typography>
+            <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel</Typography>
+          </div>
+          <Link href={route('tournament.create', { squad })}>
+            <Button variant="gradient" size="sm" color="light-green" ripple>Crear torneo</Button>
+          </Link>
+        </div>
+        <div className="mt-5">
+          {squad.tournaments.map(tournament => {
+            return (
+              <Card key={tournament.id} className="border border-gray-200 rounded-none border-l-0 border-r-0 bg-white/70" shadow={false}>
+                <CardBody>
+                  <Typography variant="h4">{tournament.name}</Typography>
+                  <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography>
+
+                  <Link href={route('tournament.show', { squad, tournament })} className="block mt-5">
+                    <Button variant="text" className="flex items-center gap-2 px-0 py-0">
+                      Ver torneo
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                        />
+                      </svg>
+                    </Button>
+                  </Link>
+                </CardBody>
+              </Card>
+            )
+          })}
+        </div>
+      </section>
+      <section className="px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
         <Link href={route('squads.show', { squad })}>
-          <ApplicationLogo className="w-9" />
+          <HomeIcon className="w-6 text-gray-600" />
         </Link>
-        <Menu placement="bottom-start">
+        <UserGroupIcon className="w-6 text-gray-600" />
+        <Cog6ToothIcon className="w-6 text-gray-600" />
+        {/* <Menu placement="bottom-start">
           <MenuHandler>
             <Avatar
               size="sm"
@@ -78,46 +125,8 @@ export default function Show({ squad }) {
               </Link>
             </MenuItem>
           </MenuList>
-        </Menu>
+        </Menu> */}
       </section>
-      <div className="w-full flex justify-between items-center px-6 mt-5">
-        <Typography variant="h3">{squad.name}</Typography>
-        <Link href={route('tournament.create', { squad })}>
-          <Button variant="outlined" size="sm" color="light-green" ripple>Crear torneo</Button>
-        </Link>
-      </div>
-      <div className="mt-5">
-        {squad.tournaments.map(tournament => {
-          return (
-            <Card key={tournament.id} className="border border-gray-200 rounded-none border-l-0 border-r-0" shadow={false}>
-              <CardBody>
-                <Typography variant="h4">{tournament.name}</Typography>
-                <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography>
-
-                <Link href={route('tournament.show', { squad, tournament })} className="block mt-5">
-                  <Button variant="text" className="flex items-center gap-2 px-0 py-0">
-                    Ver torneo
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                      className="h-4 w-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                      />
-                    </svg>
-                  </Button>
-                </Link>
-              </CardBody>
-            </Card>
-          )
-        })}
-      </div>
     </div>
   )
 }
