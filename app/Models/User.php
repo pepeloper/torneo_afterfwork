@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Game::class);
     }
+
+    public function squads()
+    {
+        return $this->belongsToMany(Squad::class);
+    }
 }

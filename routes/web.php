@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SquadsController;
+use App\Http\Controllers\TournamentsController;
 use App\Models\Game;
 use App\Models\Group;
 use App\Models\User;
@@ -21,6 +23,24 @@ use Illuminate\Support\Str;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Show list of squads for user
+Route::get('/clubs', [SquadsController::class, 'index']);
+
+// Show list of tournaments for the given squad
+Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user']);
+
+// Show list of groups with games for a given tournament
+Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->middleware(['auth', 'squad.user']);
+
+// Create a tournament
+Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user']);
+
+Route::get('/torneo/crear', function() {
+    return Inertia::render('Tournament/Create', [
+        'users' => User::all(),
+    ]);
+});
 
 Route::get('/', function () {
     $league = Group::where('name', 'Liga 1º')->first();
