@@ -18,8 +18,13 @@ import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outl
 export default function Show({ squad, tournament }) {
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
+  const [backdropClicked, setBackdropBlicked] = useState(false);
 
   const openDrawer = (game) => {
+    if (backdropClicked) {
+      setBackdropBlicked(false);
+      return
+    }
     setActiveGame(game)
     setOpen(true)
   };
@@ -74,7 +79,7 @@ export default function Show({ squad, tournament }) {
                 <div className="space-y-6 mt-10">
                   {group.games.map(game => {
                     return (
-                      <GameCard key={game.id} game={game} onClick={openDrawer} />
+                      <GameCard key={game.id} game={game} onClick={openDrawer} activeGame={activeGame} />
                     )
                   })}
                 </div>
@@ -145,7 +150,11 @@ export default function Show({ squad, tournament }) {
           </MenuList>
         </Menu> */}
       </section>
-      {activeGame && <Drawer open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+      {activeGame && <Drawer dismiss={{
+        outsidePress: (event) => {
+          setBackdropBlicked(true);
+          return true;
+      } }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
         <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
       </Drawer>
       }

@@ -15,7 +15,7 @@ export default function EditGame({ game, handleClose }) {
   const handleEditGame = (e) => {
     e.preventDefault();
 
-    if (!data.first_team_points.length && !data.first_team_points.length) {
+    if (data.first_team_points === "" && data.second_team_points === "") {
       return
     }
 

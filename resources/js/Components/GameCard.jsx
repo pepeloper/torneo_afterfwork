@@ -1,7 +1,9 @@
-export default function GameCard({ game, onClick }) {
+import classNames from "classnames";
+
+export default function GameCard({ game, onClick, activeGame }) {
   return (
     <>
-      <div className="bg-gray-100 rounded-lg py-4 px-3 flex flex-col hover:scale-105 transition-all duration-500" onClick={() => onClick(game)}>
+      <div className={classNames("bg-gray-100 rounded-lg py-4 px-3 flex flex-col transition-all duration-500", { "scale-105": game.id === activeGame?.id })} onClick={() => onClick(game)}>
         <div className="flex justify-between">
           <div className="flex items-center px-4">
             <div className="flex items-center space-x-3">
