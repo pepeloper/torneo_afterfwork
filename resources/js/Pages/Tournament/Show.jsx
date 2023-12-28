@@ -15,7 +15,7 @@ import {
 } from "@material-tailwind/react";
 import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 
-export default function Show({ squad, tournament }) {
+export default function Show({ squad, tournament, hasLeagues, section }) {
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [backdropClicked, setBackdropBlicked] = useState(false);
@@ -42,9 +42,22 @@ export default function Show({ squad, tournament }) {
             <Typography variant="h3">{tournament.name}</Typography>
             <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
           </div>
-          <Link href="#">
-            <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
-          </Link>
+          {hasLeagues ? section === 'groups' ?
+            <Link href={route('tournament.league.show', { squad, tournament })}>
+              <Button variant="gradient" size="sm" color="light-green" ripple>Ver ligas</Button>
+            </Link> :
+            <Link href={route('tournament.show', { squad, tournament })}>
+              <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
+            </Link> :
+            <Link href="#">
+              <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
+            </Link>
+          }
+        </div>
+        <div className="px-6 mt-5">
+          <Typography variant="h2">
+            { section === 'groups' ? 'Fase de grupos' : 'Ligas' }
+          </Typography>
         </div>
         <Tabs className="mt-5 px-6" value={tournament.groups[0].id}>
           <TabsHeader>
@@ -154,7 +167,8 @@ export default function Show({ squad, tournament }) {
         outsidePress: (event) => {
           setBackdropBlicked(true);
           return true;
-      } }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+        }
+      }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
         <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
       </Drawer>
       }
