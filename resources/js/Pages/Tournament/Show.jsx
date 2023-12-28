@@ -56,7 +56,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
         </div>
         <div className="px-6 mt-5">
           <Typography variant="h2">
-            { section === 'groups' ? 'Fase de grupos' : 'Ligas' }
+            {section === 'groups' ? 'Fase de grupos' : 'Ligas'}
           </Typography>
         </div>
         <Tabs className="mt-5 px-6" value={tournament.groups[0].id}>
@@ -70,9 +70,35 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
           <TabsBody>
             {tournament.groups.map((group) => (
               <TabPanel key={group.id} value={group.id} className="px-1">
-                <div className="space-y-2.5 mt-4">
+                <div className="space-y-3.5 mt-3">
                   {ranking(group.games).map((u, index) => {
                     return (
+                      <div key={u.id} className="w-full">
+                        <div className="w-full flex items-center justify-between">
+                          <div className="flex items-center">
+                            {index === 0 ? <span className="text-2xl">🥇</span> : ''}
+                            {index === 1 ? <span className="text-2xl">🥈</span> : ''}
+                            {index === 2 ? <span className="text-2xl">🥉</span> : ''}
+                            {index > 2 ? <span className="text-2xl">☠️</span> : ''}
+                            <p className="font-medium text-lg ml-1.5" key={u.username}>{u.name}</p>
+                          </div>
+                          <div className="flex space-x-4">
+                            <p className="text-light-green-500 font-semibold">{u.total_points_in_favor}</p>
+                            <p className="text-red-300 font-semibold"> {u.total_points_against}</p>
+                          </div>
+                        </div>
+                        <div className="flex mt-0.5">
+                          {u.total_points_against || u.total_points_in_favor ?
+                            <>
+                              <div className="bg-light-green-500 h-2 rounded-r-none rounded-lg" style={{ width: `${(100 * u.total_points_in_favor) / 48}%` }} />
+                              <div className="bg-red-300 h-2 rounded-l-none rounded-lg" style={{ width: `${(100 * u.total_points_against) / 48}%` }} />
+                            </> :
+                            <div className="bg-gray-300 h-2 rounded-lg w-full" />
+                          }
+                        </div>
+                      </div>
+                    )
+                    {/* return (
                       <div key={u.id} className="w-full flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           {index === 0 ? <span className="text-2xl">🥇</span> : ''}
@@ -86,7 +112,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
                           <p className="text-red-500 text-lg font-semibold"> {u.total_points_against}</p>
                         </div>
                       </div>
-                    )
+                    ) */}
                   })}
                 </div>
                 <div className="space-y-6 mt-10">
