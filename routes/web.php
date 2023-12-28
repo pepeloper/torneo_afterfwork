@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SquadsController;
 use App\Http\Controllers\TournamentsController;
@@ -35,6 +36,9 @@ Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::cla
 
 // Create a tournament
 Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.create');
+
+// Create leagues for a tournament
+Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
 
 Route::get('/torneo/crear', function() {
     return Inertia::render('Tournament/Create', [

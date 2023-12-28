@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\Game;
 use App\Models\Group;
+use App\Models\Squad;
+use App\Models\Tournament;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,16 +18,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $a = Group::create([
-            'name' => 'Grupo A',
-        ]);
-        $b = Group::create([
-            'name' => 'Grupo B',
-        ]);
-        $c = Group::create([
-            'name' => 'Grupo C',
-        ]);
-
         // Antonio pasa a ser pepe
         $pepe = \App\Models\User::create([
             'name' => 'Antonio',
@@ -36,7 +28,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 4,
             'email_verified_at' => now(),
         ]);
-        $pepe->groups()->attach($a);
 
         $pablo = \App\Models\User::create([
             'name' => 'Pablo Peña',
@@ -47,7 +38,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 3,
             'email_verified_at' => now(),
         ]);
-        $pablo->groups()->attach($a);
 
         $javi = \App\Models\User::create([
             'name' => 'Javi',
@@ -58,7 +48,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 5,
             'email_verified_at' => now(),
         ]);
-        $javi->groups()->attach($a);
 
         $domingo = \App\Models\User::create([
             'name' => 'Domingo',
@@ -69,7 +58,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
-        $domingo->groups()->attach($a);
 
         $sampe = \App\Models\User::create([
             'name' => 'Sampe',
@@ -80,7 +68,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 2,
             'email_verified_at' => now(),
         ]);
-        $sampe->groups()->attach($b);
 
         // Real Antonio es Pablo
         $nito = \App\Models\User::create([
@@ -92,7 +79,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
-        $nito->groups()->attach($b);
 
         $tolosa = \App\Models\User::create([
             'name' => 'Tolosa',
@@ -103,7 +89,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 7,
             'email_verified_at' => now(),
         ]);
-        $tolosa->groups()->attach($b);
 
         $bulio = \App\Models\User::create([
             'name' => 'Bulio',
@@ -114,7 +99,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
-        $bulio->groups()->attach($b);
 
         $fer = \App\Models\User::create([
             'name' => 'Fernando',
@@ -125,7 +109,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 9,
             'email_verified_at' => now(),
         ]);
-        $fer->groups()->attach($c);
 
         $carlos = \App\Models\User::create([
             'name' => 'Carlos',
@@ -136,7 +119,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => 10,
             'email_verified_at' => now(),
         ]);
-        $carlos->groups()->attach($c);
 
         $gon = \App\Models\User::create([
             'name' => 'Gon',
@@ -147,7 +129,6 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
-        $gon->groups()->attach($c);
 
         $juanjo = \App\Models\User::create([
             'name' => 'Juanjo',
@@ -158,53 +139,148 @@ class DatabaseSeeder extends Seeder
             'last_year_position' => null,
             'email_verified_at' => now(),
         ]);
+
+        $squad = Squad::create([
+            'name' => 'Afterwork',
+        ]);
+
+        $tournament = Tournament::create([
+            'name' => 'Navidad 2023',
+            'squad_id' => $squad->id,
+            'user_id' => $pepe->id,
+        ]);
+
+        $a = Group::create([
+            'name' => 'Grupo A',
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
+        ]);
+        $b = Group::create([
+            'name' => 'Grupo B',
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
+        ]);
+        $c = Group::create([
+            'name' => 'Grupo C',
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
+        ]);
+
+        $pepe->groups()->attach($a);
+        $pepe->squads()->attach($squad);
+        $pepe->tournaments()->attach($tournament);
+
+        $pablo->groups()->attach($a);
+        $pablo->squads()->attach($squad);
+        $pablo->tournaments()->attach($tournament);
+
+        $javi->groups()->attach($a);
+        $javi->squads()->attach($squad);
+        $javi->tournaments()->attach($tournament);
+
+        $domingo->groups()->attach($a);
+        $domingo->squads()->attach($squad);
+        $domingo->tournaments()->attach($tournament);
+
+        $sampe->groups()->attach($b);
+        $sampe->squads()->attach($squad);
+        $sampe->tournaments()->attach($tournament);
+
+        $nito->groups()->attach($b);
+        $nito->squads()->attach($squad);
+        $nito->tournaments()->attach($tournament);
+
+        $tolosa->groups()->attach($b);
+        $tolosa->squads()->attach($squad);
+        $tolosa->tournaments()->attach($tournament);
+
+        $bulio->groups()->attach($b);
+        $bulio->squads()->attach($squad);
+        $bulio->tournaments()->attach($tournament);
+
+        $fer->groups()->attach($c);
+        $fer->squads()->attach($squad);
+        $fer->tournaments()->attach($tournament);
+
+        $carlos->groups()->attach($c);
+        $carlos->squads()->attach($squad);
+        $carlos->tournaments()->attach($tournament);
+
+        $gon->groups()->attach($c);
+        $gon->squads()->attach($squad);
+        $gon->tournaments()->attach($tournament);
+
         $juanjo->groups()->attach($c);
+        $juanjo->squads()->attach($squad);
+        $juanjo->tournaments()->attach($tournament);
+
+
+
+
 
         // GRUPO A
         $game = Game::create([
             'group_id' => $a->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$pepe->id, $pablo->id, $javi->id, $domingo->id]);
 
         $game = Game::create([
             'group_id' => $a->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$pepe->id, $javi->id, $pablo->id, $domingo->id]);
 
         $game = Game::create([
             'group_id' => $a->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$pablo->id, $javi->id, $pepe->id, $domingo->id]);
 
         // GRUPO B
         $game = Game::create([
             'group_id' => $b->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$sampe->id, $nito->id, $tolosa->id, $bulio->id]);
 
         $game = Game::create([
             'group_id' => $b->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$sampe->id, $tolosa->id, $nito->id, $bulio->id]);
 
         $game = Game::create([
             'group_id' => $b->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$nito->id, $tolosa->id, $sampe->id, $bulio->id]);
 
         // GRUPO C
         $game = Game::create([
             'group_id' => $c->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$fer->id, $carlos->id, $gon->id, $juanjo->id]);
 
         $game = Game::create([
             'group_id' => $c->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$fer->id, $gon->id, $carlos->id, $juanjo->id]);
 
         $game = Game::create([
             'group_id' => $c->id,
+            'squad_id' => $squad->id,
+            'tournament_id' => $tournament->id,
         ]);
         $game->users()->attach([$carlos->id, $gon->id, $fer->id, $juanjo->id]);
     }

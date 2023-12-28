@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Squad::class);
     }
+
+    public function tournaments()
+    {
+        return $this->belongsToMany(Squad::class);
+    }
 }
