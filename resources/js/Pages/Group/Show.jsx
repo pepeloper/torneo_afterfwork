@@ -14,6 +14,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 
 export default function Show({ squad, tournament, hasLeagues, section }) {
   const [open, setOpen] = useState(false);
@@ -38,9 +39,14 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
     <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh] relative">
       <section className="flex-1 mb-6">
         <div className="w-full flex justify-between items-center px-6 mt-5">
-          <div>
-            <Typography variant="h3">{tournament.name}</Typography>
-            <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
+          <div className="flex space-x-0.5">
+            <Link href={route('tournament.show', { squad, tournament })} className="mt-2">
+              <ChevronLeftIcon className="w-6 h-6" />
+            </Link>
+            <div>
+              <Typography variant="h3">{tournament.name}</Typography>
+              <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
+            </div>
           </div>
           {hasLeagues ? section === 'groups' ?
             <Link href={route('tournament.league.show', { squad, tournament })}>
