@@ -8,9 +8,30 @@ use App\Models\Squad;
 use App\Models\Tournament;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class GroupsController extends Controller
 {
+
+    public function index(Request $request, Squad $squad, Tournament $tournament)
+    {
+        $tournament->load([
+            'groups' => function ($query) {
+                $query->where('name', 'like', 'Grupo%');
+            },
+            'groups.games',
+            'groups.games.users'
+        ]);
+
+        $has_leagues = Group::where('name', 'like', 'Liga%')->first() ? true : false;
+
+        return Inertia::render('Group/Show', [
+            'squad' => $squad,
+            'tournament' => $tournament,
+            'hasLeagues' => $has_leagues,
+            'section' => 'groups',
+        ]);
+    }
     // Create a new league based on the groups
     public function store(Request $request, Squad $squad, Tournament $tournament)
     {

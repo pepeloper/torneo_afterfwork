@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function tournaments()
     {
-        return $this->belongsToMany(Squad::class);
+        return $this->belongsToMany(Tournament::class);
     }
 }

@@ -12,9 +12,16 @@ class TournamentsController extends Controller
 {
     public function show(Request $request, Squad $squad, Tournament $tournament)
     {
-        $tournament->load(['groups' => function($query) {
-            $query->where('name', 'like', 'Grupo%');
-        }, 'groups.games', 'groups.games.users']);
+        $tournament->load([
+            'groups' => function ($query) {
+                $query->where('name', 'like', 'Grupo%');
+            },
+            'groups.games',
+            'groups.games.users',
+            'users' => function ($query) {
+                $query->inRandomOrder();
+            },
+        ]);
 
         $has_leagues = Group::where('name', 'like', 'Liga%')->first() ? true : false;
 
@@ -22,13 +29,14 @@ class TournamentsController extends Controller
             'squad' => $squad,
             'tournament' => $tournament,
             'hasLeagues' => $has_leagues,
+            'ranking' => $tournament->ranking(),
             'section' => 'groups',
         ]);
     }
 
     public function show_leagues(Request $request, Squad $squad, Tournament $tournament)
     {
-        $tournament->load(['groups' => function($query) {
+        $tournament->load(['groups' => function ($query) {
             $query->where('name', 'like', 'Liga%');
         }, 'groups.games', 'groups.games.users']);
 

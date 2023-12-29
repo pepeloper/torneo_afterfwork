@@ -31,8 +31,11 @@ use Illuminate\Support\Str;
 // Show list of tournaments for the given squad
 Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
 
-// Show list of groups with games for a given tournament
+// Show tournament details
 Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('tournament.show');
+
+// Show list of groups with games for a given tournament
+Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->middleware(['auth', 'squad.user'])->name('groups.index');
 
 // Temporary route to show leagues for a given tournament
 Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [TournamentsController::class, 'show_leagues'])->middleware(['auth', 'squad.user'])->name('tournament.league.show');
