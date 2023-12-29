@@ -38,7 +38,7 @@ Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::cla
 Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->middleware(['auth', 'squad.user'])->name('groups.index');
 
 // Temporary route to show leagues for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [TournamentsController::class, 'show_leagues'])->middleware(['auth', 'squad.user'])->name('tournament.league.show');
+Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [GroupsController::class, 'show_leagues'])->middleware(['auth', 'squad.user'])->name('tournament.league.show');
 
 // Create a tournament
 Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.create');

@@ -32,6 +32,28 @@ class GroupsController extends Controller
             'section' => 'groups',
         ]);
     }
+
+    public function show_leagues(Request $request, Squad $squad, Tournament $tournament)
+    {
+        $tournament->load([
+            'groups' => function ($query) {
+                $query->where('name', 'like', 'Liga%');
+            },
+            'groups.games',
+            'groups.games.users',
+            'users' => function ($query) {
+                $query->inRandomOrder();
+            },
+        ]);
+
+        return Inertia::render('Group/Show', [
+            'squad' => $squad,
+            'tournament' => $tournament,
+            'hasLeagues' => true,
+            'ranking' => $tournament->ranking(),
+            'section' => 'leagues',
+        ]);
+    }
     // Create a new league based on the groups
     public function store(Request $request, Squad $squad, Tournament $tournament)
     {
@@ -169,6 +191,6 @@ class GroupsController extends Controller
         ]);
         $game->users()->attach([$third_league_data[1], $third_league_data[2], $third_league_data[0], $third_league_data[3]]);
 
-        return redirect()->route('group.show', ['group' => $first_league]);
+        return redirect()->route('tournament.league.show', ['squad' => $squad, 'group' => $first_league]);
     }
 }

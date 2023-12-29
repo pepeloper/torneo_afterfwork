@@ -10,6 +10,7 @@ use Inertia\Inertia;
 
 class TournamentsController extends Controller
 {
+    // TODO: Delete
     public function show(Request $request, Squad $squad, Tournament $tournament)
     {
         $tournament->load([
@@ -31,20 +32,6 @@ class TournamentsController extends Controller
             'hasLeagues' => $has_leagues,
             'ranking' => $tournament->ranking(),
             'section' => 'groups',
-        ]);
-    }
-
-    public function show_leagues(Request $request, Squad $squad, Tournament $tournament)
-    {
-        $tournament->load(['groups' => function ($query) {
-            $query->where('name', 'like', 'Liga%');
-        }, 'groups.games', 'groups.games.users']);
-
-        return Inertia::render('Tournament/Show', [
-            'squad' => $squad,
-            'tournament' => $tournament,
-            'hasLeagues' => true,
-            'section' => 'leagues',
         ]);
     }
 }

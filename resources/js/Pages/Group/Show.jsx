@@ -52,10 +52,10 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
             <Link href={route('tournament.league.show', { squad, tournament })}>
               <Button variant="gradient" size="sm" color="light-green" ripple>Ver ligas</Button>
             </Link> :
-            <Link href={route('tournament.show', { squad, tournament })}>
+            <Link href={route('groups.index', { squad, tournament })}>
               <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
             </Link> :
-            <Link href="#">
+            <Link href={route('league.create', {squad, tournament })} method="post" as="div">
               <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
             </Link>
           }
