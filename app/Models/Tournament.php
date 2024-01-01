@@ -50,4 +50,58 @@ class Tournament extends Model
 
         return $ranking;
     }
+
+    public function createMatches($players_ids, $squad)
+    {
+        $number_of_players = count($players_ids);
+        $players = User::whereIn('id', $players_ids)->get();
+
+        if ($number_of_players === 4) {
+            $this->createMatchesForFourPlayers($players, $squad);
+        }
+
+        return true;
+    }
+
+    private function createMatchesForFourPlayers($players, $squad)
+    {
+        $group = Group::create([
+            'name' => 'Grupo A',
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+        ]);
+
+        $players[0]->tournaments()->attach($this->id);
+        $players[0]->groups()->attach($group->id);
+
+        $players[1]->tournaments()->attach($this->id);
+        $players[1]->groups()->attach($group->id);
+
+        $players[2]->tournaments()->attach($this->id);
+        $players[2]->groups()->attach($group->id);
+
+        $players[3]->tournaments()->attach($this->id);
+        $players[3]->groups()->attach($group->id);
+
+        $game_one = Game::create([
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+            'group_id' => $group->id,
+        ]);
+        $game_one->users()->attach($players->pluck('id'));
+
+        $game_two = Game::create([
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+            'group_id' => $group->id,
+        ]);
+        $game_two->users()->attach([$players[0]->id, $players[2]->id, $players[1]->id, $players[3]->id]);
+
+        $game_three = Game::create([
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+            'group_id' => $group->id,
+        ]);
+        $game_three->users()->attach([$players[1]->id, $players[2]->id, $players[0]->id, $players[3]->id]);
+    }
 }

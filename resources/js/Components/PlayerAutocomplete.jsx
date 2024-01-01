@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { select } from "@material-tailwind/react"
-export default function PlayerAutocomplete({ players, index, addPlayer, player }) {
+import { Select, Option } from "@material-tailwind/react"
+export default function PlayerAutocomplete({ players, index, addPlayers, player }) {
 
   const [selected, setSelected] = useState('')
   const [query, setQuery] = useState('')
@@ -17,15 +17,16 @@ export default function PlayerAutocomplete({ players, index, addPlayer, player }
           .includes(query.toLowerCase().replace(/\s+/g, ''))
       )
 
-  const handleSelectPlayer = (player, index) => {
-    addPlayer(player, index)
+  const handleSelectPlayer = (e) => {
+    let value = Array.from(e.target.selectedOptions, option => players[option.value].id);
+    addPlayers(value)
     setSelected()
   }
 
   return (
-    <select className="w-full">
-      <option value={null}></option>
-      {players.map(p => (<option value={p.id}>{p.name}</option>))}
+    <select className="w-full" label="Selecciona un jugador" multiple onChange={handleSelectPlayer}>
+      {/* <option value={null}></option> */}
+      {players.map((p, index) => (<option key={p.id} value={index}>{p.name}</option>))}
     </select>
   );
 }

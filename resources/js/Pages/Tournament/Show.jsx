@@ -12,6 +12,7 @@ import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 export default function Show({ squad, tournament, hasLeagues, section, ranking }) {
   console.log(tournament)
   console.log(ranking)
+
   const AVATARS_TO_SHOW = 8;
 
   const usersAvatars = useMemo(() => {
@@ -52,9 +53,9 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
           </div>
           <div className="flex -space-x-3 mt-5">
             {usersAvatars.map(u => <Avatar key={u.id} src={u.photo} className="border-2 border-white hover:z-10 focus:z-10" />)}
-            <div className="border-2 border-white hover:z-10 focus:z-10 bg-gray-600 rounded-full w-12 h-12 flex items-center justify-center text-white">
+            {tournament.users.length > AVATARS_TO_SHOW && <div className="border-2 border-white hover:z-10 focus:z-10 bg-gray-600 rounded-full w-12 h-12 flex items-center justify-center text-white">
               +{tournament.users.length - AVATARS_TO_SHOW}
-            </div>
+            </div>}
           </div>
         </div>
 
