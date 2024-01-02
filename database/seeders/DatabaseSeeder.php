@@ -214,10 +214,6 @@ class DatabaseSeeder extends Seeder
         $juanjo->squads()->attach($squad);
         $juanjo->tournaments()->attach($tournament);
 
-
-
-
-
         // GRUPO A
         $game = Game::create([
             'group_id' => $a->id,

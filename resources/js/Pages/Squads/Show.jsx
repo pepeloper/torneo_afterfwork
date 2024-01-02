@@ -12,6 +12,7 @@ import {
   Avatar,
 } from "@material-tailwind/react"
 import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+import classNames from "classnames"
 
 
 export default function Show({ squad }) {
@@ -33,9 +34,9 @@ export default function Show({ squad }) {
           </Link>
         </div>
         <div className="mt-5">
-          {squad.tournaments.map(tournament => {
+          {squad.tournaments.map((tournament, key) => {
             return (
-              <Card key={tournament.id} className="border border-gray-200 rounded-none border-l-0 border-r-0 bg-white/70" shadow={false}>
+              <Card key={tournament.id} className={classNames("border border-gray-200 border-t-0 rounded-none border-l-0 border-r-0 bg-white/70")} shadow={false}>
                 <CardBody>
                   <Typography variant="h4">{tournament.name}</Typography>
                   <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography>
