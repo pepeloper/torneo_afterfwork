@@ -51,18 +51,25 @@ class Tournament extends Model
         return $ranking;
     }
 
-    public function createMatches($players_ids, $squad)
+    public function createMatches($players_ids, $squad, $mode = 'groups')
     {
         $number_of_players = count($players_ids);
         $players = User::whereIn('id', $players_ids)->get();
 
-        if ($number_of_players === 4) {
-            $this->createMatchesForFourPlayers($players, $squad);
+        if ($mode === 'groups') {
+            if ($number_of_players === 4) {
+                $this->createMatchesForFourPlayers($players, $squad);
+            }
+
+            if ($number_of_players === 8) {
+                $this->createMatchesForEightPlayers($players, $squad);
+            }
+        } else {
+            if ($number_of_players === 8) {
+                $this->createMatchesForEightPlayersLeagueMode($players, $squad);
+            }
         }
 
-        if ($number_of_players === 8) {
-            $this->createMatchesForEightPlayers($players, $squad);
-        }
 
         return true;
     }
@@ -141,5 +148,46 @@ class Tournament extends Model
         ];
 
         $this->createGamesForGroup($players, $player_indexes_for_games, $group);
+    }
+
+    private function createMatchesForEightPlayersLeagueMode($players, $squad)
+    {
+        $player_indexes_for_games = [
+            [0, 1, 2, 3],
+            [0, 2, 1, 3],
+            [1, 2, 0, 3],
+        ];
+
+        // FIRST GROUP
+        $group_a = Group::create([
+            'name' => 'Grupo A',
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+        ]);
+
+        $group_a_players = collect([$players[0], $players[1], $players[2], $players[3]]);
+
+        $group_a_players->each(function ($player) use ($group_a) {
+            $player->tournaments()->attach($this->id);
+            $player->groups()->attach($group_a->id);
+        });
+
+        $this->createGamesForGroup($group_a_players, $player_indexes_for_games, $group_a);
+
+        // SECOND GROUP
+        $group_b = Group::create([
+            'name' => 'Grupo B',
+            'squad_id' => $squad->id,
+            'tournament_id' => $this->id,
+        ]);
+
+        $group_b_players = collect([$players[4], $players[5], $players[6], $players[7]]);
+
+        $group_b_players->each(function ($player) use ($group_b) {
+            $player->tournaments()->attach($this->id);
+            $player->groups()->attach($group_b->id);
+        });
+
+        $this->createGamesForGroup($group_b_players, $player_indexes_for_games, $group_b);
     }
 }
