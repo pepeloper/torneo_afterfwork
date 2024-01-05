@@ -10,23 +10,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Show list of squads for user
+// Show list of squads for user. For now is not needed
 // Route::get('/clubs', [SquadsController::class, 'index'])->name('clubs.index');
 
 // Show list of tournaments for the given squad
 Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
-
 
 // Show list of groups with games for a given tournament
 Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->middleware(['auth', 'squad.user'])->name('groups.index');
@@ -57,7 +45,7 @@ Route::get('/', function () {
     ]);
 })->name('index');
 
-// TODO: Add squad and tournament
+// TODO: Add squad and tournament parameters
 Route::put('/game/{game}', [GameController::class, 'update'])->name('game.update');
 
 Route::middleware('auth')->group(function () {
