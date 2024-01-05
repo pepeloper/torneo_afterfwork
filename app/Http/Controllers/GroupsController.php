@@ -54,6 +54,7 @@ class GroupsController extends Controller
             'section' => 'leagues',
         ]);
     }
+
     // Create a new league based on the groups
     public function store(Request $request, Squad $squad, Tournament $tournament)
     {
@@ -71,126 +72,208 @@ class GroupsController extends Controller
             $rankings[] = $group->ranking();
         }
 
-        $first_league_data = [
-            $rankings[0][0]->id,
-            $rankings[0][1]->id,
-            $rankings[1][0]->id,
-            $rankings[1][1]->id,
-        ];
+        if ($tournament->users->count() === 12) {
+            $first_league_data = [
+                $rankings[0][0]->id,
+                $rankings[0][1]->id,
+                $rankings[1][0]->id,
+                $rankings[1][1]->id,
+            ];
 
-        $second_league_data = [
-            $rankings[0][2]->id,
-            $rankings[1][2]->id,
-            $rankings[2][0]->id,
-            $rankings[2][1]->id,
-        ];
+            $second_league_data = [
+                $rankings[0][2]->id,
+                $rankings[1][2]->id,
+                $rankings[2][0]->id,
+                $rankings[2][1]->id,
+            ];
 
-        $third_league_data = [
-            $rankings[0][3]->id,
-            $rankings[1][3]->id,
-            $rankings[2][2]->id,
-            $rankings[2][3]->id,
-        ];
+            $third_league_data = [
+                $rankings[0][3]->id,
+                $rankings[1][3]->id,
+                $rankings[2][2]->id,
+                $rankings[2][3]->id,
+            ];
 
-        /* FIRST LEAGUE */
-        $first_league = Group::create([
-            'name' => 'Liga 1ª',
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
+            /* FIRST LEAGUE */
+            $first_league = Group::create([
+                'name' => 'Liga 1ª',
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
 
-        foreach ($first_league_data as $user_id) {
-            $user = User::find($user_id);
-            $user->groups()->attach($first_league);
+            foreach ($first_league_data as $user_id) {
+                $user = User::find($user_id);
+                $user->groups()->attach($first_league);
+            }
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[0], $first_league_data[1], $first_league_data[2], $first_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[0], $first_league_data[2], $first_league_data[1], $first_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[1], $first_league_data[2], $first_league_data[0], $first_league_data[3]]);
+
+            /* SECOND LEAGUE */
+            $second_league = Group::create([
+                'name' => 'Liga 2ª',
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+
+            foreach ($second_league_data as $user_id) {
+                $user = User::find($user_id);
+                $user->groups()->attach($second_league);
+            }
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[0], $second_league_data[1], $second_league_data[2], $second_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[0], $second_league_data[2], $second_league_data[1], $second_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[1], $second_league_data[2], $second_league_data[0], $second_league_data[3]]);
+
+            /* THIRD LEAGUE */
+            $third_league = Group::create([
+                'name' => 'Liga 3ª',
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+
+            foreach ($third_league_data as $user_id) {
+                $user = User::find($user_id);
+                $user->groups()->attach($third_league);
+            }
+
+            $game = Game::create([
+                'group_id' => $third_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$third_league_data[0], $third_league_data[1], $third_league_data[2], $third_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $third_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$third_league_data[0], $third_league_data[2], $third_league_data[1], $third_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $third_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$third_league_data[1], $third_league_data[2], $third_league_data[0], $third_league_data[3]]);
+        } else {
+            $first_league_data = [
+                $rankings[0][0]->id,
+                $rankings[0][1]->id,
+                $rankings[1][0]->id,
+                $rankings[1][1]->id,
+            ];
+
+            $second_league_data = [
+                $rankings[0][2]->id,
+                $rankings[0][3]->id,
+                $rankings[1][2]->id,
+                $rankings[1][3]->id,
+            ];
+
+            /* FIRST LEAGUE */
+            $first_league = Group::create([
+                'name' => 'Liga 1ª',
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+
+            foreach ($first_league_data as $user_id) {
+                $user = User::find($user_id);
+                $user->groups()->attach($first_league);
+            }
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[0], $first_league_data[1], $first_league_data[2], $first_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[0], $first_league_data[2], $first_league_data[1], $first_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $first_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$first_league_data[1], $first_league_data[2], $first_league_data[0], $first_league_data[3]]);
+
+            /* SECOND LEAGUE */
+            $second_league = Group::create([
+                'name' => 'Liga 2ª',
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+
+            foreach ($second_league_data as $user_id) {
+                $user = User::find($user_id);
+                $user->groups()->attach($second_league);
+            }
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[0], $second_league_data[1], $second_league_data[2], $second_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[0], $second_league_data[2], $second_league_data[1], $second_league_data[3]]);
+
+            $game = Game::create([
+                'group_id' => $second_league->id,
+                'squad_id' => $squad->id,
+                'tournament_id' => $tournament->id,
+            ]);
+            $game->users()->attach([$second_league_data[1], $second_league_data[2], $second_league_data[0], $second_league_data[3]]);
         }
 
-        $game = Game::create([
-            'group_id' => $first_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$first_league_data[0], $first_league_data[1], $first_league_data[2], $first_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $first_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$first_league_data[0], $first_league_data[2], $first_league_data[1], $first_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $first_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$first_league_data[1], $first_league_data[2], $first_league_data[0], $first_league_data[3]]);
-
-        /* SECOND LEAGUE */
-        $second_league = Group::create([
-            'name' => 'Liga 2ª',
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-
-        foreach ($second_league_data as $user_id) {
-            $user = User::find($user_id);
-            $user->groups()->attach($second_league);
-        }
-
-        $game = Game::create([
-            'group_id' => $second_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$second_league_data[0], $second_league_data[1], $second_league_data[2], $second_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $second_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$second_league_data[0], $second_league_data[2], $second_league_data[1], $second_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $second_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$second_league_data[1], $second_league_data[2], $second_league_data[0], $second_league_data[3]]);
-
-        /* THIRD LEAGUE */
-        $third_league = Group::create([
-            'name' => 'Liga 3ª',
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-
-        foreach ($third_league_data as $user_id) {
-            $user = User::find($user_id);
-            $user->groups()->attach($third_league);
-        }
-
-        $game = Game::create([
-            'group_id' => $third_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$third_league_data[0], $third_league_data[1], $third_league_data[2], $third_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $third_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$third_league_data[0], $third_league_data[2], $third_league_data[1], $third_league_data[3]]);
-
-        $game = Game::create([
-            'group_id' => $third_league->id,
-            'squad_id' => $squad->id,
-            'tournament_id' => $tournament->id,
-        ]);
-        $game->users()->attach([$third_league_data[1], $third_league_data[2], $third_league_data[0], $third_league_data[3]]);
-
-        return redirect()->route('tournament.league.show', ['squad' => $squad, 'group' => $first_league]);
+        return redirect()->route('tournament.league.show', ['squad' => $squad, 'tournament' => $tournament]);
     }
 }

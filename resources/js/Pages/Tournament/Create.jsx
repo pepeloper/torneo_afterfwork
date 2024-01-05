@@ -43,7 +43,6 @@ export default function Create({ squad, users }) {
 
     if (data.players.length >= 8) {
       setShowModeElection(true);
-      setData('mode', null);
     } else {
       setShowModeElection(false);
       setData('mode', 'groups');
