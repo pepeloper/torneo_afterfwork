@@ -5,6 +5,7 @@ import InputError from "@/Components/InputError";
 import PlayerAutocomplete from "@/Components/PlayerAutocomplete";
 import { Button } from "@material-tailwind/react";
 import { RadioGroup } from '@headlessui/react'
+import { useEffect, useMemo, useState } from "react";
 
 
 function CheckIcon(props) {
@@ -23,15 +24,38 @@ function CheckIcon(props) {
 }
 
 export default function Create({ squad, users }) {
+  const [showModeElection, setShowModeElection] = useState(false);
+  const [invalidNumberOfPlayers, setInvalidNumberOfPlayers] = useState(false);
+
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     points: 16,
     players: [],
-    mode: null,
+    mode: 'groups',
   });
 
+  useEffect(() => {
+    if (data.players.length % 4 !== 0) {
+      setInvalidNumberOfPlayers(true);
+    } else {
+      setInvalidNumberOfPlayers(false);
+    }
+
+    if (data.players.length >= 8) {
+      setShowModeElection(true);
+      setData('mode', null);
+    } else {
+      setShowModeElection(false);
+      setData('mode', 'groups');
+    }
+  }, [data.players]);
+
+  const invalidState = useMemo(() => {
+    return !data.players.length || data.name === '';
+  }, [data]);
+
   const addPlayers = (players) => {
-    data.players = players;
+    setData('players', players);
   }
 
   const handleSubmit = (event) => {
@@ -95,6 +119,7 @@ export default function Create({ squad, users }) {
               players={users}
               addPlayers={addPlayers}
             />
+            { invalidNumberOfPlayers && <InputError message="El número de jugadores tiene que ser 4, 8 o 12" className="mt-2" /> }
             {/* {data.players.map((player, index) => {
               return <PlayerAutocomplete
                 key={`player-${index}`}
@@ -106,7 +131,7 @@ export default function Create({ squad, users }) {
           </div>
         </div>
 
-        <div>
+        { showModeElection && <div>
           <InputLabel htmlFor="points" value="Modo de juego" />
 
           <RadioGroup value={data.mode} onChange={(value) => setData('mode', value)}>
@@ -160,10 +185,10 @@ export default function Create({ squad, users }) {
           </RadioGroup>
 
           <InputError message={errors.name} className="mt-2" />
-        </div>
+        </div>}
 
 
-        <Button type="submit" fullWidth>Crear torneo</Button>
+        <Button type="submit" fullWidth disabled={invalidNumberOfPlayers || invalidState}>Crear torneo</Button>
       </form>
     </div>
   )
