@@ -53,9 +53,10 @@ class TournamentsController extends Controller
             'name' => $request->input('name'),
             'squad_id' => $squad->id,
             'user_id' => $user->id,
+            'mode' => $request->input('mode') ?? 'groups',
         ]);
 
-        $tournament->createMatches($request->input('players'), $squad, $request->input('mode'));
+        $tournament->createMatches($request->input('players'), $squad);
 
         return Redirect::route('squads.show', ['squad' => $squad]);
     }

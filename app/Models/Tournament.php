@@ -51,12 +51,12 @@ class Tournament extends Model
         return $ranking;
     }
 
-    public function createMatches($players_ids, $squad, $mode = 'groups')
+    public function createMatches($players_ids, $squad)
     {
         $number_of_players = count($players_ids);
         $players = User::whereIn('id', $players_ids)->get();
 
-        if ($mode === 'groups') {
+        if ($this->mode === 'groups') {
             if ($number_of_players === 4) {
                 $this->createMatchesForFourPlayers($players, $squad);
             }
