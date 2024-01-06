@@ -11,6 +11,7 @@ import { HomeIcon, UserGroupIcon, Cog6ToothIcon, UserCircleIcon, ChartBarIcon } 
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import GameCard from "@/Components/GameCard";
 import EditGame from "@/Components/Game/EditGame";
+import AppLayout from "@/Layouts/AppLayout";
 
 export default function Show({ squad, tournament, hasLeagues, section, ranking }) {
   console.log(tournament)
@@ -44,20 +45,23 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
     return tournament.users.length === 4;
   }, [tournament.users]);
 
-  return (
-    <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh] relative">
-      <section className="flex-1 mb-6">
-        <div className="w-full flex justify-between items-center px-6 mt-5">
-          <div className="flex space-x-0.5">
-            <Link href={route('squads.show', { squad })} className="mt-2">
-              <ChevronLeftIcon className="w-6 h-6" />
-            </Link>
-            <div>
-              <Typography variant="h3">{tournament.name}</Typography>
-              <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
-            </div>
-          </div>
+  const header = (
+    <div className="w-full flex justify-between items-center px-6 mt-5">
+      <div className="flex space-x-0.5">
+        <Link href={route('squads.show', { squad })} className="mt-2">
+          <ChevronLeftIcon className="w-6 h-6" />
+        </Link>
+        <div>
+          <Typography variant="h3">{tournament.name}</Typography>
+          <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
         </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <AppLayout header={header}>
+      <>
         <div className="px-6 mt-5 border-t border-gray-200 py-6">
           <div className="flex items-center gap-x-2">
             <UserCircleIcon className="w-6 h-6" />
@@ -161,66 +165,55 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
 
         {showMatches &&
           <div className="px-6 border-t border-gray-200 py-6">
-          <div className="space-y-3.5 mt-3">
-                  {ranking.map((u, index) => {
-                    return (
-                      <div key={u.id} className="w-full">
-                        <div className="w-full flex items-center justify-between">
-                          <div className="flex items-center">
-                            {index === 0 ? <span className="text-2xl">🥇</span> : ''}
-                            {index === 1 ? <span className="text-2xl">🥈</span> : ''}
-                            {index === 2 ? <span className="text-2xl">🥉</span> : ''}
-                            {index > 2 ? <span className="text-2xl">☠️</span> : ''}
-                            <p className="font-medium text-lg ml-1.5" key={u.username}>{u.name}</p>
-                          </div>
-                          <div className="flex space-x-4">
-                            <p className="text-light-green-500 font-semibold">{u.total_points_in_favor}</p>
-                            <p className="text-red-300 font-semibold"> {u.total_points_against}</p>
-                          </div>
-                        </div>
-                        <div className="flex mt-0.5">
-                          {u.total_points_against || u.total_points_in_favor ?
-                            <>
-                              <div className="bg-light-green-500 h-2 rounded-r-none rounded-lg" style={{ width: `${(100 * u.total_points_in_favor) / 48}%` }} />
-                              <div className="bg-red-300 h-2 rounded-l-none rounded-lg" style={{ width: `${(100 * u.total_points_against) / 48}%` }} />
-                            </> :
-                            <div className="bg-gray-300 h-2 rounded-lg w-full" />
-                          }
-                        </div>
+            <div className="space-y-3.5 mt-3">
+              {ranking.map((u, index) => {
+                return (
+                  <div key={u.id} className="w-full">
+                    <div className="w-full flex items-center justify-between">
+                      <div className="flex items-center">
+                        {index === 0 ? <span className="text-2xl">🥇</span> : ''}
+                        {index === 1 ? <span className="text-2xl">🥈</span> : ''}
+                        {index === 2 ? <span className="text-2xl">🥉</span> : ''}
+                        {index > 2 ? <span className="text-2xl">☠️</span> : ''}
+                        <p className="font-medium text-lg ml-1.5" key={u.username}>{u.name}</p>
                       </div>
-                    )
-                  })}
-                </div>
-                <div className="space-y-6 mt-10">
-                  {tournament.groups[0].games.map(game => {
-                    return (
-                      <GameCard key={game.id} game={game} onClick={openDrawer} activeGame={activeGame} />
-                    )
-                  })}
-                </div>
+                      <div className="flex space-x-4">
+                        <p className="text-light-green-500 font-semibold">{u.total_points_in_favor}</p>
+                        <p className="text-red-300 font-semibold"> {u.total_points_against}</p>
+                      </div>
+                    </div>
+                    <div className="flex mt-0.5">
+                      {u.total_points_against || u.total_points_in_favor ?
+                        <>
+                          <div className="bg-light-green-500 h-2 rounded-r-none rounded-lg" style={{ width: `${(100 * u.total_points_in_favor) / 48}%` }} />
+                          <div className="bg-red-300 h-2 rounded-l-none rounded-lg" style={{ width: `${(100 * u.total_points_against) / 48}%` }} />
+                        </> :
+                        <div className="bg-gray-300 h-2 rounded-lg w-full" />
+                      }
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="space-y-6 mt-10">
+              {tournament.groups[0].games.map(game => {
+                return (
+                  <GameCard key={game.id} game={game} onClick={openDrawer} activeGame={activeGame} />
+                )
+              })}
+            </div>
           </div>
         }
 
-
-
-      </section>
-      <section className="px-12 z-50 bg-white sticky bottom-0 border-t border-gray-200 w-full py-4 flex justify-between items-center">
-        <Link href={route('squads.show', { squad })}>
-          <HomeIcon className="w-6 text-gray-600" />
-        </Link>
-        <UserGroupIcon className="w-6 text-gray-600" />
-        <Cog6ToothIcon className="w-6 text-gray-600" />
-      </section>
-
-      {activeGame && <Drawer dismiss={{
-        outsidePress: (event) => {
-          setBackdropBlicked(true);
-          return true;
-        }
-      }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
-        <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
-      </Drawer>
-      }
-    </div>
-  )
+        {activeGame && <Drawer dismiss={{
+          outsidePress: (event) => {
+            setBackdropBlicked(true);
+            return true;
+          }
+        }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+          <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
+        </Drawer>}
+      </>
+    </AppLayout>
+  );
 }

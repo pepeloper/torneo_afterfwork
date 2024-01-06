@@ -5,6 +5,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SquadsController;
 use App\Http\Controllers\TournamentsController;
+use App\Http\Controllers\UsersController;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,8 @@ Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store']
 
 // Create leagues for a tournament
 Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
+
+Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
 
 Route::get('/', function () {
     // TODO: LANDING
