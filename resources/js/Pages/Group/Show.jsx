@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EditGame from "@/Components/Game/EditGame";
 import GameCard from "@/Components/GameCard";
 import { ranking } from "@/utils";
@@ -17,9 +17,19 @@ import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outl
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 
 export default function Show({ squad, tournament, hasLeagues, section }) {
+  console.log(tournament);
+  console.log(hasLeagues);
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [backdropClicked, setBackdropBlicked] = useState(false);
+
+  const canCreateLeagues = useMemo(() => {
+    return tournament.groups.every(g => {
+      return g.games.every(game => game.played);
+    })
+  }, [tournament.groups]);
+
+  console.log('canCreateLeagues', canCreateLeagues);
 
   const openDrawer = (game) => {
     if (backdropClicked) {
@@ -55,9 +65,11 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
             <Link href={route('groups.index', { squad, tournament })}>
               <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
             </Link> :
-            <Link href={route('league.create', {squad, tournament })} method="post" as="div">
+            canCreateLeagues ?
+              <Link href={route('league.create', { squad, tournament })} method="post" as="div">
               <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
-            </Link>
+            </Link> :
+              <Button variant="gradient" size="sm" color="light-green" ripple disabled>Crear ligas</Button>
           }
         </div>
         <div className="px-6 mt-5">

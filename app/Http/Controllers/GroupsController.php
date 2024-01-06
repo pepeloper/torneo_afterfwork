@@ -23,7 +23,7 @@ class GroupsController extends Controller
             'groups.games.users'
         ]);
 
-        $has_leagues = Group::where('name', 'like', 'Liga%')->first() ? true : false;
+        $has_leagues = Group::where('name', 'like', 'Liga%')->where('tournament_id', $tournament->id)->first() ? true : false;
 
         return Inertia::render('Group/Show', [
             'squad' => $squad,
