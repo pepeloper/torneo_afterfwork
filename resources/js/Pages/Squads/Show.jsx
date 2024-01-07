@@ -41,7 +41,7 @@ export default function Show({ squad }) {
           <Card key={tournament.id} className={classNames("border-gray-200 rounded-none border-l-0 border-r-0 bg-white/70", { 'border-t-0': key === 0, 'border-t': key > 0 })} shadow={false}>
             <CardBody>
               <Typography variant="h4">{tournament.name}</Typography>
-              <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography>
+              {/* <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography> */}
 
               <Link href={route('tournament.show', { squad, tournament })} className="block mt-5">
                 <Button variant="gradient" className="flex items-center gap-2">
