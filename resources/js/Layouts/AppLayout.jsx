@@ -31,7 +31,9 @@ export default function AppLayout({ children, header }) {
         <Link href={route('users.show', { squad })}>
           <UserGroupIcon className="w-6 text-gray-600" />
         </Link>
-        <Cog6ToothIcon className="w-6 text-gray-600" />
+        <Link href={route('users.settings')}>
+          <Cog6ToothIcon className="w-6 text-gray-600" />
+        </Link>
         {/* <Menu placement="bottom-start">
           <MenuHandler>
             <Avatar
