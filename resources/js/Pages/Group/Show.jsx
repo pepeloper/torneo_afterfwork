@@ -53,7 +53,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
   };
 
   const header = (
-    <div className="w-full flex justify-between items-center px-6 mt-5">
+    <>
       <div className="flex space-x-0.5">
         <Link href={route('tournament.show', { squad, tournament })} className="mt-2">
           <ChevronLeftIcon className="w-6 h-6" />
@@ -76,13 +76,13 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
           </Link> :
           <Button variant="gradient" size="sm" color="light-green" ripple disabled>Crear ligas</Button>
       }
-    </div>
+    </>
   );
 
   return (
     <AppLayout header={header}>
       <>
-        <div className="px-6 mt-5">
+        <div className="px-6 mt-6">
           <Typography variant="h5">
             {section === 'groups' ? 'Fase de grupos' : 'Ligas'}
           </Typography>

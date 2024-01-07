@@ -23,22 +23,22 @@ export default function Show({ squad }) {
   console.log('auth', auth)
 
   const header = (
-    <div className="w-full flex justify-between items-center px-6 mt-5">
-      <div>
-        <Typography variant="h3">{squad.name}</Typography>
-        <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel</Typography>
-      </div>
-      <Link href={route('tournament.create', { squad })}>
-        <Button variant="gradient" size="sm" color="light-green" ripple>Crear torneo</Button>
-      </Link>
-    </div>
+      <>
+        <div>
+          <Typography variant="h3">{squad.name}</Typography>
+          <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel</Typography>
+        </div>
+        <Link href={route('tournament.create', { squad })}>
+          <Button variant="gradient" size="sm" color="light-green" ripple>Crear torneo</Button>
+        </Link>
+      </>
   );
 
   return (
     <AppLayout header={header}>
       {squad.tournaments.map((tournament, key) => {
         return (
-          <Card key={tournament.id} className={classNames("border border-gray-200 border-t-0 rounded-none border-l-0 border-r-0 bg-white/70")} shadow={false}>
+          <Card key={tournament.id} className={classNames("border-gray-200 rounded-none border-l-0 border-r-0 bg-white/70", { 'border-t-0': key === 0, 'border-t': key > 0 })} shadow={false}>
             <CardBody>
               <Typography variant="h4">{tournament.name}</Typography>
               <Typography variant="paragraph">¡Bienvenidos al Torneo Navideño de Pádel de Afterwork! 🎾🎄</Typography>

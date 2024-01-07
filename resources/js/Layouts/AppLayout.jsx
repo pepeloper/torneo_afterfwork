@@ -17,14 +17,16 @@ export default function AppLayout({ children, header }) {
   console.log('auth', auth)
 
   return (
-    <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh] relative">
-      <section className="flex-1">
-        {header}
-        <div className="mt-5">
+    <div className="relative max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh]">
+      <section className="flex-1 pb-[70px]">
+        <div className="w-full flex justify-between items-center px-6 border-b border-gray-200 py-5">
+          {header}
+        </div>
+        <div>
           {children}
         </div>
       </section>
-      {auth.user && <section className="px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
+      {auth.user && <section className="fixed bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
         <Link href={route('squads.show', { squad })}>
           <HomeIcon className="w-6 text-gray-600" />
         </Link>
