@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
   Typography,
   Avatar,
@@ -17,11 +17,18 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
   console.log(tournament)
   console.log(ranking)
 
+  const { auth } = usePage().props;
+
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [backdropClicked, setBackdropBlicked] = useState(false);
 
   const openDrawer = (game) => {
+    if (!auth.user) {
+      setOpen(false)
+      return
+    }
+
     if (backdropClicked) {
       setBackdropBlicked(false);
       return
@@ -48,9 +55,9 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
   const header = (
     <div className="w-full flex justify-between items-center px-6 mt-5">
       <div className="flex space-x-0.5">
-        <Link href={route('squads.show', { squad })} className="mt-2">
+        {auth.user && <Link href={route('squads.show', { squad })} className="mt-2">
           <ChevronLeftIcon className="w-6 h-6" />
-        </Link>
+        </Link>}
         <div>
           <Typography variant="h3">{tournament.name}</Typography>
           <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
