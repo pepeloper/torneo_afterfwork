@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import EditGame from "@/Components/Game/EditGame";
 import GameCard from "@/Components/GameCard";
 import { ranking } from "@/utils";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
   Tabs,
   TabsHeader,
@@ -23,6 +23,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [backdropClicked, setBackdropBlicked] = useState(false);
+  const { auth } = usePage().props;
 
   const canCreateLeagues = useMemo(() => {
     return tournament.groups.every(g => {
@@ -33,6 +34,11 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
   console.log('canCreateLeagues', canCreateLeagues);
 
   const openDrawer = (game) => {
+    if (!auth.user) {
+      setOpen(false)
+      return
+    }
+
     if (backdropClicked) {
       setBackdropBlicked(false);
       return
@@ -148,6 +154,15 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
             ))}
           </TabsBody>
         </Tabs>
+
+        {activeGame && <Drawer dismiss={{
+          outsidePress: (event) => {
+            setBackdropBlicked(true);
+            return true;
+          }
+        }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+          <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
+        </Drawer>}
       </>
     </AppLayout>
   );

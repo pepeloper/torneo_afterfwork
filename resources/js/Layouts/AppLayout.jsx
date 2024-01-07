@@ -24,7 +24,7 @@ export default function AppLayout({ children, header }) {
           {children}
         </div>
       </section>
-      <section className="px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
+      {auth.user && <section className="px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
         <Link href={route('squads.show', { squad })}>
           <HomeIcon className="w-6 text-gray-600" />
         </Link>
@@ -89,7 +89,7 @@ export default function AppLayout({ children, header }) {
             </MenuItem>
           </MenuList>
         </Menu> */}
-      </section>
+      </section>}
     </div>
   );
 }

@@ -19,10 +19,10 @@ use Inertia\Inertia;
 Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
 
 // Show list of groups with games for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->middleware(['auth', 'squad.user'])->name('groups.index');
+Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->name('groups.index');
 
 // Temporary route to show leagues for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [GroupsController::class, 'show_leagues'])->middleware(['auth', 'squad.user'])->name('tournament.league.show');
+Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
 
 // Create a tournament form
 Route::get('/clubs/{squad}/tournament/create', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
