@@ -1,0 +1,18 @@
+# Ranking
+
+use Illuminate\Support\Facades\DB;
+
+$groupId = 1; // replace with your group id
+
+$ranking = DB::table('users')
+    ->select('users.id', 'users.name', 'users.last_year_position',
+        DB::raw('SUM(game_user.points_in_favor) as points_in_favor'),
+        DB::raw('SUM(game_user.points_against) as points_against'))
+    ->join('game_user', 'users.id', '=', 'game_user.user_id')
+    ->join('games', 'games.id', '=', 'game_user.game_id')
+    ->where('games.group_id', $groupId)
+    ->groupBy('users.id', 'users.name', 'users.last_year_position')
+    ->orderByRaw('SUM(game_user.points_in_favor) - SUM(game_user.points_against) DESC,
+                  CASE WHEN users.last_year_position IS NULL THEN 1 ELSE 0 END,
+                  users.last_year_position ASC')
+    ->get();

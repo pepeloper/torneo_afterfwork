@@ -52,4 +52,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Game::class);
     }
+
+    public function squads()
+    {
+        return $this->belongsToMany(Squad::class);
+    }
+
+    public function tournaments()
+    {
+        return $this->belongsToMany(Tournament::class);
+    }
 }

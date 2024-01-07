@@ -4,8 +4,7 @@ import { ranking } from "@/utils";
 export default function GroupSection({ group, onlyRanking = false }) {
   return (
     <>
-      <div className="text-white">
-        <h2 className="text-3xl font-bold tracking-tight mt-5">Ranking</h2>
+      <div className="text-gray-900">
         <div className="space-y-2.5 mt-4">
           {ranking(group.games).map((u, index) => {
             return (
@@ -27,8 +26,7 @@ export default function GroupSection({ group, onlyRanking = false }) {
         </div>
         {!onlyRanking &&
           <>
-          <h2 className="text-3xl font-bold tracking-tight mt-10">Partidos</h2>
-            <div className="space-y-6 mt-4">
+            <div className="space-y-6 mt-10">
               {group.games.map(game => {
                 return (
                   <GameCard key={game.id} game={game} />
