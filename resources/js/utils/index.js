@@ -1,3 +1,17 @@
+export const getUserRoleForSquad = (user, squad) => {
+  if (!user) {
+    return null;
+  }
+
+  const index = user.squads.findIndex(s => s.pivot.squad_id === squad.id);
+
+  if (index < 0) {
+    return null;
+  }
+
+  return user.squads[index].pivot.role;
+}
+
 export const ranking = (games) => {
   return games.reduce((accumulator, game) => {
     game.users.forEach((user) => {

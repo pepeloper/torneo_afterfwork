@@ -38,6 +38,8 @@ Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 
 
 Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
 
+Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
+
 Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
 
 Route::get('/', function () {

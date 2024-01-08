@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function squads()
     {
-        return $this->belongsToMany(Squad::class);
+        return $this->belongsToMany(Squad::class)->withPivot(['role']);
     }
 
     public function tournaments()

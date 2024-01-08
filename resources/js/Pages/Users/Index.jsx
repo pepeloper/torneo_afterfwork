@@ -1,10 +1,15 @@
 import AppLayout from "@/Layouts/AppLayout";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import { Avatar, Typography } from "@material-tailwind/react";
+import { Avatar, Chip, Select, Typography, Option } from "@material-tailwind/react";
 import classNames from "classnames";
+import { getUserRoleForSquad } from "@/utils";
 
 export default function Index({ squad }) {
+
+  const { auth } = usePage().props;
+
+  const squadRole = getUserRoleForSquad(auth.user, squad);
 
   const header = (
     <>
@@ -20,17 +25,38 @@ export default function Index({ squad }) {
     </>
   );
 
+  const handleRolChange = (user, value) => {
+    router.put(route('users.update', { squad }), {
+      role: value,
+      user: user.id,
+    })
+  }
+
   return (
     <AppLayout header={header}>
       <div className="flex flex-col space-y-3">
         {squad.users.map((u, index) => {
           return (
-            <div className={classNames("px-6 flex space-x-4 border-gray-200 pt-3", { "border-t": index > 0 })}>
-              <Avatar key={u.id} src={u.photo} className="border-2 border-white hover:z-10 focus:z-10" />
-              <div className="flex flex-col justify-center">
-                <p className="font-semibold">{u.name}</p>
-                <p className="text-gray-500 text-sm">{u.email}</p>
+            <div key={u.id} className={classNames("px-6 flex justify-between border-gray-200 items-center pt-3", { "border-t": index > 0 })}>
+              <div className="flex space-x-4 flex-1">
+                <Avatar key={u.id} src={u.photo} className="border-2 border-white hover:z-10 focus:z-10" />
+                <div className="flex flex-col justify-center">
+                  <p className="font-semibold">{u.name}</p>
+                  <p className="text-gray-500 text-sm">{u.email}</p>
+                </div>
               </div>
+              {squadRole === "admin" && u.id !== auth.user.id ? <div>
+                <Select
+                  value={u.pivot.role}
+                  variant="outlined"
+                  labelProps={{ className: "after:ml-0 before:mr-0" }}
+                  onChange={(value) => handleRolChange(u, value)}
+                >
+                  <Option value="admin">Admin</Option>
+                  <Option value="member">Miembro</Option>
+                </Select>
+              </div> :
+                <Chip className="w-20 text-center" value={u.pivot.role === "admin" ? "Admin" : "Miembro"} variant="outlined" />}
             </div>
           )
         })}

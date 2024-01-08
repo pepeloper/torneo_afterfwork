@@ -13,7 +13,6 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import AppLayout from "@/Layouts/AppLayout";
 
