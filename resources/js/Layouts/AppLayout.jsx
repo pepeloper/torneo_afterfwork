@@ -11,10 +11,12 @@ import {
   MenuItem,
   Avatar,
 } from "@material-tailwind/react"
+import classNames from "classnames";
 
 export default function AppLayout({ children, header }) {
   const { auth, squad } = usePage().props
-  console.log('auth', auth)
+  const currentRoute = route().current();
+  console.log("currentRoute", currentRoute)
 
   return (
     <div className="relative max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh]">
@@ -28,13 +30,13 @@ export default function AppLayout({ children, header }) {
       </section>
       {auth.user && <section className="fixed bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
         <Link href={route('squads.show', { squad })}>
-          <HomeIcon className="w-6 text-gray-600" />
+          <HomeIcon className={ classNames('w-6', { 'text-light-green-700': !["users.show", "users.settings"].includes(currentRoute), 'text-gray-600': ["users.show", "users.settings"].includes(currentRoute)}) } />
         </Link>
         <Link href={route('users.show', { squad })}>
-          <UserGroupIcon className="w-6 text-gray-600" />
+          <UserGroupIcon className={ classNames('w-6', { 'text-light-green-700': currentRoute === "users.show", 'text-gray-600': currentRoute !== "users.show"}) } />
         </Link>
         <Link href={route('users.settings')}>
-          <Cog6ToothIcon className="w-6 text-gray-600" />
+          <Cog6ToothIcon className={ classNames('w-6', { 'text-light-green-700': currentRoute === "users.settings", 'text-gray-600': currentRoute !== "users.settings"}) } />
         </Link>
         {/* <Menu placement="bottom-start">
           <MenuHandler>
