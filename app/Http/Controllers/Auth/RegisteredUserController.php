@@ -51,6 +51,14 @@ class RegisteredUserController extends Controller
 
         $user->squads()->attach($squad);
 
+        foreach ($request->members as $key => $member) {
+            $member = User::create([
+                'email' => $member['email'],
+                'name' => $member['name'],
+            ]);
+            $member->squads()->attach($squad);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);

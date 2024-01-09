@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -6,15 +6,18 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from "@/Layouts/AppLayout";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
+import classNames from "classnames";
 
 export default function Register() {
+  const [showAddPlayers, setShowAddPlayers] = useState(null);
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
     squad: '',
+    members: [{ name: '', email: '' }],
   });
 
   useEffect(() => {
@@ -25,8 +28,29 @@ export default function Register() {
 
   const submit = (e) => {
     e.preventDefault();
-
     post(route('register'));
+  };
+
+
+  const handleChangePlayer = (field, index, value) => {
+    setData((data) => {
+      data.members[index][field] = value
+      return { ...data };
+    })
+  };
+
+  const handleAddMorePlayers = (field, index, value) => {
+    setData((data) => {
+      data.members.push({ name: '', email: '' });
+      return { ...data };
+    })
+  };
+
+  const handleRemovePlayer = (index) => {
+    setData((data) => {
+      data.members.splice(index, 1);
+      return { ...data };
+    })
   };
 
   const header = (
@@ -53,7 +77,7 @@ export default function Register() {
             id="name"
             name="name"
             value={data.name}
-            className="mt-1 block w-full"
+            className="mt-1.5 block w-full"
             autoComplete="name"
             isFocused={true}
             onChange={(e) => setData('name', e.target.value)}
@@ -71,7 +95,7 @@ export default function Register() {
             type="email"
             name="email"
             value={data.email}
-            className="mt-1 block w-full"
+            className="mt-1.5 block w-full"
             autoComplete="username"
             onChange={(e) => setData('email', e.target.value)}
             required
@@ -88,7 +112,7 @@ export default function Register() {
             type="password"
             name="password"
             value={data.password}
-            className="mt-1 block w-full"
+            className="mt-1.5 block w-full"
             autoComplete="new-password"
             onChange={(e) => setData('password', e.target.value)}
             required
@@ -98,14 +122,14 @@ export default function Register() {
         </div>
 
         <div className="mt-4">
-          <InputLabel htmlFor="password_confirmation" value="Repite la constraseña" />
+          <InputLabel htmlFor="password_confirmation" value="Repite la contraseña" />
 
           <TextInput
             id="password_confirmation"
             type="password"
             name="password_confirmation"
             value={data.password_confirmation}
-            className="mt-1 block w-full"
+            className="mt-1.5 block w-full"
             autoComplete="new-password"
             onChange={(e) => setData('password_confirmation', e.target.value)}
             required
@@ -124,13 +148,63 @@ export default function Register() {
             type="text"
             name="squad"
             value={data.squad}
-            className="mt-1 block w-full"
+            className="mt-1.5 block w-full"
             onChange={(e) => setData('squad', e.target.value)}
             required
           />
 
           <InputError message={errors.squad} className="mt-2" />
         </div>
+
+        <div className="mt-3">
+          <InputLabel value="¿Quieres añadir miembros al grupo?" />
+          <ButtonGroup variant="outlined" fullWidth className="mt-2">
+            <Button className={classNames({ 'bg-gray-200': showAddPlayers})} type="button" onClick={() => setShowAddPlayers(true)}>Si</Button>
+            <Button className={classNames({ 'bg-gray-200': showAddPlayers === false})} type="button" onClick={() => setShowAddPlayers(false)}>No</Button>
+          </ButtonGroup>
+        </div>
+
+        {showAddPlayers &&
+          <div className="mt-3">
+            <div className="w-full flex items-center justify-between">
+              <InputLabel htmlFor="squad" value="Añade miembros" />
+              <Button variant="text" size="sm" onClick={handleAddMorePlayers}>Añadir otro miembro</Button>
+            </div>
+
+            {data.members.map((m, index) => {
+              return (
+                <div key={`player_${index}`} className={classNames({ 'mt-3': index > 0 })}>
+                  <div className="flex items-center justify-between">
+                    <InputLabel htmlFor={`player_name_${index}`} value={`Jugador ${index + 1}`} />
+                    {index > 0 && <Button variant="text" size="sm" onClick={() => handleRemovePlayer(index)}>Eliminar</Button>}
+                  </div>
+                  <TextInput
+                    id={`player_name_${index}`}
+                    type="text"
+                    name={`player_name_${index}`}
+                    value={data.members[index].name}
+                    placeholder="Nombre"
+                    className="mt-1.5 block w-full"
+                    onChange={(e) => handleChangePlayer('name', index, e.target.value)}
+                    required
+                  />
+                  <TextInput
+                    id={`player_email_${index}`}
+                    type="email"
+                    placeholder="Correo electrónico"
+                    name={`player_email_${index}`}
+                    value={data.members[index].email}
+                    className="mt-2 block w-full"
+                    onChange={(e) => handleChangePlayer('email', index, e.target.value)}
+                    required
+                  />
+                </div>
+              )
+            })}
+
+            <InputError message={errors.squad} className="mt-2" />
+          </div>
+        }
 
         <div className="flex items-center justify-end mt-10">
           <Link
