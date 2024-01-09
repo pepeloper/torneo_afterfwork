@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
             'name' => $request->squad,
         ]);
 
-        $user->squads()->attach($squad);
+        $user->squads()->attach($squad, ['role' => 'admin']);
 
         foreach ($request->members as $key => $member) {
             $member = User::create([
