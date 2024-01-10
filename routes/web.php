@@ -2,15 +2,35 @@
 
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SquadsController;
 use App\Http\Controllers\TournamentsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserSettingsControler;
 use App\Models\Group;
+use App\Models\Invitation;
+use App\Models\Squad;
 use App\Models\User;
+use App\Notifications\UserInvitation;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Ramsey\Uuid\Uuid;
+
+Route::get('/mailable', function () {
+    $squad = Squad::first();
+    $user = User::first();
+    $invitation = Invitation::first();
+
+    if (!$invitation) {
+        $invitation = Invitation::create([
+            'user_id' => $user->id,
+            'used_at' => null,
+            'token' => (string) Uuid::uuid4(),
+        ]);
+    }
+    return (new UserInvitation($squad, $user, $invitation))->toMail($user);
+});
 
 // Show list of squads for user. For now is not needed
 // Route::get('/clubs', [SquadsController::class, 'index'])->name('clubs.index');
@@ -41,6 +61,10 @@ Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middlewar
 Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
 
 Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
+
+Route::get('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.show');
+
+Route::post('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 
 Route::get('/', function () {
     // TODO: LANDING

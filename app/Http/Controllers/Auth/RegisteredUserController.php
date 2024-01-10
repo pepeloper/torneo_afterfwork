@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invitation;
 use App\Models\Squad;
 use App\Models\User;
+use App\Notifications\UserInvitation;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Ramsey\Uuid\Uuid;
 
 class RegisteredUserController extends Controller
 {
@@ -57,6 +60,12 @@ class RegisteredUserController extends Controller
                 'name' => $member['name'],
             ]);
             $member->squads()->attach($squad);
+            $invitation = Invitation::create([
+                'user_id' => $member->id,
+                'used_at' => null,
+                'token' => (string) Uuid::uuid4(),
+            ]);
+            $member->notify(new UserInvitation($squad, $member, $invitation));
         }
 
         event(new Registered($user));
