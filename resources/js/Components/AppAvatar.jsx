@@ -1,7 +1,7 @@
 import { Avatar } from "@material-tailwind/react";
 
 export default function AppAvatar({ user }) {
-  const stringToHslColor = (str, s = 60, l = 45) => {
+  const stringToHslColor = (str, s = 44, l = 62) => {
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -24,7 +24,7 @@ export default function AppAvatar({ user }) {
     <div>
       {user.photo ?
         <Avatar key={user.id} src={user.photo} className="border-2 border-white hover:z-10 focus:z-10" /> :
-        <div className="uppercase font-medium text-sm border-2 border-white hover:z-10 focus:z-10 rounded-full w-12 h-12 flex items-center justify-center text-white" style={{ backgroundColor: stringToHslColor(user.name) }}>
+        <div className="uppercase font-semibold text-sm border-2 border-white hover:z-10 focus:z-10 rounded-full w-12 h-12 flex items-center justify-center text-white" style={{ backgroundColor: stringToHslColor(user.name) }}>
           <span>{getInitials(user.name)}</span>
         </div>
     }

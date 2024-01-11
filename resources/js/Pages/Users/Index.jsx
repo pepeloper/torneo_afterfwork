@@ -42,7 +42,7 @@ export default function Index({ squad }) {
               <div className="flex space-x-4 flex-1">
                 <AppAvatar key={u.id} user={u} className="border-2 border-white hover:z-10 focus:z-10" />
                 <div className="flex flex-col justify-center">
-                  <p className="font-semibold">{u.name}</p>
+                  <p className="font-semibold first-letter:uppercase">{u.name}</p>
                   <p className="text-gray-500 text-sm">{u.email}</p>
                 </div>
               </div>
