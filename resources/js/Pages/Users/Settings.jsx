@@ -1,7 +1,7 @@
 import AppLayout from "@/Layouts/AppLayout";
 import { Link, useForm } from "@inertiajs/react";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import { Avatar, Button, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 
 export default function Settings({ user, squad }) {
 

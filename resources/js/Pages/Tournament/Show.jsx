@@ -2,9 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import {
   Typography,
-  Avatar,
   Button,
-  ButtonGroup,
   Drawer,
 } from "@material-tailwind/react";
 import { HomeIcon, UserGroupIcon, Cog6ToothIcon, UserCircleIcon, ChartBarIcon } from '@heroicons/react/24/outline'
@@ -12,6 +10,7 @@ import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import GameCard from "@/Components/GameCard";
 import EditGame from "@/Components/Game/EditGame";
 import AppLayout from "@/Layouts/AppLayout";
+import AppAvatar from "@/Components/AppAvatar";
 
 export default function Show({ squad, tournament, hasLeagues, section, ranking }) {
   console.log(tournament)
@@ -77,7 +76,7 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
             </Typography>
           </div>
           <div className="flex -space-x-3 mt-5">
-            {usersAvatars.map(u => <Avatar key={u.id} src={u.photo} className="border-2 border-white hover:z-10 focus:z-10" />)}
+            {usersAvatars.map(u => <AppAvatar key={u.id} user={u} className="border-2 border-white hover:z-10 focus:z-10" />)}
             {tournament.users.length > AVATARS_TO_SHOW && <div className="border-2 border-white hover:z-10 focus:z-10 bg-gray-600 rounded-full w-12 h-12 flex items-center justify-center text-white">
               +{tournament.users.length - AVATARS_TO_SHOW}
             </div>}
