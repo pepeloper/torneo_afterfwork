@@ -56,25 +56,27 @@ Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store']
 // Create leagues for a tournament
 Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
 
+// List users in a squad
 Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
 
-Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
+// Update users permissions from squad
+Route::put('/clubs/{squad}/users', [UsersController ::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
 
+// Authenticated user settings
 Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
 
+// Show invitation to register for a squad
 Route::get('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.show');
 
+// Process the invitation, creating user password
 Route::post('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
+
+// Invite a usar to a squad
+Route::post('/clubs/{squad}/invite', [InvitationController::class, 'create'])->name('invitation.create');
 
 Route::get('/', function () {
     // TODO: LANDING
-    $league = Group::where('name', 'Liga 1º')->first();
-    $group = Group::where('name', 'Grupo A')->first();
-
-    return Inertia::render('Welcome', [
-        'group' => $group,
-        'league' => $league,
-    ]);
+    return Inertia::render('Welcome');
 })->name('index');
 
 // TODO: Add squad and tournament parameters

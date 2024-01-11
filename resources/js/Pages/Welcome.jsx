@@ -4,7 +4,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
-export default function Welcome({ group, league, auth }) {
+export default function Welcome({ auth }) {
 
   const { user } = auth;
 

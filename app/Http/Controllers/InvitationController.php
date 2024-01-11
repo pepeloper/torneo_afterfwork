@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invitation;
 use App\Models\Squad;
 use App\Models\User;
+use App\Notifications\UserInvitation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Ramsey\Uuid\Uuid;
 
 class InvitationController extends Controller
 {
@@ -53,5 +55,25 @@ class InvitationController extends Controller
         Auth::login($user);
 
         return redirect("/clubs/{$squad->id}");
+    }
+
+    public function create(Request $request, Squad $squad)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        $user->squads()->attach($squad, ['role' => 'member']);
+
+        $invitation = Invitation::create([
+            'user_id' => $user->id,
+            'used_at' => null,
+            'token' => (string) Uuid::uuid4(),
+        ]);
+
+        $user->notify(new UserInvitation($squad, $user, $invitation));
+
+        return back();
     }
 }

@@ -2,6 +2,7 @@ import AppLayout from "@/Layouts/AppLayout";
 import { Link, useForm } from "@inertiajs/react";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { Button, Typography } from "@material-tailwind/react";
+import AppAvatar from "@/Components/AppAvatar";
 
 export default function Settings({ user, squad }) {
 
@@ -15,8 +16,7 @@ export default function Settings({ user, squad }) {
           <ChevronLeftIcon className="w-6 h-6" />
         </Link>
         <div>
-          <Typography variant="h3">{user.name}</Typography>
-          <Typography variant="small" className="-mt-2 text-gray-500">Configuración de usuario</Typography>
+          <Typography variant="h3">Configuración</Typography>
         </div>
       </div>
     </>
@@ -25,8 +25,15 @@ export default function Settings({ user, squad }) {
   return (
     <AppLayout header={header}>
       <div className="px-6 mt-6">
-        <div className="flex flex-col space-y-3">
-          <Button variant="outlined" className="mt-12" onClick={() => post(route('logout'))}>
+        <div className="flex flex-col space-y-5">
+          <div className="flex items-center space-x-5">
+            <AppAvatar user={user} />
+            <div>
+              <Typography variant="lead">{user.name}</Typography>
+              <Typography variant="small" className="-mt-2">{user.email}</Typography>
+            </div>
+          </div>
+          <Button variant="outlined" onClick={() => post(route('logout'))}>
             Cerrar sesión
           </Button>
         </div>

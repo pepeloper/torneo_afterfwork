@@ -1,11 +1,13 @@
-import { useForm } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import PlayerAutocomplete from "@/Components/PlayerAutocomplete";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { RadioGroup } from '@headlessui/react'
 import { useEffect, useMemo, useState } from "react";
+import AppLayout from "@/Layouts/AppLayout";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 
 
 function CheckIcon(props) {
@@ -26,6 +28,7 @@ function CheckIcon(props) {
 export default function Create({ squad, users }) {
   const [showModeElection, setShowModeElection] = useState(false);
   const [invalidNumberOfPlayers, setInvalidNumberOfPlayers] = useState(false);
+  const { auth } = usePage().props;
 
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
@@ -76,9 +79,23 @@ export default function Create({ squad, users }) {
     },
   ]
 
+  const header = (
+    <>
+      <div className="flex space-x-0.5">
+        {auth.user && <Link href={route('squads.show', { squad })} className="mt-2">
+          <ChevronLeftIcon className="w-6 h-6" />
+        </Link>}
+        <div>
+          <Typography variant="h3">Crear torneo</Typography>
+          <Typography variant="small" className="-mt-2 text-gray-500">{squad.name}</Typography>
+        </div>
+      </div>
+    </>
+  );
+
   return (
-    <div className="max-w-xl mx-auto mt-5 px-6">
-      <form className="space-y-6" onSubmit={handleSubmit}>
+    <AppLayout header={header}>
+      <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
         <div>
           <InputLabel htmlFor="tournament_name" value="Nombre del torneo" />
 
@@ -118,7 +135,7 @@ export default function Create({ squad, users }) {
               players={users}
               addPlayers={addPlayers}
             />
-            { invalidNumberOfPlayers && <InputError message="El número de jugadores tiene que ser 4, 8 o 12" className="mt-2" /> }
+            {invalidNumberOfPlayers && <InputError message="El número de jugadores tiene que ser 4, 8 o 12" className="mt-2" />}
             {/* {data.players.map((player, index) => {
               return <PlayerAutocomplete
                 key={`player-${index}`}
@@ -130,7 +147,7 @@ export default function Create({ squad, users }) {
           </div>
         </div>
 
-        { showModeElection && <div>
+        {showModeElection && <div>
           <InputLabel htmlFor="points" value="Modo de juego" />
 
           <RadioGroup value={data.mode} onChange={(value) => setData('mode', value)}>
@@ -189,6 +206,6 @@ export default function Create({ squad, users }) {
 
         <Button type="submit" fullWidth disabled={invalidNumberOfPlayers || invalidState}>Crear torneo</Button>
       </form>
-    </div>
+    </AppLayout>
   )
 }
