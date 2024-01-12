@@ -19,7 +19,7 @@ export default function AppLayout({ children, header }) {
   console.log("currentRoute", currentRoute)
 
   return (
-    <div className="relative max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh]">
+    <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh]">
       <section className="flex-1 pb-[70px]">
         <div className="w-full flex justify-between items-center px-6 border-b border-gray-200 py-5">
           {header}
