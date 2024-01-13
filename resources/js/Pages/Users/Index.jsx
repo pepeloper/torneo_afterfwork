@@ -68,15 +68,17 @@ export default function Index({ squad }) {
                 </div>
               </div>
               {squadRole === "admin" && u.id !== auth.user.id ? <div>
-                <Select
-                  value={u.pivot.role}
-                  variant="outlined"
-                  labelProps={{ className: "after:ml-0 before:mr-0" }}
-                  onChange={(value) => handleRolChange(u, value)}
-                >
-                  <Option value="admin">Admin</Option>
-                  <Option value="member">Miembro</Option>
-                </Select>
+                <div className="w-28 [&>div]:min-w-0">
+                  <Select
+                    value={u.pivot.role}
+                    variant="outlined"
+                    labelProps={{ className: "after:ml-0 before:mr-0" }}
+                    onChange={(value) => handleRolChange(u, value)}
+                  >
+                    <Option value="admin">Admin</Option>
+                    <Option value="member">Miembro</Option>
+                  </Select>
+                </div>
               </div> :
                 <Chip className="w-20 text-center" value={u.pivot.role === "admin" ? "Admin" : "Miembro"} variant="outlined" />}
             </div>
