@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,26 +36,38 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'squad' => 'required',
+            'members' => 'nullable|array',
+        ], [
+            'name.required' => "El nombre es obligatorio",
+            'email.required'    => 'El correo electrónico es obligatorio',
+            'email.unique' => 'El correo electrónico ya está en uso',
+            'password.required'    => 'La contraseña es obligatoria',
         ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         $squad = Squad::create([
-            'name' => $request->squad,
+            'name' => $validated['squad'],
         ]);
 
         $user->squads()->attach($squad, ['role' => 'admin']);
 
-        foreach ($request->members as $key => $member) {
+        foreach ($validated['members'] as $key => $member) {
             $member = User::create([
                 'email' => $member['email'],
                 'name' => $member['name'],

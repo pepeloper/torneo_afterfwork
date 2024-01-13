@@ -2,12 +2,12 @@ import { Link, useForm, usePage } from "@inertiajs/react";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
-import PlayerAutocomplete from "@/Components/PlayerAutocomplete";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import { RadioGroup } from '@headlessui/react'
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "@/Layouts/AppLayout";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import AppAvatar from "@/Components/AppAvatar";
 
 
 function CheckIcon(props) {
@@ -56,13 +56,20 @@ export default function Create({ squad, users }) {
     return !data.players.length || data.name === '';
   }, [data]);
 
-  const addPlayers = (players) => {
-    setData('players', players);
+  const addPlayers = (user) => {
+    const players = [...data.players];
+
+    const index = players.findIndex((p) => p === user.id)
+    if (index < 0) {
+      players.push(user.id)
+    } else {
+      players.splice(index, 1);
+    }
+    setData('players', players)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('data', data);
     post(route('tournament.store', { squad }));
   }
 
@@ -131,19 +138,19 @@ export default function Create({ squad, users }) {
         <div className="">
           <InputLabel htmlFor="points" value="Jugadores" />
           <div className="space-y-3 mt-2">
-            <PlayerAutocomplete
-              players={users}
-              addPlayers={addPlayers}
-            />
+            {users.map(user => {
+              return <div className="flex w-full justify-between" key={user.id}>
+                <label htmlFor={`user_${user.id}`} className="flex flex-1">
+                  <AppAvatar user={user} />
+                  <div className="ml-2 flex flex-col justify-center">
+                    <p className="leading-tight">{user.name}</p>
+                    <p className="text-sm leading-tight">{user.email}</p>
+                  </div>
+                </label>
+                <Checkbox color="light-green" name={`user_${user.id}`} id={`user_${user.id}`} className="before:bg-light-green-500 text-light-green-500 focus:ring-light-green-500" onChange={() => addPlayers(user)} />
+              </div>;
+            })}
             {invalidNumberOfPlayers && <InputError message="El número de jugadores tiene que ser 4, 8 o 12" className="mt-2" />}
-            {/* {data.players.map((player, index) => {
-              return <PlayerAutocomplete
-                key={`player-${index}`}
-                players={users}
-                addPlayers={addPlayers}
-                player={player}
-                />
-            })} */}
           </div>
         </div>
 

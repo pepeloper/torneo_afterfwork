@@ -95,7 +95,7 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
                     Grupos
                   </Button>
                 </Link>
-                {hasLeagues ?
+                {hasLeagues && tournament.mode !== 'groups' ?
                   <Link disabled={!hasLeagues} href={route('tournament.league.show', { squad, tournament })} className="w-1/2">
                     <Button disabled={!hasLeagues} fullWidth variant="outlined" className="rounded-l-none">Ligas</Button>
                   </Link> :

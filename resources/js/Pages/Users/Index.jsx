@@ -50,6 +50,7 @@ export default function Index({ squad }) {
     post(route('invitation.create', { squad }), {
       onSuccess: () => {
         setShowInviteDrawer(false);
+        reset('name', 'email');
       }
     });
   }
