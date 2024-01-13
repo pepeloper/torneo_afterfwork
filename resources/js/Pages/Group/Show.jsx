@@ -1,128 +1,190 @@
-import GroupSection from "@/Components/GroupSection";
+import { useEffect, useMemo, useState } from "react";
+import EditGame from "@/Components/Game/EditGame";
+import GameCard from "@/Components/GameCard";
 import { ranking } from "@/utils";
-import { Link, useForm } from '@inertiajs/react';
-import { useMemo } from "react";
+import { Link, usePage } from "@inertiajs/react";
+import {
+  Tabs,
+  TabsHeader,
+  TabsBody,
+  Tab,
+  TabPanel,
+  Drawer,
+  Typography,
+  Button,
+} from "@material-tailwind/react";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import AppLayout from "@/Layouts/AppLayout";
 
-export default function Welcome({ activeGroup, allGroups, section, hasLeagues }) {
-  const allMatchesPlayed = useMemo(() => {
-    const groupOne = allGroups[0].games.every(m => m.played)
-    const groupTwo = allGroups[1].games.every(m => m.played)
-    const groupThree = allGroups[2].games.every(m => m.played)
+export default function Show({ squad, tournament, hasLeagues, section }) {
+  console.log(tournament);
+  console.log(hasLeagues);
+  const [open, setOpen] = useState(false);
+  const [activeGame, setActiveGame] = useState(null);
+  const [backdropClicked, setBackdropBlicked] = useState(false);
+  const { auth } = usePage().props;
 
-    return groupOne && groupTwo && groupThree;
-  }, [activeGroup, allGroups]);
+  const canCreateLeagues = useMemo(() => {
+    return tournament.groups.every(g => {
+      return g.games.every(game => game.played);
+    })
+  }, [tournament.groups]);
 
-  const firstGroupRanking = ranking(allGroups[0].games);
-  const secondGroupRanking = ranking(allGroups[1].games);
-  const thirdGroupRanking = ranking(allGroups[2].games);
+  useEffect(() => {
+    if (!open) {
+      setTimeout(() => setBackdropBlicked(false), 200);
+    }
+  }, [open]);
 
-  const firstLeague = [
-    firstGroupRanking[0],
-    firstGroupRanking[1],
-    secondGroupRanking[0],
-    secondGroupRanking[1],
-  ];
+  const openDrawer = (game) => {
+    if (!auth.user) {
+      setOpen(false)
+      return
+    }
 
-  const secondLeague = [
-    firstGroupRanking[2],
-    secondGroupRanking[2],
-    thirdGroupRanking[0],
-    thirdGroupRanking[1],
-  ];
-
-  const thirdLeague = [
-    firstGroupRanking[3],
-    secondGroupRanking[3],
-    thirdGroupRanking[2],
-    thirdGroupRanking[3],
-  ];
-
-  const { data, post, processing, errors } = useForm({
-    first_league: firstLeague.map(u => u.id),
-    second_league: secondLeague.map(u => u.id),
-    third_league: thirdLeague.map(u => u.id),
-  })
-
-  const handleCreateLeagues = () => {
-    post(route('league.create.multiple'))
+    if (backdropClicked) {
+      setBackdropBlicked(false);
+      return
+    }
+    setActiveGame(game)
+    setOpen(true)
   };
 
-  return (
-    <>
-      <div className="bg-gray-900">
-        <main className="">
-          {/* Hero section */}
-          <div className="isolate relative overflow-hidden">
-            <svg
-              className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-              aria-hidden="true"
-            >
-              <defs>
-                <pattern
-                  id="983e3e4c-de6d-4c3f-8d64-b9761d1534cc"
-                  width={200}
-                  height={200}
-                  x="50%"
-                  y={-1}
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path d="M.5 200V.5H200" fill="none" />
-                </pattern>
-              </defs>
-              <svg x="50%" y={-1} className="overflow-visible fill-gray-800/20">
-                <path
-                  d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-                  strokeWidth={0}
-                />
-              </svg>
-              <rect width="100%" height="100%" strokeWidth={0} fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" />
-            </svg>
-            <div
-              className="absolute opacity-30 left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
-              aria-hidden="true"
-            >
-              <div
-                className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80ff88] to-[#46e596] opacity-20"
-                style={{
-                  clipPath:
-                    'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
-                }}
-              />
-            </div>
-            <div className="mx-auto flex flex-col max-w-7xl px-6 pb-24 pt-10 sm:pb-40 lg:flex lg:px-8 lg:pt-40">
-              <div className="mx-auto flex flex-col max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-                <div className="w-full flex items-center justify-between">
-                  <Link href={route('index')}>
-                    <img
-                      className="h-11"
-                      src="/storage/ball.png"
-                    />
-                  </Link>
-                  {!hasLeagues &&
-                    <button className="inline-flex space-x-6 disabled:opacity-60" disabled={!allMatchesPlayed} onClick={handleCreateLeagues}>
-                      <span className="rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20">
-                        Crear ligas
-                      </span>
-                    </button>
-                  }
-                </div>
-                <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                  Torneo Americano Afterwork
-                </h1>
-              </div>
+  const handleCloseDrawer = () => {
+    setOpen(false)
+    setActiveGame(null)
+  };
 
-              <div className="grid grid-cols-3 mt-5 py-2 space-x-1">
-                {allGroups.map(group => {
-                  return group.name === activeGroup.name ?
-                    <Link key={group.id} className="text-center rounded-full bg-light-green-800/40 px-3 py-1 text-sm font-semibold leading-6 text-light-green-200 ring-1 ring-inset ring-light-green-500/60" href={route('group.show', { group })}>{group.name}</Link> :
-                    <Link key={group.id} className="text-center rounded-full bg-light-green-500/10 px-3 py-1 text-sm font-semibold leading-6 text-light-green-400 ring-1 ring-inset ring-light-green-500/20" href={route('group.show', { group })}>{group.name}</Link>
-                })}
-              </div>
-              <GroupSection group={activeGroup} />
-            </div>
-          </div>
-        </main>
+  const HeaderButton = () => {
+    if (hasLeagues) {
+      if (section === 'groups') {
+        return (
+          <Link href={route('tournament.league.show', { squad, tournament })}>
+            <Button variant="gradient" size="sm" color="light-green" ripple>Ver ligas</Button>
+          </Link>
+        );
+      }
+
+      return (
+        <Link href={route('groups.index', { squad, tournament })}>
+          <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
+        </Link>
+      );
+    }
+
+    if (canCreateLeagues) {
+      return (
+        <Link href={route('league.create', { squad, tournament })} method="post" as="div">
+          <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
+        </Link>
+      );
+    }
+
+    return (
+      <Button variant="gradient" size="sm" color="light-green" ripple disabled>Crear ligas</Button>
+    );
+  };
+
+  const header = (
+    <>
+      <div className="flex space-x-0.5">
+        <Link href={route('tournament.show', { squad, tournament })} className="mt-2">
+          <ChevronLeftIcon className="w-6 h-6" />
+        </Link>
+        <div>
+          <Typography variant="h3">{tournament.name}</Typography>
+          <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
+        </div>
       </div>
+      <HeaderButton />
     </>
+  );
+
+  return (
+    <AppLayout header={header}>
+      <>
+        <div className="px-6 mt-6">
+          <Typography variant="h5">
+            {section === 'groups' ? 'Fase de grupos' : 'Ligas'}
+          </Typography>
+        </div>
+        <Tabs className="mt-5 px-6" value={tournament.groups[0].id}>
+          <TabsHeader>
+            {tournament.groups.map(({ name, id }) => (
+              <Tab key={id} value={id}>
+                {name}
+              </Tab>
+            ))}
+          </TabsHeader>
+          <TabsBody>
+            {tournament.groups.map((group) => (
+              <TabPanel key={group.id} value={group.id} className="px-1">
+                <div className="space-y-3.5 mt-3">
+                  {ranking(group.games).map((u, index) => {
+                    return (
+                      <div key={u.id} className="w-full">
+                        <div className="w-full flex items-center justify-between">
+                          <div className="flex items-center">
+                            {index === 0 ? <span className="text-2xl">🥇</span> : ''}
+                            {index === 1 ? <span className="text-2xl">🥈</span> : ''}
+                            {index === 2 ? <span className="text-2xl">🥉</span> : ''}
+                            {index > 2 ? <span className="text-2xl">☠️</span> : ''}
+                            <p className="font-medium text-lg ml-1.5" key={u.username}>{u.name}</p>
+                          </div>
+                          <div className="flex space-x-4">
+                            <p className="text-light-green-500 font-semibold">{u.total_points_in_favor}</p>
+                            <p className="text-red-300 font-semibold"> {u.total_points_against}</p>
+                          </div>
+                        </div>
+                        <div className="flex mt-0.5">
+                          {u.total_points_against || u.total_points_in_favor ?
+                            <>
+                              <div className="bg-light-green-500 h-2 rounded-r-none rounded-lg" style={{ width: `${(100 * u.total_points_in_favor) / 48}%` }} />
+                              <div className="bg-red-300 h-2 rounded-l-none rounded-lg" style={{ width: `${(100 * u.total_points_against) / 48}%` }} />
+                            </> :
+                            <div className="bg-gray-300 h-2 rounded-lg w-full" />
+                          }
+                        </div>
+                      </div>
+                    )
+                    {/* return (
+                      <div key={u.id} className="w-full flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          {index === 0 ? <span className="text-2xl">🥇</span> : ''}
+                          {index === 1 ? <span className="text-2xl">🥈</span> : ''}
+                          {index === 2 ? <span className="text-2xl">🥉</span> : ''}
+                          {index > 2 ? <span className="text-2xl">☠️</span> : ''}
+                          <p className="font-medium text-lg" key={u.username}>{u.name}</p>
+                        </div>
+                        <div className="flex space-x-4">
+                          <p className="text-green-500 text-lg font-semibold">{u.total_points_in_favor}</p>
+                          <p className="text-red-500 text-lg font-semibold"> {u.total_points_against}</p>
+                        </div>
+                      </div>
+                    ) */}
+                  })}
+                </div>
+                <div className="space-y-6 mt-10">
+                  {group.games.map(game => {
+                    return (
+                      <GameCard key={game.id} game={game} onClick={openDrawer} activeGame={activeGame} />
+                    )
+                  })}
+                </div>
+              </TabPanel>
+            ))}
+          </TabsBody>
+        </Tabs>
+
+        {activeGame && <Drawer dismiss={{
+          outsidePress: (event) => {
+            setBackdropBlicked(true);
+            return true;
+          }
+        }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+          <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
+        </Drawer>}
+      </>
+    </AppLayout>
   );
 }

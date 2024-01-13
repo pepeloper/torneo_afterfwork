@@ -1,149 +1,86 @@
 <?php
 
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Game;
+use App\Http\Controllers\SquadsController;
+use App\Http\Controllers\TournamentsController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserSettingsControler;
 use App\Models\Group;
+use App\Models\Invitation;
+use App\Models\Squad;
 use App\Models\User;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
+use App\Notifications\UserInvitation;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/mailable', function () {
+    $squad = Squad::first();
+    $user = User::first();
+    $invitation = Invitation::first();
+
+    if (!$invitation) {
+        $invitation = Invitation::create([
+            'user_id' => $user->id,
+            'used_at' => null,
+            'token' => (string) Uuid::uuid4(),
+        ]);
+    }
+    return (new UserInvitation($squad, $user, $invitation))->toMail($user);
+});
+
+// Show list of squads for user. For now is not needed
+// Route::get('/clubs', [SquadsController::class, 'index'])->name('clubs.index');
+
+// Show list of tournaments for the given squad
+Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
+
+// Show list of groups with games for a given tournament
+Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->name('groups.index');
+
+// Temporary route to show leagues for a given tournament
+Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
+
+// Create a tournament form
+Route::get('/clubs/{squad}/tournament/create', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
+
+// Show tournament details
+Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
+
+// Store a tournament
+Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.store');
+
+// Create leagues for a tournament
+Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
+
+// List users in a squad
+Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
+
+// Update users permissions from squad
+Route::put('/clubs/{squad}/users', [UsersController ::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
+
+// Authenticated user settings
+Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
+
+// Show invitation to register for a squad
+Route::get('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.show');
+
+// Process the invitation, creating user password
+Route::post('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
+
+// Invite a usar to a squad
+Route::post('/clubs/{squad}/invite', [InvitationController::class, 'create'])->name('invitation.create');
 
 Route::get('/', function () {
-    $league = Group::where('name', 'Liga 1º')->first();
-    $group = Group::where('name', 'Grupo A')->first();
-
-    return Inertia::render('Welcome', [
-        'group' => $group,
-        'league' => $league,
-    ]);
+    // TODO: LANDING
+    return Inertia::render('Welcome');
 })->name('index');
 
-Route::get('/groups/{group}', function (Request $request, Group $group) {
-    $all_groups = collect([]);
-
-    if (Str::of($group->name)->startsWith('Grupo')) {
-        $section = 'groups';
-        $groups = collect(['Grupo A', 'Grupo B', 'Grupo C']);
-        // Puede que sea mejor devolver los tres grupos
-        $groups->each(function ($item) use ($all_groups) {
-            $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
-        });
-    } else {
-        $section = 'leagues';
-        $leagues = collect(['Liga 1º', 'Liga 2º', 'Liga 3º']);
-        $leagues->each(function ($item) use ($all_groups) {
-            $all_groups->push(Group::where('name', $item)->with(['games', 'games.users'])->first());
-        });
-    }
-
-    $has_leagues = Group::where('name', 'Liga 1º')->first() ? true : false;
-
-    return Inertia::render('Group/Show', [
-        'activeGroup' => $group->load(['games', 'games.users']),
-        'allGroups' => $all_groups,
-        'section' => $section,
-        'hasLeagues' => $has_leagues,
-    ]);
-})->name('group.show');
-
+// TODO: Add squad and tournament parameters
 Route::put('/game/{game}', [GameController::class, 'update'])->name('game.update');
-
-Route::post('league/create', function(Request $request) {
-    // FIRST LEAGUE
-    $first_league = Group::create([
-        'name' => 'Liga 1º',
-    ]);
-
-    foreach ($request->first_league as $user_id) {
-        $user = User::find($user_id);
-        $user->groups()->attach($first_league);
-    }
-
-    $game = Game::create([
-        'group_id' => $first_league->id,
-    ]);
-    $game->users()->attach([$request->first_league[0], $request->first_league[1], $request->first_league[2], $request->first_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $first_league->id,
-    ]);
-    $game->users()->attach([$request->first_league[0], $request->first_league[2], $request->first_league[1], $request->first_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $first_league->id,
-    ]);
-    $game->users()->attach([$request->first_league[1], $request->first_league[2], $request->first_league[0], $request->first_league[3]]);
-
-    // SECOND LEAGUE
-    $league = Group::create([
-        'name' => 'Liga 2º',
-    ]);
-
-    foreach ($request->second_league as $user_id) {
-        $user = User::find($user_id);
-        $user->groups()->attach($league);
-    }
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->second_league[0], $request->second_league[1], $request->second_league[2], $request->second_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->second_league[0], $request->second_league[2], $request->second_league[1], $request->second_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->second_league[1], $request->second_league[2], $request->second_league[0], $request->second_league[3]]);
-
-    // THIRD LEAGUE
-    $league = Group::create([
-        'name' => 'Liga 3º',
-    ]);
-
-    foreach ($request->third_league as $user_id) {
-        $user = User::find($user_id);
-        $user->groups()->attach($league);
-    }
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->third_league[0], $request->third_league[1], $request->third_league[2], $request->third_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->third_league[0], $request->third_league[2], $request->third_league[1], $request->third_league[3]]);
-
-    $game = Game::create([
-        'group_id' => $league->id,
-    ]);
-    $game->users()->attach([$request->third_league[1], $request->third_league[2], $request->third_league[0], $request->third_league[3]]);
-
-    return redirect()->route('group.show', ['group' => $first_league]);
-})->name('league.create.multiple');
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -151,4 +88,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
