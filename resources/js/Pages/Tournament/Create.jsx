@@ -95,7 +95,7 @@ export default function Create({ squad, users }) {
 
   return (
     <AppLayout header={header}>
-      <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
+      <form className="space-y-6 mt-5 px-6" onSubmit={handleSubmit}>
         <div>
           <InputLabel htmlFor="tournament_name" value="Nombre del torneo" />
 

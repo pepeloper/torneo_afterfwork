@@ -1,4 +1,4 @@
-import { HomeIcon, UserGroupIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, UserGroupIcon, Cog6ToothIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Link, usePage } from "@inertiajs/react"
 import {
   Button,
@@ -16,7 +16,6 @@ import classNames from "classnames";
 export default function AppLayout({ children, header }) {
   const { auth, squad } = usePage().props
   const currentRoute = route().current();
-  console.log("currentRoute", currentRoute)
 
   return (
     <div className="max-w-2xl w-full mx-auto flex flex-col min-h-[100dvh]">
@@ -28,16 +27,25 @@ export default function AppLayout({ children, header }) {
           {children}
         </div>
       </section>
-      {auth.user && <section className="fixed bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex justify-between items-center">
-        <Link href={route('squads.show', { squad })}>
-          <HomeIcon className={ classNames('w-6', { 'text-light-green-700': !["users.show", "users.settings"].includes(currentRoute), 'text-gray-600': ["users.show", "users.settings"].includes(currentRoute)}) } />
-        </Link>
-        <Link href={route('users.show', { squad })}>
-          <UserGroupIcon className={ classNames('w-6', { 'text-light-green-700': currentRoute === "users.show", 'text-gray-600': currentRoute !== "users.show"}) } />
-        </Link>
-        <Link href={route('users.settings')}>
-          <Cog6ToothIcon className={ classNames('w-6', { 'text-light-green-700': currentRoute === "users.settings", 'text-gray-600': currentRoute !== "users.settings"}) } />
-        </Link>
+      <section className={classNames("fixed bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex items-center", auth.user ? "justify-between" : "justify-center")}>
+        {
+          auth.user ?
+            <>
+              <Link href={route('squads.show', { squad })}>
+                <HomeIcon className={classNames('w-6', { 'text-light-green-700': !["users.show", "users.settings"].includes(currentRoute), 'text-gray-600': ["users.show", "users.settings"].includes(currentRoute) })} />
+              </Link>
+              <Link href={route('users.show', { squad })}>
+                <UserGroupIcon className={classNames('w-6', { 'text-light-green-700': currentRoute === "users.show", 'text-gray-600': currentRoute !== "users.show" })} />
+              </Link>
+              <Link href={route('users.settings')}>
+                <Cog6ToothIcon className={classNames('w-6', { 'text-light-green-700': currentRoute === "users.settings", 'text-gray-600': currentRoute !== "users.settings" })} />
+              </Link>
+            </>
+            :
+            <Link href={route('login')}>
+              <UserIcon className={classNames('w-6', { 'text-light-green-700': currentRoute === "users.settings", 'text-gray-600': currentRoute !== "users.settings" })} />
+            </Link>
+        }
         {/* <Menu placement="bottom-start">
           <MenuHandler>
             <Avatar
@@ -93,7 +101,7 @@ export default function AppLayout({ children, header }) {
             </MenuItem>
           </MenuList>
         </Menu> */}
-      </section>}
+      </section>
     </div>
   );
 }

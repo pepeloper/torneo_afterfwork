@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import {
   Typography,
@@ -13,14 +13,17 @@ import AppLayout from "@/Layouts/AppLayout";
 import AppAvatar from "@/Components/AppAvatar";
 
 export default function Show({ squad, tournament, hasLeagues, section, ranking }) {
-  console.log(tournament)
-  console.log(ranking)
-
   const { auth } = usePage().props;
 
   const [open, setOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [backdropClicked, setBackdropBlicked] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setTimeout(() => setBackdropBlicked(false), 200);
+    }
+  }, [open]);
 
   const openDrawer = (game) => {
     if (!auth.user) {
@@ -48,7 +51,7 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
   }, [tournament.users]);
 
   const showMatches = useMemo(() => {
-    return tournament.users.length === 4;
+    return tournament.users.length === 4 || tournament.groups.length === 1;
   }, [tournament.users]);
 
   const header = (
@@ -213,6 +216,7 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
 
         {activeGame && <Drawer dismiss={{
           outsidePress: (event) => {
+            console.log("outsidePress", "setBackDropClicked to TRUE")
             setBackdropBlicked(true);
             return true;
           }

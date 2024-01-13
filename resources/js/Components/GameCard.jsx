@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import AppAvatar from "./AppAvatar";
 
 export default function GameCard({ game, onClick, activeGame }) {
   return (
@@ -8,11 +9,11 @@ export default function GameCard({ game, onClick, activeGame }) {
           <div className="flex items-center px-4">
             <div className="flex items-center space-x-3">
               <div className="flex flex-col justify-center items-center">
-                <img src={game.users[0].photo} className="w-11 h-11 z-10 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white text-sm" />
+                <AppAvatar user={game.users[0]} />
                 <p className="text-xs mt-0.5 truncate w-12 text-center text-gray-900">{game.users[0].name}</p>
               </div>
               <div className="flex flex-col justify-center items-center">
-                <img src={game.users[1].photo} className="w-11 h-11 z-10 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white text-sm" />
+                <AppAvatar user={game.users[1]} />
                 <p className="text-xs mt-0.5 truncate w-12 text-center text-gray-900">{game.users[1].name}</p>
               </div>
             </div>
@@ -21,11 +22,11 @@ export default function GameCard({ game, onClick, activeGame }) {
           <div className="flex items-center px-4">
             <div className="flex items-center space-x-3">
               <div className="flex flex-col justify-center items-center">
-                <img src={game.users[2].photo} className="w-11 h-11 z-10 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white text-sm" />
+                <AppAvatar user={game.users[2]} />
                 <p className="text-xs mt-0.5 truncate w-12 text-center text-gray-900">{game.users[2].name}</p>
               </div>
               <div className="flex flex-col justify-center items-center">
-                <img src={game.users[3].photo} className="w-11 h-11 z-10 bg-gray-700 rounded-full flex items-center justify-center font-sans text-white text-sm" />
+                <AppAvatar user={game.users[3]} />
                 <p className="text-xs mt-0.5 truncate w-12 text-center text-gray-900">{game.users[3].name}</p>
               </div>
             </div>

@@ -58,6 +58,12 @@ class GroupsController extends Controller
     // Create a new league based on the groups
     public function store(Request $request, Squad $squad, Tournament $tournament)
     {
+        $has_leagues = Group::where('name', 'like', 'Liga%')->where('tournament_id', $tournament->id)->first() ? true : false;
+
+        if ($has_leagues) {
+            return back();
+        }
+
         $tournament->load(['groups' => function ($query) {
             $query->where('name', 'like', 'Grupo%');
         }]);

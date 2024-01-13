@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EditGame from "@/Components/Game/EditGame";
 import GameCard from "@/Components/GameCard";
 import { ranking } from "@/utils";
@@ -30,7 +30,11 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
     })
   }, [tournament.groups]);
 
-  console.log('canCreateLeagues', canCreateLeagues);
+  useEffect(() => {
+    if (!open) {
+      setTimeout(() => setBackdropBlicked(false), 200);
+    }
+  }, [open]);
 
   const openDrawer = (game) => {
     if (!auth.user) {
@@ -51,6 +55,36 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
     setActiveGame(null)
   };
 
+  const HeaderButton = () => {
+    if (hasLeagues) {
+      if (section === 'groups') {
+        return (
+          <Link href={route('tournament.league.show', { squad, tournament })}>
+            <Button variant="gradient" size="sm" color="light-green" ripple>Ver ligas</Button>
+          </Link>
+        );
+      }
+
+      return (
+        <Link href={route('groups.index', { squad, tournament })}>
+          <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
+        </Link>
+      );
+    }
+
+    if (canCreateLeagues) {
+      return (
+        <Link href={route('league.create', { squad, tournament })} method="post" as="div">
+          <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
+        </Link>
+      );
+    }
+
+    return (
+      <Button variant="gradient" size="sm" color="light-green" ripple disabled>Crear ligas</Button>
+    );
+  };
+
   const header = (
     <>
       <div className="flex space-x-0.5">
@@ -62,19 +96,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
           <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
         </div>
       </div>
-      {hasLeagues ? section === 'groups' ?
-        <Link href={route('tournament.league.show', { squad, tournament })}>
-          <Button variant="gradient" size="sm" color="light-green" ripple>Ver ligas</Button>
-        </Link> :
-        <Link href={route('groups.index', { squad, tournament })}>
-          <Button variant="gradient" size="sm" color="light-green" ripple>Ver grupos</Button>
-        </Link> :
-        canCreateLeagues ?
-          <Link href={route('league.create', { squad, tournament })} method="post" as="div">
-            <Button variant="gradient" size="sm" color="light-green" ripple>Crear ligas</Button>
-          </Link> :
-          <Button variant="gradient" size="sm" color="light-green" ripple disabled>Crear ligas</Button>
-      }
+      <HeaderButton />
     </>
   );
 
