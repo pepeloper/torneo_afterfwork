@@ -32,7 +32,6 @@ export default function Create({ squad, users }) {
 
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
-    points: 16,
     players: [],
     mode: 'groups',
   });
@@ -114,22 +113,6 @@ export default function Create({ squad, users }) {
             className="mt-1 block w-full"
             isFocused={true}
             onChange={(e) => setData('name', e.target.value)}
-          />
-
-          <InputError message={errors.name} className="mt-2" />
-        </div>
-
-        <div>
-          <InputLabel htmlFor="points" value="Puntos por partido" />
-
-          <TextInput
-            id="points"
-            type="tel"
-            inputMode="numeric"
-            name="points"
-            value={data.points}
-            className="mt-1 block w-full"
-            onChange={(e) => setData('points', e.target.value)}
           />
 
           <InputError message={errors.name} className="mt-2" />
