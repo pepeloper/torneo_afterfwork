@@ -17,7 +17,7 @@ class GroupsController extends Controller
     {
         $tournament->load([
             'groups' => function ($query) {
-                $query->where('name', 'like', 'Grupo%');
+                $query->where('name', 'not like', 'Liga%');
             },
             'groups.games',
             'groups.games.users'

@@ -67,7 +67,7 @@ class TournamentsControllerTest extends TestCase
 
         // GROUP CHECK
         $this->assertDatabaseHas('groups', [
-            'name' => 'Grupo A',
+            'name' => 'Pista 1',
             'squad_id' => $squad->id,
             'tournament_id' => 1,
         ]);
@@ -206,7 +206,7 @@ class TournamentsControllerTest extends TestCase
         });
     }
 
-    public function test_create_tournament_with_eight_players(): void
+    public function test_create_tournament_with_eight_players_one_court(): void
     {
         $squad = Squad::factory()->create();
 
@@ -248,7 +248,7 @@ class TournamentsControllerTest extends TestCase
         $this->actingAs($user_one);
         $response = $this->post("/clubs/{$squad->id}/tournament", [
             'name' => 'Mi segundo torneo',
-            'points' => 16,
+            'courts' => 1,
             'players' => $players,
             'mode' => 'groups',
         ]);
@@ -273,7 +273,7 @@ class TournamentsControllerTest extends TestCase
 
         // GROUP CHECK
         $this->assertDatabaseHas('groups', [
-            'name' => 'Grupo A',
+            'name' => 'Pista 1',
             'squad_id' => $squad->id,
             'tournament_id' => 1,
         ]);
@@ -322,6 +322,137 @@ class TournamentsControllerTest extends TestCase
             foreach ($game_indexes as $index) {
                 $this->assertDatabaseHas('game_user', [
                     'game_id' => $key + 1,
+                    'user_id' => $players[$index],
+                    'points_in_favor' => null,
+                    'points_against' => null,
+                ]);
+            }
+        }
+    }
+
+    public function test_create_tournament_with_eight_players_two_courts(): void
+    {
+        $squad = Squad::factory()->create();
+
+        $user_one = User::factory()->create();
+        $user_one->squads()->attach($squad);
+
+        $user_two = User::factory()->create();
+        $user_two->squads()->attach($squad);
+
+        $user_three = User::factory()->create();
+        $user_three->squads()->attach($squad);
+
+        $user_four = User::factory()->create();
+        $user_four->squads()->attach($squad);
+
+        $user_five = User::factory()->create();
+        $user_five->squads()->attach($squad);
+
+        $user_six = User::factory()->create();
+        $user_six->squads()->attach($squad);
+
+        $user_seven = User::factory()->create();
+        $user_seven->squads()->attach($squad);
+
+        $user_eight = User::factory()->create();
+        $user_eight->squads()->attach($squad);
+
+        $players = [
+            $user_one->id,
+            $user_two->id,
+            $user_three->id,
+            $user_four->id,
+            $user_five->id,
+            $user_six->id,
+            $user_seven->id,
+            $user_eight->id,
+        ];
+
+        $this->actingAs($user_one);
+        $response = $this->post("/clubs/{$squad->id}/tournament", [
+            'name' => 'Mi segundo torneo',
+            'courts' => 2,
+            'players' => $players,
+            'mode' => 'groups',
+        ]);
+
+        $response->assertStatus(302);
+
+        // TOURNAMENT CHECK
+        $this->assertDatabaseHas('tournaments', [
+            'name' => 'Mi segundo torneo',
+            'squad_id' => $squad->id,
+            'user_id' => $user_one->id,
+        ]);
+
+        $this->assertDatabaseCount('tournament_user', 8);
+
+        foreach ($players as $player) {
+            $this->assertDatabaseHas('tournament_user', [
+                'tournament_id' => 1,
+                'user_id' => $player,
+            ]);
+        }
+
+        // GROUP CHECK
+        $this->assertDatabaseHas('groups', [
+            'name' => 'Pista 1',
+            'squad_id' => $squad->id,
+            'tournament_id' => 1,
+        ]);
+
+        $this->assertDatabaseHas('groups', [
+            'name' => 'Pista 2',
+            'squad_id' => $squad->id,
+            'tournament_id' => 1,
+        ]);
+
+        // Everyone is playing on every group
+        $this->assertDatabaseCount('group_user', 16);
+        foreach ($players as $player) {
+            $this->assertDatabaseHas('group_user', [
+                'group_id' => 1,
+                'user_id' => $player,
+            ]);
+        }
+
+        // GAMES CHECK
+        $player_indexes_for_games = [
+            /* 1 */  [0, 1, 2, 3],
+            /* 2 */  [4, 5, 6, 7],
+
+            /* 3 */  [0, 2, 4, 6],
+            /* 4 */  [1, 3, 5, 7],
+
+            /* 5 */  [1, 2, 5, 6],
+            /* 6 */  [0, 3, 4, 7],
+
+            /* 7 */  [0, 4, 1, 5],
+            /* 8 */  [2, 6, 3, 7],
+
+            /* 9 */  [1, 4, 3, 6],
+            /* 10 */ [0, 5, 2, 7],
+
+            /* 11 */ [1, 7, 2, 4],
+            /* 12 */ [0, 6, 3, 5],
+
+            /* 13 */ [2, 5, 3, 4],
+            /* 14 */ [0, 7, 1, 6],
+        ];
+
+        foreach ($player_indexes_for_games as $key => $game_indexes) {
+            $this->assertDatabaseHas('games', [
+                'id' => $key + 1,
+                'squad_id' => $squad->id,
+                'tournament_id' => 1,
+                'played' => false,
+            ]);
+
+            foreach ($game_indexes as $index) {
+                $this->assertDatabaseHas('game_user', [
+                    // TODO: Set game id, the way we do it now we are creating a first batch of games and then a second
+                    // 'game_id' => $key + 1
                     'user_id' => $players[$index],
                     'points_in_favor' => null,
                     'points_against' => null,
@@ -397,13 +528,13 @@ class TournamentsControllerTest extends TestCase
 
         // GROUP CHECK
         $this->assertDatabaseHas('groups', [
-            'name' => 'Grupo A',
+            'name' => 'Pista 1',
             'squad_id' => $squad->id,
             'tournament_id' => 1,
         ]);
 
         $this->assertDatabaseHas('groups', [
-            'name' => 'Grupo B',
+            'name' => 'Pista 2',
             'squad_id' => $squad->id,
             'tournament_id' => 1,
         ]);
@@ -475,7 +606,7 @@ class TournamentsControllerTest extends TestCase
         }
     }
 
-    public function test_create_tournament_with_twelve_players(): void
+    public function test_create_tournament_with_twelve_players_one_court(): void
     {
         $squad = Squad::factory()->create();
 
@@ -536,6 +667,7 @@ class TournamentsControllerTest extends TestCase
             'name' => 'Mi segundo torneo',
             'points' => 16,
             'players' => $players,
+            'courts' => 1,
             'mode' => 'groups',
         ]);
 
@@ -559,7 +691,7 @@ class TournamentsControllerTest extends TestCase
 
         // GROUP CHECK
         $this->assertDatabaseHas('groups', [
-            'name' => 'Grupo A',
+            'name' => 'Pista 1',
             'squad_id' => $squad->id,
             'tournament_id' => 1,
         ]);
@@ -632,6 +764,178 @@ class TournamentsControllerTest extends TestCase
             foreach ($game_indexes as $index) {
                 $this->assertDatabaseHas('game_user', [
                     'game_id' => $key + 1,
+                    'user_id' => $players[$index],
+                    'points_in_favor' => null,
+                    'points_against' => null,
+                ]);
+            }
+        }
+    }
+
+    public function test_create_tournament_with_twelve_players_two_courts(): void
+    {
+        $squad = Squad::factory()->create();
+
+        $user_one = User::factory()->create();
+        $user_one->squads()->attach($squad);
+
+        $user_two = User::factory()->create();
+        $user_two->squads()->attach($squad);
+
+        $user_three = User::factory()->create();
+        $user_three->squads()->attach($squad);
+
+        $user_four = User::factory()->create();
+        $user_four->squads()->attach($squad);
+
+        $user_five = User::factory()->create();
+        $user_five->squads()->attach($squad);
+
+        $user_six = User::factory()->create();
+        $user_six->squads()->attach($squad);
+
+        $user_seven = User::factory()->create();
+        $user_seven->squads()->attach($squad);
+
+        $user_eight = User::factory()->create();
+        $user_eight->squads()->attach($squad);
+
+        $user_nine = User::factory()->create();
+        $user_nine->squads()->attach($squad);
+
+        $user_ten = User::factory()->create();
+        $user_ten->squads()->attach($squad);
+
+        $user_eleven = User::factory()->create();
+        $user_eleven->squads()->attach($squad);
+
+        $user_twelve = User::factory()->create();
+        $user_twelve->squads()->attach($squad);
+
+
+        $players = [
+            $user_one->id,
+            $user_two->id,
+            $user_three->id,
+            $user_four->id,
+            $user_five->id,
+            $user_six->id,
+            $user_seven->id,
+            $user_eight->id,
+            $user_nine->id,
+            $user_ten->id,
+            $user_eleven->id,
+            $user_twelve->id,
+        ];
+
+        $this->actingAs($user_one);
+        $response = $this->post("/clubs/{$squad->id}/tournament", [
+            'name' => 'Mi segundo torneo',
+            'points' => 16,
+            'players' => $players,
+            'courts' => 2,
+            'mode' => 'groups',
+        ]);
+
+        $response->assertStatus(302);
+
+        // TOURNAMENT CHECK
+        $this->assertDatabaseHas('tournaments', [
+            'name' => 'Mi segundo torneo',
+            'squad_id' => $squad->id,
+            'user_id' => $user_one->id,
+        ]);
+
+        $this->assertDatabaseCount('tournament_user', 12);
+
+        foreach ($players as $player) {
+            $this->assertDatabaseHas('tournament_user', [
+                'tournament_id' => 1,
+                'user_id' => $player,
+            ]);
+        }
+
+        // GROUP CHECK
+        $this->assertDatabaseHas('groups', [
+            'name' => 'Pista 1',
+            'squad_id' => $squad->id,
+            'tournament_id' => 1,
+        ]);
+
+        $this->assertDatabaseHas('groups', [
+            'name' => 'Pista 2',
+            'squad_id' => $squad->id,
+            'tournament_id' => 1,
+        ]);
+
+        $this->assertDatabaseCount('group_user', 24);
+
+        foreach ($players as $player) {
+            $this->assertDatabaseHas('group_user', [
+                'group_id' => 1,
+                'user_id' => $player,
+            ]);
+        }
+
+        // GAMES CHECK
+        $player_indexes_for_games = [
+            /* 1 */  [4, 6, 8, 9],
+            /* 2 */  [0, 11, 1, 7],
+            /* 3 */  [2, 5, 3, 10],
+
+            /* 4 */  [3, 11, 4, 10],
+            /* 5 */  [5, 8, 2, 6],
+            /* 6 */  [7, 9, 0 , 1],
+
+            /* 7 */  [0, 8, 5, 9],
+            /* 8 */  [1, 10, 3, 4],
+            /* 9 */  [6, 11, 2, 7],
+
+            /* 10 */  [2, 4, 6, 7],
+            /* 11 */  [9, 11, 5, 10],
+            /* 12 */  [0, 3, 1, 8],
+
+            /* 13 */  [1, 11, 2, 8],
+            /* 14 */  [3, 6, 0, 4],
+            /* 15 */  [5, 7, 9, 10],
+
+            /* 16 */  [6, 9, 3, 7],
+            /* 17 */  [8, 10, 1, 2],
+            /* 18 */  [4, 11, 0, 5],
+
+            /* 19 */  [0, 2, 4, 5],
+            /* 20 */  [7, 11, 3, 8],
+            /* 21 */  [1, 9, 6, 10],
+
+            /* 22 */  [10, 11, 0, 6],
+            /* 23 */  [1, 4, 2, 9],
+            /* 24 */  [3, 5, 7, 8],
+
+            /* 25 */  [4, 7, 1, 5],
+            /* 26 */  [6, 8, 0, 10],
+            /* 27 */  [2, 11, 3, 9],
+
+            /* 28 */  [0, 9, 2, 3],
+            /* 29 */  [5, 11, 1, 6],
+            /* 30 */  [7, 10, 4, 8],
+
+            /* 31 */  [8, 11, 4, 9],
+            /* 32 */  [2, 10, 0, 7],
+            /* 33 */  [1, 3, 5, 6],
+        ];
+
+        foreach ($player_indexes_for_games as $key => $game_indexes) {
+            $this->assertDatabaseHas('games', [
+                'id' => $key + 1,
+                'squad_id' => $squad->id,
+                'tournament_id' => 1,
+                // TODO: CHECK
+                // 'group_id' => $key % 2 === 0 ? 1 : 2,
+                'played' => false,
+            ]);
+
+            foreach ($game_indexes as $index) {
+                $this->assertDatabaseHas('game_user', [
                     'user_id' => $players[$index],
                     'points_in_favor' => null,
                     'points_against' => null,

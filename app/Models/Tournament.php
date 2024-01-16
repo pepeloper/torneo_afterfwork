@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Actions\GamesForEightPlayers;
+use App\Actions\GamesForFourPlayers;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +54,7 @@ class Tournament extends Model
         return $ranking;
     }
 
-    public function createMatches($players_ids, $squad)
+    public function createMatches($players_ids, $squad, $courts)
     {
         $number_of_players = count($players_ids);
         $players = User::whereIn('id', $players_ids)->get();
@@ -62,11 +65,11 @@ class Tournament extends Model
             }
 
             if ($number_of_players === 8) {
-                $this->createMatchesForEightPlayers($players, $squad);
+                $this->createMatchesForEightPlayers($players, $squad, $courts);
             }
 
             if ($number_of_players === 12) {
-                $this->createMatchesForTwelvePlayers($players, $squad);
+                $this->createMatchesForTwelvePlayers($players, $squad, $courts);
             }
         } else {
             if ($number_of_players === 8) {
@@ -97,65 +100,48 @@ class Tournament extends Model
         }
     }
 
-    private function createMatchesForFourPlayers($players, $squad)
+    private function createGamesAndGroups(Collection $players, $courts)
     {
-        $group = Group::create([
-            'name' => 'Grupo A',
-            'squad_id' => $squad->id,
-            'tournament_id' => $this->id,
-        ]);
-
-        $players->each(function ($player) use ($group) {
+        $players->each(function ($player) {
             $player->tournaments()->attach($this->id);
-            $player->groups()->attach($group->id);
         });
 
-        $player_indexes_for_games = [
-            [0, 1, 2, 3],
-            [0, 2, 1, 3],
-            [1, 2, 0, 3],
-        ];
+        foreach ($courts as $key => $court) {
+            $court_number = $key + 1;
+            $group = Group::create([
+                'name' => "Pista {$court_number}",
+                'squad_id' => $this->squad_id,
+                'tournament_id' => $this->id,
+            ]);
 
-        $this->createGamesForGroup($players, $player_indexes_for_games, $group);
+            $players->each(function ($player) use ($group) {
+                $player->groups()->attach($group->id);
+            });
+
+            foreach ($court as $game) {
+                $match = Game::create([
+                    'squad_id' => $this->squad_id,
+                    'tournament_id' => $this->id,
+                    'group_id' => $group->id,
+                ]);
+
+                foreach ($game as $index) {
+                    $match->users()->attach($players[$index]);
+                }
+            }
+        }
     }
 
-    private function createMatchesForEightPlayers($players, $squad)
+    private function createMatchesForFourPlayers($players)
     {
-        $group = Group::create([
-            'name' => 'Grupo A',
-            'squad_id' => $squad->id,
-            'tournament_id' => $this->id,
-        ]);
+        $courts = GamesForFourPlayers::get();
+        $this->createGamesAndGroups($players, $courts);
+    }
 
-        $players->each(function ($player) use ($group) {
-            $player->tournaments()->attach($this->id);
-            $player->groups()->attach($group->id);
-        });
-
-        $player_indexes_for_games = [
-            /* 1 */  [0, 1, 2, 3],
-            /* 2 */  [4, 5, 6, 7],
-
-            /* 3 */  [0, 2, 4, 6],
-            /* 4 */  [1, 3, 5, 7],
-
-            /* 5 */  [1, 2, 5, 6],
-            /* 6 */  [0, 3, 4, 7],
-
-            /* 7 */  [0, 4, 1, 5],
-            /* 8 */  [2, 6, 3, 7],
-
-            /* 9 */  [1, 4, 3, 6],
-            /* 10 */ [0, 5, 2, 7],
-
-            /* 11 */ [1, 7, 2, 4],
-            /* 12 */ [0, 6, 3, 5],
-
-            /* 13 */ [2, 5, 3, 4],
-            /* 14 */ [0, 7, 1, 6],
-        ];
-
-        $this->createGamesForGroup($players, $player_indexes_for_games, $group);
+    private function createMatchesForEightPlayers($players, $squad, $courts)
+    {
+        $courts = GamesForEightPlayers::get($courts);
+        $this->createGamesAndGroups($players, $courts);
     }
 
     private function createMatchesForEightPlayersLeagueMode($players, $squad)
@@ -168,7 +154,7 @@ class Tournament extends Model
 
         // FIRST GROUP
         $group_a = Group::create([
-            'name' => 'Grupo A',
+            'name' => 'Pista 1',
             'squad_id' => $squad->id,
             'tournament_id' => $this->id,
         ]);
@@ -184,7 +170,7 @@ class Tournament extends Model
 
         // SECOND GROUP
         $group_b = Group::create([
-            'name' => 'Grupo B',
+            'name' => 'Pista 2',
             'squad_id' => $squad->id,
             'tournament_id' => $this->id,
         ]);
@@ -199,17 +185,29 @@ class Tournament extends Model
         $this->createGamesForGroup($group_b_players, $player_indexes_for_games, $group_b);
     }
 
-    private function createMatchesForTwelvePlayers($players, $squad)
+    private function createMatchesForTwelvePlayers($players, $squad, $courts)
     {
-        $group = Group::create([
-            'name' => 'Grupo A',
-            'squad_id' => $squad->id,
-            'tournament_id' => $this->id,
-        ]);
+        $courtsArray = range(1, $courts);
+        $courts_groups = [];
+        foreach ($courtsArray as $key => $value) {
+            $courts_groups[] = Group::create([
+                'name' => "Pista {$value}",
+                'squad_id' => $squad->id,
+                'tournament_id' => $this->id,
+            ]);
+        }
 
-        $players->each(function ($player) use ($group) {
+        // $group = Group::create([
+        //     'name' => 'Grupo A',
+        //     'squad_id' => $squad->id,
+        //     'tournament_id' => $this->id,
+        // ]);
+
+        $players->each(function ($player) use ($courts_groups) {
             $player->tournaments()->attach($this->id);
-            $player->groups()->attach($group->id);
+            foreach ($courts_groups as $group) {
+                $player->groups()->attach($group->id);
+            }
         });
 
         $player_indexes_for_games = [
@@ -219,7 +217,7 @@ class Tournament extends Model
 
             /* 4 */  [3, 11, 4, 10],
             /* 5 */  [5, 8, 2, 6],
-            /* 6 */  [7, 9, 0 , 1],
+            /* 6 */  [7, 9, 0, 1],
 
             /* 7 */  [0, 8, 5, 9],
             /* 8 */  [1, 10, 3, 4],
@@ -258,7 +256,15 @@ class Tournament extends Model
             /* 33 */  [1, 3, 5, 6],
         ];
 
-        $this->createGamesForGroup($players, $player_indexes_for_games, $group);
+        $courts_games = array_fill(0, $courts, []);
+        foreach ($player_indexes_for_games as $key => $value) {
+            $court_index = $key % $courts;
+            $courts_games[$court_index][] = $value;
+        }
+
+        foreach ($courts_games as $key => $games) {
+            $this->createGamesForGroup($players, $games, $courts_groups[$key]);
+        }
     }
 
     private function createMatchesForTwelvePlayersLeagueMode($players, $squad)
