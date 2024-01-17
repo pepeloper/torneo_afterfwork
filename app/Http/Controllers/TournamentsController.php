@@ -17,7 +17,7 @@ class TournamentsController extends Controller
     {
         $tournament->load([
             'groups' => function ($query) {
-                $query->where('name', 'like', 'Grupo%');
+                $query->where('name', 'not like', 'Liga%');
             },
             'groups.games',
             'groups.games.users',
@@ -27,6 +27,14 @@ class TournamentsController extends Controller
         ]);
 
         $has_leagues = Group::where('name', 'like', 'Liga%')->where('tournament_id', $tournament->id)->first() ? true : false;
+
+        // dd([
+        //     'squad' => $squad,
+        //     'tournament' => $tournament,
+        //     'hasLeagues' => $has_leagues,
+        //     'ranking' => $tournament->ranking(),
+        //     'section' => 'groups',
+        // ]);
 
         return Inertia::render('Tournament/Show', [
             'squad' => $squad,
@@ -56,7 +64,7 @@ class TournamentsController extends Controller
             'mode' => $request->input('mode') ?? 'groups',
         ]);
 
-        $tournament->createMatches($request->input('players'), $squad);
+        $tournament->createMatches($request->input('players'), $squad, intval($request->input('courts')));
 
         return Redirect::route('squads.show', ['squad' => $squad]);
     }

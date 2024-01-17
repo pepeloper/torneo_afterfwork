@@ -13,8 +13,11 @@ use App\Models\Invitation;
 use App\Models\Squad;
 use App\Models\User;
 use App\Notifications\UserInvitation;
+use App\Services\RoundRobin;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Mixpanel;
 use Ramsey\Uuid\Uuid;
 
 Route::get('/mailable', function () {
@@ -60,7 +63,7 @@ Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 
 Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
 
 // Update users permissions from squad
-Route::put('/clubs/{squad}/users', [UsersController ::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
+Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
 
 // Authenticated user settings
 Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
@@ -76,6 +79,7 @@ Route::post('/clubs/{squad}/invite', [InvitationController::class, 'create'])->n
 
 Route::get('/', function () {
     // TODO: LANDING
+    app(MixPanel::class)->track("landing view");
     return Inertia::render('Welcome');
 })->name('index');
 
