@@ -17,7 +17,6 @@ use App\Services\RoundRobin;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Mixpanel;
 use Ramsey\Uuid\Uuid;
 
 Route::get('/mailable', function () {
@@ -79,7 +78,6 @@ Route::post('/clubs/{squad}/invite', [InvitationController::class, 'create'])->n
 
 Route::get('/', function () {
     // TODO: LANDING
-    app(MixPanel::class)->track("landing view");
     return Inertia::render('Welcome');
 })->name('index');
 
