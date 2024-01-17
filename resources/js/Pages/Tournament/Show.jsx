@@ -70,7 +70,7 @@ export default function Show({ squad, tournament, hasLeagues, section, ranking }
           <ChevronLeftIcon className="w-6 h-6" />
         </Link>}
         <div>
-          <Typography variant="h3" className="truncate w-[97%]">{tournament.name}</Typography>
+          <Typography variant="h3" className="break-words">{tournament.name}</Typography>
           <Typography variant="small" className="-mt-2 text-gray-500">Torneo Americano</Typography>
         </div>
       </div>

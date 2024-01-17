@@ -27,7 +27,7 @@ export default function AppLayout({ children, header }) {
           {children}
         </div>
       </section>
-      <section className={classNames("fixed bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex items-center", auth.user ? "justify-between" : "justify-center")}>
+      <section className={classNames("fixed z-50 bottom-0 left-0 right-0  bg-white px-12 border-t border-gray-200 w-full py-4 flex items-center", auth.user ? "justify-between" : "justify-center")}>
         {
           auth.user ?
             <>
