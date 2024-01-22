@@ -52,7 +52,7 @@ class UserInvitation extends Notification
             ->subject("Tienes una invitación a un torneo de padel")
             ->greeting('¡Te han invitado a un torneo de padel!')
             ->line("Hola, {$this->user->name}.")
-            ->line("Tienes una invitación para un torneo de Padel pendiente de aceptar en el grupo {$this->squad->name}")
+            ->line("Tienes una invitación para un torneo Americano de Padel pendiente de aceptar")
             ->action('Aceptar invitación', $url);
     }
 }

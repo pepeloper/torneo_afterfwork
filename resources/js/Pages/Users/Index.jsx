@@ -13,12 +13,14 @@ import InputError from "@/Components/InputError";
 export default function Index({ squad }) {
 
   const { auth } = usePage().props;
+  const [activeUser, setActiveUser] = useState(null);
 
   const squadRole = getUserRoleForSquad(auth.user, squad);
   const [showInviteDrawer, setShowInviteDrawer] = useState(false);
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     email: '',
+    user_id: null,
   });
 
   const header = (
@@ -45,6 +47,16 @@ export default function Index({ squad }) {
     })
   };
 
+  const handleInviteUser = (user) => {
+    setActiveUser(user);
+    setData({
+      name: user.name,
+      email: '',
+      user_id: user.id,
+    });
+    setShowInviteDrawer(true)
+  }
+
   const handleSendInvitation = (e) => {
     e.preventDefault();
     post(route('invitation.create', { squad }), {
@@ -68,19 +80,23 @@ export default function Index({ squad }) {
                   <p className="text-gray-500 text-sm">{u.email}</p>
                 </div>
               </div>
-              {squadRole === "admin" && u.id !== auth.user.id ? <div>
-                <div className="w-28 [&>div]:min-w-0">
-                  <Select
-                    value={u.pivot.role}
-                    variant="outlined"
-                    labelProps={{ className: "after:ml-0 before:mr-0" }}
-                    onChange={(value) => handleRolChange(u, value)}
-                  >
-                    <Option value="admin">Admin</Option>
-                    <Option value="member">Miembro</Option>
-                  </Select>
-                </div>
-              </div> :
+              {squadRole === "admin" && u.id !== auth.user.id ? u.email ?
+                <div>
+                  <div className="w-28 [&>div]:min-w-0">
+                    <Select
+                      value={u.pivot.role}
+                      variant="outlined"
+                      labelProps={{ className: "after:ml-0 before:mr-0" }}
+                      onChange={(value) => handleRolChange(u, value)}
+                    >
+                      <Option value="admin">Admin</Option>
+                      <Option value="member">Miembro</Option>
+                    </Select>
+                  </div>
+                </div> :
+                <Button size="sm" onClick={() => handleInviteUser(u)}>
+                  Invitar
+                </Button> :
                 <Chip className="w-20 text-center" value={u.pivot.role === "admin" ? "Admin" : "Miembro"} variant="outlined" />}
             </div>
           )
@@ -88,9 +104,11 @@ export default function Index({ squad }) {
       </div>
       <Drawer open={showInviteDrawer} onClose={() => {
         setShowInviteDrawer(false);
+        setActiveUser(null);
         setData({
           name: '',
           email: '',
+          user_id: null,
         })
       }} placement="bottom" size={310}>
         <div className="flex flex-col mt-6 px-6">
@@ -103,10 +121,11 @@ export default function Index({ squad }) {
                 id="name"
                 name="name"
                 value={data.name}
-                className="mt-1 block w-full"
+                className={classNames("mt-1 block w-full", { 'disabled:bg-gray-100': activeUser })}
                 autoComplete="name"
                 isFocused={true}
                 onChange={(e) => setData('name', e.target.value)}
+                disabled={activeUser}
                 required
               />
 

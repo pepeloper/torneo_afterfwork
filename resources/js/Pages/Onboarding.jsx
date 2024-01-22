@@ -3,17 +3,14 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
-import AppLayout from "@/Layouts/AppLayout";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { Button, ButtonGroup, Chip, Typography } from "@material-tailwind/react";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
 
 export default function Onboarding({ players }) {
   const { data, setData, get, processing, errors, reset } = useForm({
     name: '',
-    number_of_players: Number(players),
+    number_of_players: players ? Number(players) : null,
     courts: null,
   });
 
@@ -26,7 +23,7 @@ export default function Onboarding({ players }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    get(route('onboarding.players', { number: players }));
+    get(route('onboarding.players', { number: data.number_of_players }));
   }
 
   return (
@@ -82,7 +79,6 @@ export default function Onboarding({ players }) {
                   const newData = {
                     number_of_players: 4,
                     courts: null,
-                    players: ['', '', '', ''],
                   };
                   setData({ ...data, ...newData });
                 }}>4</Button>
@@ -90,7 +86,6 @@ export default function Onboarding({ players }) {
                   const newData = {
                     number_of_players: 8,
                     courts: null,
-                    players: ['', '', '', '', '', '', '', ''],
                   };
                   setData({ ...data, ...newData });
                 }}>8</Button>
@@ -98,7 +93,6 @@ export default function Onboarding({ players }) {
                   const newData = {
                     number_of_players: 12,
                     courts: null,
-                    players: ['', '', '', '', '', '', '', '', '', '', '', ''],
                   };
                   setData({ ...data, ...newData });
                 }}>12</Button>

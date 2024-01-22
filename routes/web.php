@@ -9,17 +9,18 @@ use App\Http\Controllers\SquadsController;
 use App\Http\Controllers\TournamentsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserSettingsControler;
-use App\Models\Group;
 use App\Models\Invitation;
 use App\Models\Squad;
 use App\Models\User;
 use App\Notifications\UserInvitation;
-use App\Services\RoundRobin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Ramsey\Uuid\Uuid;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Tags\Url;
 
 Route::get('/mailable', function () {
     $squad = Squad::first();
@@ -36,8 +37,37 @@ Route::get('/mailable', function () {
     return (new UserInvitation($squad, $user, $invitation))->toMail($user);
 });
 
+Route::get('/test', function () {
+    Sitemap::create()
+        ->add(Url::create('/')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.8))
+        ->add(Url::create('/crear-torneo-4-jugadores')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.9))
+        ->add(Url::create('/crear-torneo-8-jugadores')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.9))
+        ->add(Url::create('/crear-torneo-12-jugadores')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.9))
+        ->add(Url::create('/crear-torneo')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.9))
+        ->add(Url::create('/organizar-torneo')
+            ->setLastModificationDate(Carbon::today())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+            ->setPriority(0.9))
+        ->writeToFile(public_path('sitemap.xml'));
+});
+
 Route::get('/crear-torneo-{number}-jugadores', function ($number) {
-    if (!collect([4,8,12])->contains($number)) {
+    if (!collect([4, 8, 12])->contains($number)) {
         return redirect('/');
     }
 
@@ -46,14 +76,38 @@ Route::get('/crear-torneo-{number}-jugadores', function ($number) {
     ]);
 })->name('onboarding');
 
+Route::get('/crear-torneo', function () {
+    return Inertia::render('Onboarding', [
+        'players' => null,
+    ]);
+})->name('onboarding.create');
+
+Route::get('/organizar-torneo', function () {
+    return Inertia::render('Onboarding', [
+        'players' => null,
+    ]);
+})->name('onboarding.organize');
+
 Route::get('/crear-torneo-{number}-jugadores/jugadores', function ($number, Request $request) {
-    if (!collect([4,8,12])->contains($number)) {
+    if (!collect([4, 8, 12])->contains($number)) {
+        return redirect('/');
+    }
+
+    if ($number == 4 && $request->query('courts') != 1) {
+        return redirect('/');
+    }
+
+    if ($number == 8 && !collect([1, 2])->contains($request->query('courts'))) {
+        return redirect('/');
+    }
+
+    if ($number == 12 && !collect([1, 2, 3])->contains($request->query('courts'))) {
         return redirect('/');
     }
 
     return Inertia::render('Onboarding/Players', [
         'name' => $request->query('name'),
-        'number_of_players' => $request->query('number_of_players'),
+        'number_of_players' => $number,
         'courts' => $request->query('courts'),
     ]);
 })->name('onboarding.players');

@@ -59,12 +59,17 @@ class InvitationController extends Controller
 
     public function create(Request $request, Squad $squad)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-
-        $user->squads()->attach($squad, ['role' => 'member']);
+        if ($request->input('user_id')) {
+            $user = User::find($request->input('user_id'));
+            $user->email = $request->input('email');
+            $user->save();
+        } else {
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+            ]);
+            $user->squads()->attach($squad, ['role' => 'member']);
+        }
 
         $invitation = Invitation::create([
             'user_id' => $user->id,
