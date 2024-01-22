@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedTinyInteger('courts')->nullable();
             $table->unsignedBigInteger('squad_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

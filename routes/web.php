@@ -4,6 +4,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SquadsController;
 use App\Http\Controllers\TournamentsController;
 use App\Http\Controllers\UsersController;
@@ -14,6 +15,7 @@ use App\Models\Squad;
 use App\Models\User;
 use App\Notifications\UserInvitation;
 use App\Services\RoundRobin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +35,30 @@ Route::get('/mailable', function () {
     }
     return (new UserInvitation($squad, $user, $invitation))->toMail($user);
 });
+
+Route::get('/crear-torneo-{number}-jugadores', function ($number) {
+    if (!collect([4,8,12])->contains($number)) {
+        return redirect('/');
+    }
+
+    return Inertia::render('Onboarding', [
+        'players' => $number,
+    ]);
+})->name('onboarding');
+
+Route::get('/crear-torneo-{number}-jugadores/jugadores', function ($number, Request $request) {
+    if (!collect([4,8,12])->contains($number)) {
+        return redirect('/');
+    }
+
+    return Inertia::render('Onboarding/Players', [
+        'name' => $request->query('name'),
+        'number_of_players' => $request->query('number_of_players'),
+        'courts' => $request->query('courts'),
+    ]);
+})->name('onboarding.players');
+
+Route::post('/crear-torneo-{number}-jugadores', [RegisterUserController::class, 'store'])->name('onboarding.store');
 
 // Show list of squads for user. For now is not needed
 // Route::get('/clubs', [SquadsController::class, 'index'])->name('clubs.index');
