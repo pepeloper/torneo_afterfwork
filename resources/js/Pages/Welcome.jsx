@@ -122,7 +122,8 @@ export default function Welcome({ auth }) {
                       Organiza tu torneo de padel
                     </h1>
                     <p className="mt-6 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                      Crea tus torneos americanos personalizados de hasta 12 jugadores, nosotros nos encargamos de la organización de partidos para que tú te centres en disfrutar de los partidos!
+                      Crea tus torneos americanos personalizados de hasta 12 jugadores, nosotros nos encargamos de la organización de partidos para que tú te centres en disfrutar de ellos!
+                      <br />
                       Añade los resultados de cada partido para ver como se actualiza el ranking en tiempo real.
                     </p>
                     <div className="mt-10 flex items-center gap-x-6">

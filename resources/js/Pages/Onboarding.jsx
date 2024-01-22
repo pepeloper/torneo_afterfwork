@@ -2,10 +2,13 @@ import AppAvatar from "@/Components/AppAvatar";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
+import Footer from "@/Components/Landing/Footer";
 import TextInput from "@/Components/TextInput";
 import { Head, useForm } from '@inertiajs/react';
 import { Button, ButtonGroup, Chip, Typography } from "@material-tailwind/react";
 import classNames from "classnames";
+import CookieConsent from "react-cookie-consent";
+import { hotjar } from "react-hotjar";
 
 export default function Onboarding({ players }) {
   const { data, setData, get, processing, errors, reset } = useForm({
@@ -131,9 +134,24 @@ export default function Onboarding({ players }) {
           </form>
         </div>
       </section>
-      <section className=" bg-white px-12 border-t border-gray-200 w-full py-4 flex items-center justify-center">
-        FOOTER
+      <section className="w-full bg-white border-t border-gray-200 px-8 py-4 flex items-center justify-start">
+        <Footer />
       </section>
+      <CookieConsent
+        location="bottom"
+        buttonText="Aceptar"
+        cookieName="torneospadel"
+        style={{ background: "#1f2937" }}
+        buttonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "#7cb342", padding: "5px 25px" }}
+        declineButtonText="Rechazar"
+        declineButtonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "transparent", padding: "5px 20px" }}
+        enableDeclineButton
+        onAccept={() => hotjar.initialize(3836237)}
+        flipButtons
+        expires={150}
+      >
+        Este sitio web utiliza cookies para mejorar la experiencia del usuario.
+      </CookieConsent>
     </div>
   );
 }

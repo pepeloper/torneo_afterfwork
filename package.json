@@ -24,6 +24,8 @@
         "@heroicons/react": "^2.1.1",
         "@material-tailwind/react": "^2.1.8",
         "@tremor/react": "^3.12.1",
-        "classnames": "^2.4.0"
+        "classnames": "^2.4.0",
+        "react-cookie-consent": "^9.0.0",
+        "react-hotjar": "^6.2.0"
     }
 }

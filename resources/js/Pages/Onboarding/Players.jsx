@@ -1,6 +1,7 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
+import Footer from "@/Components/Landing/Footer";
 import TextInput from "@/Components/TextInput";
 import { Head, useForm } from '@inertiajs/react';
 import { Button, Drawer, Typography } from "@material-tailwind/react";
@@ -158,8 +159,8 @@ export default function Players({ name, number_of_players, courts }) {
             </form>
           </div>
         </section>
-        <section className=" bg-white px-12 border-t border-gray-200 w-full py-4 flex items-center justify-center">
-          FOOTER
+        <section className="w-full bg-white border-t border-gray-200 px-8 py-4 flex items-center justify-start">
+          <Footer />
         </section>
       </div>
       <Drawer placement="bottom" open={showUserModal} overlayProps={{ className: 'fixed' }} size={350}>
@@ -167,7 +168,7 @@ export default function Players({ name, number_of_players, courts }) {
           <Typography variant="h4">¿Vas a jugar el torneo?</Typography>
           <Typography>No hemos podido asociarte automáticamente con un jugador, si vas a jugar el torneo selecciona quién eres de los jugadores</Typography>
           <select onChange={(event) => setData('user_player', event.target.value)} name="user_player" id="user_player" className="mt-5 border border-gray-300 rounded-md">
-            {data.players.map((p,index) => <option key={index} value={p}>{p}</option>)}
+            {data.players.map((p, index) => <option key={index} value={p}>{p}</option>)}
           </select>
           <Button onClick={() => post(route('onboarding.store', { number: number_of_players }))} className="mt-5" variant="gradient" color="light-green" fullWidth>Asociar jugador</Button>
           <Button onClick={() => post(route('onboarding.store', { number: number_of_players }))} className="mt-1" variant="text" color="light-green" fullWidth>No voy a jugar el torneo</Button>

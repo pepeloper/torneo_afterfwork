@@ -93,7 +93,7 @@ Route::get('/crear-torneo-{number}-jugadores/jugadores', function ($number, Requ
         return redirect('/');
     }
 
-    if ($number == 4 && $request->query('courts') != 1) {
+    if ($number == 4 && ($request->query('courts') !== null && $request->query('courts') != 1)) {
         return redirect('/');
     }
 
