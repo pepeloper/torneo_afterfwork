@@ -53,7 +53,7 @@ class RegisterUserController extends Controller
         $user->squads()->attach($squad, ['role' => 'admin']);
 
         foreach ($validated['players'] as $key => $member) {
-            if ($member === $validated['user_player'] || $member = $validated['user_name']) {
+            if ($member === $validated['user_player'] || $member === $validated['user_name']) {
                 $players[] = $user->id;
                 continue;
             }
