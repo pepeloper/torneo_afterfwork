@@ -12,6 +12,7 @@ import {
   Avatar,
 } from "@material-tailwind/react"
 import classNames from "classnames";
+import CookieConsent from "react-cookie-consent";
 
 export default function AppLayout({ children, header }) {
   const { auth, squad } = usePage().props
@@ -102,6 +103,21 @@ export default function AppLayout({ children, header }) {
           </MenuList>
         </Menu> */}
       </section>
+      <CookieConsent
+        location="bottom"
+        buttonText="Aceptar"
+        cookieName="torneospadel"
+        style={{ background: "#1f2937" }}
+        buttonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "#7cb342", padding: "5px 25px" }}
+        declineButtonText="Rechazar"
+        declineButtonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "transparent", padding: "5px 20px" }}
+        enableDeclineButton
+        onAccept={() => hotjar.initialize(3836237)}
+        flipButtons
+        expires={150}
+      >
+        Este sitio web utiliza cookies para mejorar la experiencia del usuario.
+      </CookieConsent>
     </div>
   );
 }

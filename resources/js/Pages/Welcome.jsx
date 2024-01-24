@@ -3,6 +3,7 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import CookieConsent from "react-cookie-consent";
 
 export default function Welcome({ auth }) {
 
@@ -12,7 +13,7 @@ export default function Welcome({ auth }) {
 
   return (
     <>
-      <Head title="Torneo Afterwork" />
+      <Head title="Bienvenido" />
 
       <div className="bg-white">
         <header className="absolute inset-x-0 top-0 z-50">
@@ -203,6 +204,21 @@ export default function Welcome({ auth }) {
           </div>
         </main>
       </div>
+      <CookieConsent
+        location="bottom"
+        buttonText="Aceptar"
+        cookieName="torneospadel"
+        style={{ background: "#1f2937" }}
+        buttonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "#7cb342", padding: "5px 25px" }}
+        declineButtonText="Rechazar"
+        declineButtonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "transparent", padding: "5px 20px" }}
+        enableDeclineButton
+        onAccept={() => hotjar.initialize(3836237)}
+        flipButtons
+        expires={150}
+      >
+        Este sitio web utiliza cookies para mejorar la experiencia del usuario.
+      </CookieConsent>
     </>
   );
 }

@@ -6,6 +6,7 @@ import TextInput from "@/Components/TextInput";
 import { Head, useForm } from '@inertiajs/react';
 import { Button, Drawer, Typography } from "@material-tailwind/react";
 import { useState } from "react";
+import CookieConsent from "react-cookie-consent";
 
 export default function Players({ name, number_of_players, courts }) {
   const [showUserModal, setShowUserModal] = useState(false);
@@ -45,6 +46,7 @@ export default function Players({ name, number_of_players, courts }) {
 
   return (
     <>
+      <Head title="Organizar torneo" />
       <div className="w-full mx-auto flex flex-col min-h-[100dvh]">
         <header className="">
           <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -181,6 +183,21 @@ export default function Players({ name, number_of_players, courts }) {
           <Button onClick={handleCreate} className="mt-1" variant="text" color="light-green" fullWidth>No voy a jugar el torneo</Button>
         </div>
       </Drawer>
+      <CookieConsent
+        location="bottom"
+        buttonText="Aceptar"
+        cookieName="torneospadel"
+        style={{ background: "#1f2937" }}
+        buttonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "#7cb342", padding: "5px 25px" }}
+        declineButtonText="Rechazar"
+        declineButtonStyle={{ color: "#FFFFFF", fontSize: "13px", background: "transparent", padding: "5px 20px" }}
+        enableDeclineButton
+        onAccept={() => hotjar.initialize(3836237)}
+        flipButtons
+        expires={150}
+      >
+        Este sitio web utiliza cookies para mejorar la experiencia del usuario.
+      </CookieConsent>
     </>
   );
 }

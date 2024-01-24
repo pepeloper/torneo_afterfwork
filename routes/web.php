@@ -6,6 +6,7 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SquadsController;
+use App\Http\Controllers\TournamentInvitationController;
 use App\Http\Controllers\TournamentsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserSettingsControler;
@@ -100,7 +101,7 @@ Route::get('/clubs/{squad}/torneo/{tournament}/grupos', [GroupsController::class
 Route::get('/clubs/{squad}/v/{tournament}/ligas', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
 
 // Create a tournament form
-Route::get('/clubs/{squad}/torneo/create', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
+Route::get('/clubs/{squad}/torneo/crear', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
 
 // Show tournament details
 Route::get('/clubs/{squad}/torneo/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
@@ -120,8 +121,10 @@ Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middlewa
 // Authenticated user settings
 Route::get('/configuración', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
 
-// General invite to a squad
-// Route::get('/clubs/{squad}/invitacion/', [InvitationController::class, 'show'])->name('invitation.squad.show');
+// General invite to a tournament
+Route::get('/clubs/{squad}/torneo/{tournament}/invitacion', [TournamentInvitationController::class, 'show'])->name('invitation.tournament.show');
+
+Route::post('/clubs/{squad}/torneo/{tournament}/invitacion', [TournamentInvitationController::class, 'store'])->name('invitation.tournament.show');
 
 // Show invitation to register for a squad
 Route::get('/clubs/{squad}/invitacion/{token}', [InvitationController::class, 'show'])->name('invitation.show');

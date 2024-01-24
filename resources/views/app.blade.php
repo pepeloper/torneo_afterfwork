@@ -6,6 +6,34 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <meta name="description" content="Organiza y gestiona con facilidad torneos americanos de padel con nuestra plataforma">
+        <meta name="keywords" content="padel, americano, torneo padel, torneo americano padel, torneo padel americano, torneo padel 4 personas, torneo padel 4 jugadores, torneo padel 8 personas, torneo padel 8 jugadores, torneo padel 12 personas, torneo padel 12 jugadores, organizar torneo padel, crear torneo padel, torneo padel amateur, ">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ config('app.url') }}">
+        <meta property="og:title" content="{{ config('app.name') }}">
+        <meta property="og:description" content="Organiza y gestiona con facilidad torneos americanos de padel con nuestra plataforma">
+        <meta property="og:image" content="https://torneospadel.app/storage/ball.png">
+        <meta property="og:type" content="website" />
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="285">
+        <meta property="og:image:height" content="290">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ config('app.url') }}">
+        <meta property="twitter:title" content="{{ config('app.name') }}">
+        <meta property="twitter:description" content="Organiza y gestiona con facilidad torneos americanos de padel con nuestra plataforma">
+        <meta property="twitter:image" content="https://torneospadel.app/storage/ball.png">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+        <link rel="manifest" href="/site.webmanifest">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
