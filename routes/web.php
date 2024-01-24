@@ -124,7 +124,7 @@ Route::get('/configuración', [UserSettingsControler::class, 'index'])->middlewa
 // General invite to a tournament
 Route::get('/clubs/{squad}/torneo/{tournament}/invitacion', [TournamentInvitationController::class, 'show'])->name('invitation.tournament.show');
 
-Route::post('/clubs/{squad}/torneo/{tournament}/invitacion', [TournamentInvitationController::class, 'store'])->name('invitation.tournament.show');
+Route::post('/clubs/{squad}/torneo/{tournament}/invitacion', [TournamentInvitationController::class, 'store'])->name('invitation.tournament.store');
 
 // Show invitation to register for a squad
 Route::get('/clubs/{squad}/invitacion/{token}', [InvitationController::class, 'show'])->name('invitation.show');
