@@ -22,90 +22,22 @@ use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
 
-Route::get('/mailable', function () {
-    $squad = Squad::first();
-    $user = User::first();
-    $invitation = Invitation::first();
+if (app()->isLocal()) {
+    Route::get('/mailable', function () {
+        $squad = Squad::first();
+        $user = User::first();
+        $invitation = Invitation::first();
 
-    if (!$invitation) {
-        $invitation = Invitation::create([
-            'user_id' => $user->id,
-            'used_at' => null,
-            'token' => (string) Uuid::uuid4(),
-        ]);
-    }
-    return (new UserInvitation($squad, $user, $invitation))->toMail($user);
-});
-
-Route::get('/test', function () {
-    function generateRoundRobinSchedule($players)
-    {
-        $numPlayers = count($players);
-        if ($numPlayers % 2 != 0) {
-            array_push($players, "bye"); // If there's an odd number, add a "bye" player
-            $numPlayers++;
+        if (!$invitation) {
+            $invitation = Invitation::create([
+                'user_id' => $user->id,
+                'used_at' => null,
+                'token' => (string) Uuid::uuid4(),
+            ]);
         }
-        $numRounds = $numPlayers - 1;
-        $half = $numPlayers / 2;
-
-        $schedule = [];
-        $played = array_fill(0, $numPlayers, array_fill(0, $numPlayers, false));
-
-        for ($round = 0; $round < $numRounds; $round++) {
-            for ($i = 0; $i < $half; $i++) {
-                $playerA = $players[$i];
-                $playerB = $players[($numPlayers - 1 - $i + $round) % ($numPlayers - 1)];
-                $playerC = $players[($i + $round + 1) % ($numPlayers - 1)];
-                $playerD = $players[($numPlayers - 2 - $i + $round) % ($numPlayers - 1)];
-
-                // Ensure a player doesn't play with or against the same person more than once
-                if (!$played[$playerA][$playerB] && !$played[$playerA][$playerC] && !$played[$playerA][$playerD] &&
-                    !$played[$playerB][$playerC] && !$played[$playerB][$playerD] &&
-                    !$played[$playerC][$playerD]) {
-                    $match = [$playerA, $playerB, $playerC, $playerD];
-                    $schedule[$round][] = $match;
-
-                    $played[$playerA][$playerB] = $played[$playerB][$playerA] = true;
-                    $played[$playerA][$playerC] = $played[$playerC][$playerA] = true;
-                    $played[$playerA][$playerD] = $played[$playerD][$playerA] = true;
-                    $played[$playerB][$playerC] = $played[$playerC][$playerB] = true;
-                    $played[$playerB][$playerD] = $played[$playerD][$playerB] = true;
-                    $played[$playerC][$playerD] = $played[$playerD][$playerC] = true;
-                }
-            }
-        }
-
-        return $schedule;
-    };
-
-    echo "<pre>" . json_encode(generateRoundRobinSchedule([1,2,3,4,5,6,7,8])) . "</pre>";
-    // Sitemap::create()
-    //     ->add(Url::create('/')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.8))
-    //     ->add(Url::create('/crear-torneo-4-jugadores')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.9))
-    //     ->add(Url::create('/crear-torneo-8-jugadores')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.9))
-    //     ->add(Url::create('/crear-torneo-12-jugadores')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.9))
-    //     ->add(Url::create('/crear-torneo')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.9))
-    //     ->add(Url::create('/organizar-torneo')
-    //         ->setLastModificationDate(Carbon::today())
-    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-    //         ->setPriority(0.9))
-    //     ->writeToFile(public_path('sitemap.xml'));
-});
+        return (new UserInvitation($squad, $user, $invitation))->toMail($user);
+    });
+}
 
 Route::get('/crear-torneo-{number}-jugadores', function ($number) {
     if (!collect([4, 8, 12])->contains($number)) {
