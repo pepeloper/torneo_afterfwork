@@ -121,7 +121,7 @@ Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middlewa
 Route::get('/configuración', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
 
 // General invite to a squad
-Route::get('/clubs/{squad}/invitacion/', [InvitationController::class, 'show'])->name('invitation.show');
+// Route::get('/clubs/{squad}/invitacion/', [InvitationController::class, 'show'])->name('invitation.squad.show');
 
 // Show invitation to register for a squad
 Route::get('/clubs/{squad}/invitacion/{token}', [InvitationController::class, 'show'])->name('invitation.show');
