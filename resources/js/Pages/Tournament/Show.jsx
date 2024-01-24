@@ -10,7 +10,7 @@ import {
   TabPanel,
   Tab,
 } from "@material-tailwind/react";
-import { HomeIcon, UserGroupIcon, Cog6ToothIcon, UserCircleIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import GameCard from "@/Components/GameCard";
 import EditGame from "@/Components/Game/EditGame";

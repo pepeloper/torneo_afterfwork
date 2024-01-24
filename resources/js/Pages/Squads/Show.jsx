@@ -5,11 +5,6 @@ import {
   Card,
   CardBody,
   Typography,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
 } from "@material-tailwind/react"
 import classNames from "classnames"
 import AppLayout from "@/Layouts/AppLayout"

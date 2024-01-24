@@ -1,4 +1,4 @@
-import { Link, Head, usePage } from '@inertiajs/react';
+import { Link, Head } from '@inertiajs/react';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
