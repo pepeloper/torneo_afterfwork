@@ -137,7 +137,7 @@ export default function Welcome({ auth }) {
                         : <>
                           <Link
                             href={route('onboarding.organize')}
-                            className="rounded-md bg-light-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-light-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-green-600"
+                            className="rounded-md bg-light-green-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-light-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-green-600"
                             onClick={() => fathom.trackEvent('onboarding started')}
                           >
                             ¡Organiza tu primer torneo!
@@ -153,8 +153,8 @@ export default function Welcome({ auth }) {
                     <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                       <div className="relative">
                         <img
-                          src="https://complejodeportivo.race.es/wp-content/uploads/2018/07/gral-padel-dest.jpg"
-                          alt=""
+                          src="/images/landing_1.webp"
+                          alt="pala de padel con varias pelotas sobre una pista"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
                         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
@@ -163,16 +163,16 @@ export default function Welcome({ auth }) {
                     <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                       <div className="relative">
                         <img
-                          src="https://images.unsplash.com/photo-1640974051016-9f364cd64eb3?q=80&w=2535&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                          alt=""
+                          src="/images/landing_2.webp"
+                          alt="pista de padel con una pelota en medio"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
                         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                       </div>
                       <div className="relative">
                         <img
-                          src="https://images.unsplash.com/photo-1646649851780-d9701b7c3c04?q=80&w=2671&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                          alt=""
+                          src="/images/landing_3.webp"
+                          alt="mujer en una pista de padel sujetando una pala"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
                         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
@@ -181,16 +181,16 @@ export default function Welcome({ auth }) {
                     <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
                       <div className="relative">
                         <img
-                          src="https://images.unsplash.com/photo-1613870930431-a09c7139eb33?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                          alt=""
+                          src="/images/landing_4.webp"
+                          alt="persona jugando al padel dentro de una pista, enfoque a la pala"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
                         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                       </div>
                       <div className="relative">
                         <img
-                          src="https://images.unsplash.com/photo-1612534847738-b3af9bc31f0c?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                          alt=""
+                          src="/images/landing_5.webp"
+                          alt="pala de padel head"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
                         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
