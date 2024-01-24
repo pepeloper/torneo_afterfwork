@@ -153,7 +153,7 @@ export default function Welcome({ auth }) {
                     <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                       <div className="relative">
                         <img
-                          src="/images/landing_1.webp"
+                          src="/images/pala_padel_pista.webp"
                           alt="pala de padel con varias pelotas sobre una pista"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
@@ -163,7 +163,7 @@ export default function Welcome({ auth }) {
                     <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                       <div className="relative">
                         <img
-                          src="/images/landing_2.webp"
+                          src="/images/pista_padel.webp"
                           alt="pista de padel con una pelota en medio"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
@@ -171,7 +171,7 @@ export default function Welcome({ auth }) {
                       </div>
                       <div className="relative">
                         <img
-                          src="/images/landing_3.webp"
+                          src="/images/partido_padel.webp"
                           alt="mujer en una pista de padel sujetando una pala"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
@@ -181,7 +181,7 @@ export default function Welcome({ auth }) {
                     <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
                       <div className="relative">
                         <img
-                          src="/images/landing_4.webp"
+                          src="/images/partido_padel_pista.webp"
                           alt="persona jugando al padel dentro de una pista, enfoque a la pala"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
@@ -189,7 +189,7 @@ export default function Welcome({ auth }) {
                       </div>
                       <div className="relative">
                         <img
-                          src="/images/landing_5.webp"
+                          src="/images/pala_head_partido_padel.webp"
                           alt="pala de padel head"
                           className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                         />
