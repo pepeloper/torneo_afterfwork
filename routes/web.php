@@ -38,32 +38,73 @@ Route::get('/mailable', function () {
 });
 
 Route::get('/test', function () {
-    Sitemap::create()
-        ->add(Url::create('/')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.8))
-        ->add(Url::create('/crear-torneo-4-jugadores')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.9))
-        ->add(Url::create('/crear-torneo-8-jugadores')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.9))
-        ->add(Url::create('/crear-torneo-12-jugadores')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.9))
-        ->add(Url::create('/crear-torneo')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.9))
-        ->add(Url::create('/organizar-torneo')
-            ->setLastModificationDate(Carbon::today())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-            ->setPriority(0.9))
-        ->writeToFile(public_path('sitemap.xml'));
+    function generateRoundRobinSchedule($players)
+    {
+        $numPlayers = count($players);
+        if ($numPlayers % 2 != 0) {
+            array_push($players, "bye"); // If there's an odd number, add a "bye" player
+            $numPlayers++;
+        }
+        $numRounds = $numPlayers - 1;
+        $half = $numPlayers / 2;
+
+        $schedule = [];
+        $played = array_fill(0, $numPlayers, array_fill(0, $numPlayers, false));
+
+        for ($round = 0; $round < $numRounds; $round++) {
+            for ($i = 0; $i < $half; $i++) {
+                $playerA = $players[$i];
+                $playerB = $players[($numPlayers - 1 - $i + $round) % ($numPlayers - 1)];
+                $playerC = $players[($i + $round + 1) % ($numPlayers - 1)];
+                $playerD = $players[($numPlayers - 2 - $i + $round) % ($numPlayers - 1)];
+
+                // Ensure a player doesn't play with or against the same person more than once
+                if (!$played[$playerA][$playerB] && !$played[$playerA][$playerC] && !$played[$playerA][$playerD] &&
+                    !$played[$playerB][$playerC] && !$played[$playerB][$playerD] &&
+                    !$played[$playerC][$playerD]) {
+                    $match = [$playerA, $playerB, $playerC, $playerD];
+                    $schedule[$round][] = $match;
+
+                    $played[$playerA][$playerB] = $played[$playerB][$playerA] = true;
+                    $played[$playerA][$playerC] = $played[$playerC][$playerA] = true;
+                    $played[$playerA][$playerD] = $played[$playerD][$playerA] = true;
+                    $played[$playerB][$playerC] = $played[$playerC][$playerB] = true;
+                    $played[$playerB][$playerD] = $played[$playerD][$playerB] = true;
+                    $played[$playerC][$playerD] = $played[$playerD][$playerC] = true;
+                }
+            }
+        }
+
+        return $schedule;
+    };
+
+    echo "<pre>" . json_encode(generateRoundRobinSchedule([1,2,3,4,5,6,7,8])) . "</pre>";
+    // Sitemap::create()
+    //     ->add(Url::create('/')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.8))
+    //     ->add(Url::create('/crear-torneo-4-jugadores')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.9))
+    //     ->add(Url::create('/crear-torneo-8-jugadores')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.9))
+    //     ->add(Url::create('/crear-torneo-12-jugadores')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.9))
+    //     ->add(Url::create('/crear-torneo')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.9))
+    //     ->add(Url::create('/organizar-torneo')
+    //         ->setLastModificationDate(Carbon::today())
+    //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+    //         ->setPriority(0.9))
+    //     ->writeToFile(public_path('sitemap.xml'));
 });
 
 Route::get('/crear-torneo-{number}-jugadores', function ($number) {
@@ -121,40 +162,43 @@ Route::post('/crear-torneo-{number}-jugadores', [RegisterUserController::class, 
 Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['auth', 'squad.user'])->name('squads.show');
 
 // Show list of groups with games for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}/groups', [GroupsController::class, 'index'])->name('groups.index');
+Route::get('/clubs/{squad}/torneo/{tournament}/grupos', [GroupsController::class, 'index'])->name('groups.index');
 
 // Temporary route to show leagues for a given tournament
-Route::get('/clubs/{squad}/tournament/{tournament}/leagues', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
+Route::get('/clubs/{squad}/v/{tournament}/ligas', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
 
 // Create a tournament form
-Route::get('/clubs/{squad}/tournament/create', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
+Route::get('/clubs/{squad}/torneo/create', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
 
 // Show tournament details
-Route::get('/clubs/{squad}/tournament/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
+Route::get('/clubs/{squad}/torneo/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
 
 // Store a tournament
-Route::post('/clubs/{squad}/tournament', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.store');
+Route::post('/clubs/{squad}/torneo', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.store');
 
 // Create leagues for a tournament
-Route::post('/clubs/{squad}/tournament/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
+Route::post('/clubs/{squad}/torneo/{tournament}', [GroupsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('league.create');
 
 // List users in a squad
-Route::get('/clubs/{squad}/users', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
+Route::get('/clubs/{squad}/usuarios', [UsersController::class, 'index'])->middleware(['auth', 'squad.user'])->name('users.show');
 
 // Update users permissions from squad
 Route::put('/clubs/{squad}/users', [UsersController::class, 'update'])->middleware(['auth', 'squad.user'])->name('users.update');
 
 // Authenticated user settings
-Route::get('/settings', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
+Route::get('/configuración', [UserSettingsControler::class, 'index'])->middleware(['auth'])->name('users.settings');
+
+// General invite to a squad
+Route::get('/clubs/{squad}/invitacion/', [InvitationController::class, 'show'])->name('invitation.show');
 
 // Show invitation to register for a squad
-Route::get('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.show');
+Route::get('/clubs/{squad}/invitacion/{token}', [InvitationController::class, 'show'])->name('invitation.show');
 
 // Process the invitation, creating user password
-Route::post('/clubs/{squad}/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
+Route::post('/clubs/{squad}/invitacion/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 
 // Invite a usar to a squad
-Route::post('/clubs/{squad}/invite', [InvitationController::class, 'create'])->name('invitation.create');
+Route::post('/clubs/{squad}/invitar', [InvitationController::class, 'create'])->name('invitation.create');
 
 Route::get('/', function () {
     // TODO: LANDING
@@ -162,7 +206,7 @@ Route::get('/', function () {
 })->name('index');
 
 // TODO: Add squad and tournament parameters
-Route::put('/game/{game}', [GameController::class, 'update'])->name('game.update');
+Route::put('/partido/{game}', [GameController::class, 'update'])->name('game.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

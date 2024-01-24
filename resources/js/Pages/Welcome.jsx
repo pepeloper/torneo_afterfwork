@@ -38,7 +38,7 @@ export default function Welcome({ auth }) {
                 <Link href={route('squads.show', { squad: auth.user.squads[0] })} className="text-sm font-semibold leading-6 text-gray-900">
                   Mis torneos <span aria-hidden="true">&rarr;</span>
                 </Link>
-                : <Link href={route('login')} className="text-sm font-semibold leading-6 text-gray-900">
+                : <Link href={route('login')} onClick={() => fathom.trackEvent('login')} className="text-sm font-semibold leading-6 text-gray-900">
                   Iniciar sesión <span aria-hidden="true">&rarr;</span>
                 </Link>}
             </div>
@@ -67,7 +67,7 @@ export default function Welcome({ auth }) {
                       <Link href={route('squads.show', { squad: auth.user.squads[0] })} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         Mis torneos
                       </Link>
-                      : <Link href={route('login')} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                      : <Link href={route('login')} onClick={() => fathom.trackEvent('login')} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         Iniciar sesión
                       </Link>}
                   </div>
@@ -138,10 +138,11 @@ export default function Welcome({ auth }) {
                           <Link
                             href={route('onboarding.organize')}
                             className="rounded-md bg-light-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-light-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-green-600"
+                            onClick={() => fathom.trackEvent('onboarding started')}
                           >
                             ¡Organiza tu primer torneo!
                           </Link>
-                          <Link  href={route('login')} className="text-sm font-semibold leading-6 text-gray-900">
+                          <Link  href={route('login')} onClick={() => fathom.trackEvent('login')} className="text-sm font-semibold leading-6 text-gray-900">
                             Iniciar sesión <span aria-hidden="true">&rarr;</span>
                           </Link>
                         </>

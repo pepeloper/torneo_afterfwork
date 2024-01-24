@@ -33,8 +33,14 @@ export default function Players({ name, number_of_players, courts }) {
     if (!data.players.includes(data.user_name)) {
       setShowUserModal(true);
     } else {
+      fathom.trackEvent('onboarding done')
       post(route('onboarding.store', { number: number_of_players }));
     }
+  }
+
+  const handleCreate = (event) => {
+    fathom.trackEvent('onboarding done')
+    post(route('onboarding.store', { number: number_of_players }));
   }
 
   return (
@@ -75,6 +81,7 @@ export default function Players({ name, number_of_players, courts }) {
                       name={`user_${index}`}
                       id={`user_${index}`}
                       className="mt-1.5 block w-full"
+                      placeholder="Nombre"
                       onChange={(e) => addPlayers(e.target.value, index)}
                       required
                     />
@@ -170,8 +177,8 @@ export default function Players({ name, number_of_players, courts }) {
           <select onChange={(event) => setData('user_player', event.target.value)} name="user_player" id="user_player" className="mt-5 border border-gray-300 rounded-md">
             {data.players.map((p, index) => <option key={index} value={p}>{p}</option>)}
           </select>
-          <Button onClick={() => post(route('onboarding.store', { number: number_of_players }))} className="mt-5" variant="gradient" color="light-green" fullWidth>Asociar jugador</Button>
-          <Button onClick={() => post(route('onboarding.store', { number: number_of_players }))} className="mt-1" variant="text" color="light-green" fullWidth>No voy a jugar el torneo</Button>
+          <Button onClick={handleCreate} className="mt-5" variant="gradient" color="light-green" fullWidth>Asociar jugador</Button>
+          <Button onClick={handleCreate} className="mt-1" variant="text" color="light-green" fullWidth>No voy a jugar el torneo</Button>
         </div>
       </Drawer>
     </>
