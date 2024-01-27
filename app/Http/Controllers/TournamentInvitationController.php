@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Squad;
 use App\Models\Tournament;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
@@ -45,6 +47,10 @@ class TournamentInvitationController extends Controller
         $user->squads()->attach($squad, ['role' => 'member']);
         $user->tournaments()->attach($tournament->id);
 
-        return back()->with(['success' => true]);
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect("/clubs/{$squad->id}");
     }
 }

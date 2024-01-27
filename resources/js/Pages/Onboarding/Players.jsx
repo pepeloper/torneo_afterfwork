@@ -34,13 +34,13 @@ export default function Players({ name, number_of_players, courts }) {
     if (!data.players.includes(data.user_name)) {
       setShowUserModal(true);
     } else {
-      fathom.trackEvent('onboarding done')
+      if (typeof fathom !== "undefined") fathom.trackEvent('onboarding done')
       post(route('onboarding.store', { number: number_of_players }));
     }
   }
 
   const handleCreate = (event) => {
-    fathom.trackEvent('onboarding done')
+    if (typeof fathom !== "undefined") fathom.trackEvent('onboarding done')
     post(route('onboarding.store', { number: number_of_players }));
   }
 
@@ -73,7 +73,7 @@ export default function Players({ name, number_of_players, courts }) {
           <div className="container px-4 md:px-0 mx-auto mt-3">
             <form className="space-y-5" onSubmit={handleSubmit}>
 
-              <Typography variant="h4">Jugadores del torneo</Typography>
+              <Typography variant="h4">Nombre de los jugadores</Typography>
 
               <div className="space-y-3">
                 {data.players.map((player, index) => {
@@ -83,7 +83,6 @@ export default function Players({ name, number_of_players, courts }) {
                       name={`user_${index}`}
                       id={`user_${index}`}
                       className="mt-1.5 block w-full"
-                      placeholder="Nombre"
                       onChange={(e) => addPlayers(e.target.value, index)}
                       required
                     />

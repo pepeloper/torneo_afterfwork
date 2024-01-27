@@ -18,7 +18,7 @@ export default function Onboarding({ players }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fathom.trackEvent('onboarding next')
+    if (typeof fathom !== "undefined") fathom.trackEvent('onboarding next');
     get(route('onboarding.players', { number: data.number_of_players }));
   }
 
@@ -64,7 +64,6 @@ export default function Onboarding({ players }) {
                   onChange={(e) => setData('name', e.target.value)}
                   required
                 />
-                <p className="text-sm text-gray-600 mt-0.5">¡Pónle nombre al torneo!</p>
 
                 <InputError message={errors.name} className="mt-2" />
               </div>
