@@ -112,7 +112,7 @@ export default function Index({ squad }) {
             email: '',
             user_id: null,
           })
-        }} placement="bottom" size={310}>
+        }} placement="bottom" size={310} overlayProps={{ className: 'fixed' }}>
           <div className="flex flex-col mt-6 px-6">
             <Typography variant="h4">Invitar al grupo</Typography>
             <form onSubmit={handleSendInvitation}>

@@ -181,7 +181,7 @@ export default function Show({ squad, tournament, hasLeagues, section }) {
               setBackdropBlicked(true);
               return true;
             }
-          }} open={open} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
+          }} open={open} overlayProps={{ className: 'fixed' }} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
             <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
           </Drawer>}
         </>
