@@ -39,13 +39,17 @@ export default function Onboarding({ players }) {
         <section className="flex-1 pb-12">
           <div className="w-full flex justify-between items-center py-5">
             <div className="container px-4 md:px-0 mx-auto">
-              <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Organiza tu torneo de padel
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Organiza tu torneo americano de padel
               </h1>
-              <p className="mt-6 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
+              {/* <p className="mt-6 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
                 Un americano de pádel es un torneo de varios partidos cambiando de pista y de compañeros donde te enfrentarás con todos los participantes en un circuito con puntuación.
                 <br />
                 Crea tu torneo americano personalizado de {players} jugadores, nosotros nos encargamos de la organización de los partidos y de generar el ranking que se actualiza en tiempo real.
+              </p> */}
+              <p className="mt-6 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
+                En estos torneos todos jugáis contra todos y solo gana uno, el que más puntos tenga.
+                Nosotros nos ocupamos de rotar a los jugadores y de actualizar el ranking en tiempo real.
               </p>
             </div>
           </div>

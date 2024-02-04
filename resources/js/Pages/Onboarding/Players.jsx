@@ -66,19 +66,19 @@ export default function Players({ name, number_of_players, courts }) {
               </h1>
               <p className="mt-3 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
                 Vas a crear un torneo de {data.number_of_players} jugadores en {data.courts} {data.courts === 1 ? 'pista' : 'pistas'}.
-                A continuación añade el nombre de los jugadores. ¡Una vez creado el torneo podrás invitarlos para que se registren en la plataforma y puedan añadir resultados!
+                A continuación añade a los jugadores. ¡Después invítalos para que puedan añadir los resultados!
               </p>
             </div>
           </div>
           <div className="container px-4 md:px-0 mx-auto mt-3">
             <form className="space-y-5" onSubmit={handleSubmit}>
 
-              <Typography variant="h4">Nombre de los jugadores</Typography>
+              {/* <Typography variant="h4">Nombre de los jugadores</Typography> */}
 
               <div className="space-y-3">
                 {data.players.map((player, index) => {
                   return <div className="w-full justify-between" key={`player_${index}`}>
-                    <InputLabel htmlFor={`player_${index}`} value={`Jugador ${index + 1}`} />
+                    <InputLabel htmlFor={`player_${index}`} value={`Nombre del jugador ${index + 1}`} />
                     <TextInput
                       name={`user_${index}`}
                       id={`user_${index}`}
