@@ -55,7 +55,7 @@ export default function Register() {
     <>
       <div className="flex space-x-0.5">
         <div>
-          <Typography variant="h3">Registro</Typography>
+          <Typography variant="h5">Registro</Typography>
           <Typography variant="small" className="-mt-2 text-gray-500">Crea tu cuenta</Typography>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function Register() {
       <Head title="Register" />
 
       <form onSubmit={submit} className="px-6 mt-5">
-        <Typography variant="h3">Datos personales</Typography>
+        <Typography variant="h5">Datos personales</Typography>
         <div className="mt-3">
           <InputLabel htmlFor="name" value="Nombre" />
 
@@ -136,7 +136,7 @@ export default function Register() {
           <InputError message={errors.password_confirmation} className="mt-2" />
         </div>
 
-        <Typography variant="h3" className="mt-4">Grupo de padel</Typography>
+        <Typography variant="h5" className="mt-4">Grupo de padel</Typography>
 
         <div className="mt-3">
           <InputLabel htmlFor="squad" value="Nombre del grupo" />

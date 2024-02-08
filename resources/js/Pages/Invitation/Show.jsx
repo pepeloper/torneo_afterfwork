@@ -28,7 +28,7 @@ export default function Show({ squad, invitation }) {
 
   const header = (
     <div>
-      <Typography variant="h3">Invitación</Typography>
+      <Typography variant="h5">Invitación</Typography>
       <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel {squad.name}</Typography>
     </div>
   );

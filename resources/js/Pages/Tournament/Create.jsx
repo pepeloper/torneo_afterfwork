@@ -96,7 +96,7 @@ export default function Create({ squad, users }) {
           <ChevronLeftIcon className="w-6 h-6" />
         </Link>}
         <div>
-          <Typography variant="h3">Crear torneo</Typography>
+          <Typography variant="h5">Crear torneo</Typography>
           <Typography variant="small" className="-mt-2 text-gray-500">{squad.name}</Typography>
         </div>
       </div>

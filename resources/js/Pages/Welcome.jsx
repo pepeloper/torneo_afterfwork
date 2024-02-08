@@ -1,9 +1,14 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, useForm } from '@inertiajs/react';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import CookieConsent from "react-cookie-consent";
+import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
+import InputLabel from "@/Components/InputLabel";
+import InputError from "@/Components/InputError";
+import TextInput from "@/Components/TextInput";
+import classNames from "classnames";
 
 export default function Welcome({ auth }) {
 
@@ -11,12 +16,24 @@ export default function Welcome({ auth }) {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const { data, setData, get, processing, errors, reset } = useForm({
+    name: '',
+    number_of_players: null,
+    courts: null,
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (typeof fathom !== "undefined") fathom.trackEvent('onboarding next');
+    get(route('onboarding.players', { number: data.number_of_players }));
+  }
+
   return (
     <>
       <Head title="Bienvenido" />
 
       <div className="bg-white">
-        <header className="absolute inset-x-0 top-0 z-50">
+        <header className="inset-x-0 top-0 z-50">
           <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
               <a href="#" className="-m-1.5 p-1.5">
@@ -77,131 +94,56 @@ export default function Welcome({ auth }) {
             </Dialog.Panel>
           </Dialog>
         </header>
-        <main>
-          <div className="relative isolate">
-            <svg
-              className="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
-              aria-hidden="true"
-            >
-              <defs>
-                <pattern
-                  id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84"
-                  width={200}
-                  height={200}
-                  x="50%"
-                  y={-1}
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path d="M.5 200V.5H200" fill="none" />
-                </pattern>
-              </defs>
-              <svg x="50%" y={-1} className="overflow-visible fill-gray-50">
-                <path
-                  d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-                  strokeWidth={0}
-                />
-              </svg>
-              <rect width="100%" height="100%" strokeWidth={0} fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)" />
-            </svg>
-            <div
-              className="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
-              aria-hidden="true"
-            >
-              <div
-                className="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#80ff88] to-[#9089fc] opacity-30"
-                style={{
-                  clipPath:
-                    'polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)',
-                }}
-              />
+        <main className="px-4">
+          <h1 className="mt-3 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-6xl uppercase">
+            Organiza tu torneo <br /> de padel americano
+          </h1>
+          <p className="mt-3 md:text-lg leading-7 text-gray-600 sm:max-w-md lg:max-w-none">
+            Un Americano es un torneo de varios partidos cambiando de pista y de compañeros donde nos cruzaremos con todos los participantes en un circuito con puntuación
+          </p>
+          <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
+            <div>
+              <InputLabel value="¿Cuántas personas vais a jugar?" />
+
+              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 4 })} onClick={() => {
+                  const newData = {
+                    number_of_players: 4,
+                    courts: 1,
+                  };
+                  setData({ ...data, ...newData });
+                }}>4</Button>
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 8 })} onClick={() => {
+                  const newData = {
+                    number_of_players: 8,
+                    courts: null,
+                  };
+                  setData({ ...data, ...newData });
+                }}>8</Button>
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 12 })} onClick={() => {
+                  const newData = {
+                    number_of_players: 12,
+                    courts: null,
+                  };
+                  setData({ ...data, ...newData });
+                }}>12</Button>
+              </ButtonGroup>
             </div>
-            <div className="overflow-hidden">
-              <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
-                <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
-                  <div className="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-                    <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                      Organiza tu torneo de padel
-                    </h1>
-                    <p className="mt-6 md:text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                      Crea tus torneos americanos personalizados de hasta 12 jugadores, nosotros nos encargamos de la organización de partidos para que tú te centres en disfrutar de ellos!
-                      <br />
-                      Añade los resultados de cada partido para ver como se actualiza el ranking en tiempo real.
-                    </p>
-                    <div className="mt-10 flex items-center gap-x-6">
-                      {auth.user ?
-                        <Link
-                          href={route('squads.show', { squad: auth.user.squads[0] })}
-                          className="rounded-md bg-light-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-light-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-green-600"
-                        >
-                          Ver mis torneos
-                        </Link>
-                        : <>
-                          <Link
-                            href={route('onboarding.organize')}
-                            className="rounded-md bg-light-green-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-light-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-green-600"
-                            onClick={() => fathom && fathom.trackEvent('onboarding started')}
-                          >
-                            ¡Organiza tu primer torneo!
-                          </Link>
-                          <Link  href={route('login')} onClick={() => fathom && fathom.trackEvent('login')} className="text-sm font-semibold leading-6 text-gray-900">
-                            Iniciar sesión <span aria-hidden="true">&rarr;</span>
-                          </Link>
-                        </>
-                      }
-                    </div>
-                  </div>
-                  <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
-                    <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
-                      <div className="relative">
-                        <img
-                          src="/images/pala_padel_pista.webp"
-                          alt="pala de padel con varias pelotas sobre una pista"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                      </div>
-                    </div>
-                    <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
-                      <div className="relative">
-                        <img
-                          src="/images/pista_padel.webp"
-                          alt="pista de padel con una pelota en medio"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                      </div>
-                      <div className="relative">
-                        <img
-                          src="/images/partido_padel.webp"
-                          alt="mujer en una pista de padel sujetando una pala"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                      </div>
-                    </div>
-                    <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
-                      <div className="relative">
-                        <img
-                          src="/images/partido_padel_pista.webp"
-                          alt="persona jugando al padel dentro de una pista, enfoque a la pala"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                      </div>
-                      <div className="relative">
-                        <img
-                          src="/images/pala_head_partido_padel.webp"
-                          alt="pala de padel head"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+            <div>
+              <InputLabel value="¿En cuántas pistas vais a jugar?" />
+
+              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
+                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
+              </ButtonGroup>
+              { data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en 3 pistas</Typography>}
             </div>
-          </div>
+
+
+            <Button type="submit" variant="gradient" color="light-green" fullWidth disabled={data.name === '' || (data.number_of_players > 4 && data.courts === null)}>Siguiente</Button>
+          </form>
         </main>
       </div>
       <CookieConsent

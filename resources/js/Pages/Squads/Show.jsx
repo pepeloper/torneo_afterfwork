@@ -16,8 +16,8 @@ export default function Show({ squad }) {
   const header = (
       <>
         <div>
-          <Typography variant="h3">{squad.name}</Typography>
-          <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel</Typography>
+        <Typography variant="h5">{squad.name}</Typography>
+          <Typography variant="small" className="-mt-1 text-gray-500">Mis torneos</Typography>
         </div>
         <Link href={route('tournament.create', { squad })}>
           <Button variant="gradient" size="sm" color="light-green" ripple>Crear torneo</Button>

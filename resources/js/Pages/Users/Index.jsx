@@ -30,12 +30,12 @@ export default function Index({ squad }) {
           <ChevronLeftIcon className="w-6 h-6" />
         </Link>
         <div>
-          <Typography variant="h3">{squad.name}</Typography>
-          <Typography variant="small" className="-mt-2 text-gray-500">Grupo de padel</Typography>
+          <Typography variant="h5">{squad.name}</Typography>
+          <Typography variant="small" className="-mt-1 text-gray-500">Jugadores de mi grupo</Typography>
         </div>
       </div>
       <Button size="sm" onClick={() => setShowInviteDrawer(true)}>
-        Invitar jugadores
+        Invitar
       </Button>
     </>
   );
