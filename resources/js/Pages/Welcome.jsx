@@ -1,4 +1,4 @@
-import { Link, Head, useForm } from '@inertiajs/react';
+import { Link, Head, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import CookieConsent from "react-cookie-consent";
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
@@ -16,7 +16,7 @@ export default function Welcome({ auth }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (typeof fathom !== "undefined") fathom.trackEvent('onboarding started');
-    get(route('onboarding.players', { number: data.number_of_players }));
+    router.visit(route('onboarding.tournament', { players: data.number_of_players, courts: data.courts }));
   }
 
   return (
@@ -24,11 +24,11 @@ export default function Welcome({ auth }) {
       <Head title="Bienvenido" />
 
       <header className="text-gray-50 px-4 pt-7 pb-16 flex flex-col items-center bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
-        <a href={route('index')} className="-m-1.5 p-1.5 flex items-center space-x-2">
+        <Link href={route('index')} className="-m-1.5 p-1.5 flex items-center space-x-2">
           <span className="sr-only">Americano Padel</span>
           <ApplicationLogo className="w-10 h-10" />
           <p className="uppercase font-black text-xl">torneospadel.app</p>
-        </a>
+        </Link>
         <h1 className="mt-7 text-[28px] font-black leading-7 uppercase text-center">
           Organiza torneos <br /> americanos de padel
         </h1>

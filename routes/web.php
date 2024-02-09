@@ -98,7 +98,7 @@ Route::get('/clubs/{squad}', [SquadsController::class, 'show'])->middleware(['au
 Route::get('/clubs/{squad}/torneo/{tournament}/grupos', [GroupsController::class, 'index'])->name('groups.index');
 
 // Temporary route to show leagues for a given tournament
-Route::get('/clubs/{squad}/v/{tournament}/ligas', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
+Route::get('/clubs/{squad}/{tournament}/ligas', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
 
 // Create a tournament form
 Route::get('/clubs/{squad}/torneo/crear', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
@@ -140,10 +140,13 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('index');
 
-Route::get('/torneo', function () {
+Route::get('/torneo-{players}-jugadores-{courts}-pistas', function ($players, $courts) {
     // TODO: LANDING
-    return Inertia::render('Onboarding/Tournament');
-})->name('index');
+    return Inertia::render('Onboarding/Tournament', [
+        'players' => $players,
+        'courts' => $courts,
+    ]);
+})->name('onboarding.tournament');
 
 // TODO: Add squad and tournament parameters
 Route::put('/partido/{game}', [GameController::class, 'update'])->name('game.update');
