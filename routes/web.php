@@ -140,6 +140,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('index');
 
+Route::get('/torneo', function () {
+    // TODO: LANDING
+    return Inertia::render('Onboarding/Tournament');
+})->name('index');
+
 // TODO: Add squad and tournament parameters
 Route::put('/partido/{game}', [GameController::class, 'update'])->name('game.update');
 
