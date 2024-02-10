@@ -55,7 +55,7 @@ class Tournament extends Model
         return $ranking;
     }
 
-    public function createMatches($players_ids, $squad, $courts)
+    public function createMatches($players_ids, $courts)
     {
         $number_of_players = count($players_ids);
         $players = User::whereIn('id', $players_ids)->get();
@@ -74,11 +74,11 @@ class Tournament extends Model
             }
         } else {
             if ($number_of_players === 8) {
-                $this->createMatchesForEightPlayersLeagueMode($players, $squad);
+                $this->createMatchesForEightPlayersLeagueMode($players);
             }
 
             if ($number_of_players === 12) {
-                $this->createMatchesForTwelvePlayersLeagueMode($players, $squad);
+                $this->createMatchesForTwelvePlayersLeagueMode($players);
             }
         }
 
@@ -145,7 +145,7 @@ class Tournament extends Model
         $this->createGamesAndGroups($players, $courts);
     }
 
-    private function createMatchesForEightPlayersLeagueMode($players, $squad)
+    private function createMatchesForEightPlayersLeagueMode($players)
     {
         $player_indexes_for_games = [
             [0, 1, 2, 3],
@@ -156,7 +156,7 @@ class Tournament extends Model
         // FIRST GROUP
         $group_a = Group::create([
             'name' => 'Pista 1',
-            'squad_id' => $squad->id,
+            'squad_id' => $this->squad_id,
             'tournament_id' => $this->id,
         ]);
 
@@ -172,7 +172,7 @@ class Tournament extends Model
         // SECOND GROUP
         $group_b = Group::create([
             'name' => 'Pista 2',
-            'squad_id' => $squad->id,
+            'squad_id' => $this->squad_id,
             'tournament_id' => $this->id,
         ]);
 
@@ -192,7 +192,7 @@ class Tournament extends Model
         $this->createGamesAndGroups($players, $courts);
     }
 
-    private function createMatchesForTwelvePlayersLeagueMode($players, $squad)
+    private function createMatchesForTwelvePlayersLeagueMode($players)
     {
         $player_indexes_for_games = [
             [0, 1, 2, 3],
@@ -203,7 +203,7 @@ class Tournament extends Model
         // FIRST GROUP
         $group_a = Group::create([
             'name' => 'Grupo A',
-            'squad_id' => $squad->id,
+            'squad_id' => $this->squad_id,
             'tournament_id' => $this->id,
         ]);
 
@@ -219,7 +219,7 @@ class Tournament extends Model
         // SECOND GROUP
         $group_b = Group::create([
             'name' => 'Grupo B',
-            'squad_id' => $squad->id,
+            'squad_id' => $this->squad_id,
             'tournament_id' => $this->id,
         ]);
 
@@ -235,7 +235,7 @@ class Tournament extends Model
         // THIRD GROUP
         $group_c = Group::create([
             'name' => 'Grupo C',
-            'squad_id' => $squad->id,
+            'squad_id' => $this->squad_id,
             'tournament_id' => $this->id,
         ]);
 

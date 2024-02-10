@@ -1,6 +1,7 @@
 import { Avatar } from "@material-tailwind/react";
+import classNames from "classnames";
 
-export default function AppAvatar({ user }) {
+export default function AppAvatar({ user, size = "md" }) {
   const stringToHslColor = (str, s = 50, l = 60) => {
     if (str.startsWith('Jugador')) {
       str = (Math.random() + 1).toString(36).substring(7);
@@ -26,9 +27,17 @@ export default function AppAvatar({ user }) {
   return (
     <div>
       {user.photo ?
-        <Avatar key={user.id} src={user.photo} className="border border-white hover:z-10 focus:z-10" /> :
+        <Avatar key={user.id} src={user.photo} size={size} className="border border-white hover:z-10 focus:z-10" /> :
         <div
-          className="uppercase text-sm font-semibold border bg-gray-700 border-white hover:z-10 focus:z-10 rounded-full w-10 h-10 flex items-center justify-center text-white"
+          className={
+            classNames(
+              "uppercase font-semibold border bg-gray-700 border-white hover:z-10 focus:z-10 rounded-full flex items-center justify-center text-white",
+              {
+                "w-10 h-10 text-sm": size === "md",
+                "w-9 h-9 text-xs": size === "sm",
+              }
+            )
+          }
           style={user.name.startsWith('Jugador') ? null : { backgroundColor: stringToHslColor(user.name) }}
         >
           <span>{getInitials(user.name)}</span>

@@ -101,10 +101,10 @@ Route::get('/clubs/{squad}/torneo/{tournament}/grupos', [GroupsController::class
 Route::get('/clubs/{squad}/{tournament}/ligas', [GroupsController::class, 'show_leagues'])->name('tournament.league.show');
 
 // Create a tournament form
-Route::get('/clubs/{squad}/torneo/crear', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
+Route::get('/torneo/crear', [TournamentsController::class, 'create'])->middleware(['auth', 'squad.user'])->name('tournament.create');
 
 // Show tournament details
-Route::get('/clubs/{squad}/torneo/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
+Route::get('/torneo/{tournament}', [TournamentsController::class, 'show'])->name('tournament.show');
 
 // Store a tournament
 Route::post('/clubs/{squad}/torneo', [TournamentsController::class, 'store'])->middleware(['auth', 'squad.user'])->name('tournament.store');
@@ -147,6 +147,13 @@ Route::get('/torneo-{players}-jugadores-{courts}-pistas', function ($players, $c
         'courts' => $courts,
     ]);
 })->name('onboarding.tournament');
+
+Route::get('/mis-torneos', function () {
+    $user = auth()->user()->load(['tournaments', 'tournaments.users', 'tournaments.groups']);
+    return Inertia::render('Tournament/List', [
+        'tournaments' => $user->tournaments,
+    ]);
+})->name('tournaments.list');
 
 // TODO: Add squad and tournament parameters
 Route::put('/partido/{game}', [GameController::class, 'update'])->name('game.update');

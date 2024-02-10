@@ -17,14 +17,11 @@ class RegisterUserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
             'number_of_players' => 'required|numeric',
             'courts' => 'required|numeric',
-            'players' => 'required|array',
-            'user_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'user_player' => 'nullable',
         ], [
             'name.required' => "El nombre es obligatorio",
             'email.required'    => 'El correo electrónico es obligatorio',
@@ -41,44 +38,34 @@ class RegisterUserController extends Controller
         $validated = $validator->validated();
 
         $user = User::create([
-            'name' => $validated['user_player'] ?? $validated['user_name'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
-        $squad = Squad::create([
-            'name' => 'Grupo de padel',
-        ]);
+        $players[] = $user->id;
 
-        $user->squads()->attach($squad, ['role' => 'admin']);
-
-        foreach ($validated['players'] as $key => $member) {
-            if ($member === $validated['user_player'] || $member === $validated['user_name']) {
-                $players[] = $user->id;
-                continue;
-            }
-
+        for ($i=1; $i < $validated['number_of_players']; $i++) {
+            // Needs to start from player number 2. The first one is the onboarded user
+            $position = $i +1;
             $member = User::create([
                 'email' => null,
-                'name' => $member,
+                'name' => "Jugador {$position}",
             ]);
             $players[] = $member->id;
-            $member->squads()->attach($squad);
         }
 
         $tournament = Tournament::create([
-            'name' => $validated['name'],
-            'squad_id' => $squad->id,
             'user_id' => $user->id,
             'mode' => 'groups',
         ]);
 
-        $tournament->createMatches($players, $squad, intval($validated['courts']));
+        $tournament->createMatches($players, intval($validated['courts']));
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect("/clubs/{$squad->id}");
+        return redirect("/mis-torneos");
     }
 }

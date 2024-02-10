@@ -13,7 +13,7 @@ use Inertia\Inertia;
 
 class TournamentsController extends Controller
 {
-    public function show(Request $request, Squad $squad, Tournament $tournament)
+    public function show(Request $request, Tournament $tournament)
     {
         $tournament->load([
             'groups' => function ($query) {
@@ -29,7 +29,6 @@ class TournamentsController extends Controller
         $has_leagues = Group::where('name', 'like', 'Liga%')->where('tournament_id', $tournament->id)->first() ? true : false;
 
         // dd([
-        //     'squad' => $squad,
         //     'tournament' => $tournament,
         //     'hasLeagues' => $has_leagues,
         //     'ranking' => $tournament->ranking(),
@@ -37,7 +36,6 @@ class TournamentsController extends Controller
         // ]);
 
         return Inertia::render('Tournament/Show', [
-            'squad' => $squad,
             'tournament' => $tournament,
             'hasLeagues' => $has_leagues,
             'ranking' => $tournament->ranking(),
@@ -45,12 +43,9 @@ class TournamentsController extends Controller
         ]);
     }
 
-    public function create(Request $request, Squad $squad)
+    public function create(Request $request)
     {
-        return Inertia::render('Tournament/Create', [
-            'squad' => $squad,
-            'users' => $squad->users,
-        ]);
+        return Inertia::render('Tournament/Create');
     }
 
     public function store(Request $request, Squad $squad, Tournament $tournament)
