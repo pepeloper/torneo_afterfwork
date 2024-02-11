@@ -15,15 +15,14 @@ use Inertia\Inertia;
 
 class TournamentInvitationController extends Controller
 {
-    public function show(Squad $squad, Tournament $tournament)
+    public function show(Tournament $tournament)
     {
         return Inertia::render('Tournament/Invitation', [
-            'squad' => $squad,
             'tournament' => $tournament,
         ]);
     }
 
-    public function store(Squad $squad, Tournament $tournament, Request $request)
+    public function store(Tournament $tournament, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -38,19 +37,21 @@ class TournamentInvitationController extends Controller
 
         $validated = $validator->validated();
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        $tournament->load(['users' => function ($query) {
+            $query->where('name', 'like', 'Jugador%');
+        }]);
 
-        $user->squads()->attach($squad, ['role' => 'member']);
-        $user->tournaments()->attach($tournament->id);
+        $user = $tournament->users->first();
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make($validated['password']);
+        $user->save();
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect("/clubs/{$squad->id}");
+        return redirect("/mis-torneos");
     }
 }

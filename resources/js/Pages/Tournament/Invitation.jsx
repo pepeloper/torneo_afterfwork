@@ -29,10 +29,10 @@ export default function Invitation({ squad, tournament }) {
         <header className="">
           <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
-              <a href={route('index')} className="-m-1.5 p-1.5">
+              <Link href={route('index')} className="-m-1.5 p-1.5">
                 <span className="sr-only">Americano Padel</span>
                 <ApplicationLogo className="w-10 h-10" />
-              </a>
+              </Link>
             </div>
           </nav>
         </header>
@@ -40,8 +40,7 @@ export default function Invitation({ squad, tournament }) {
           <div className="w-full flex justify-between items-center py-5">
             <div className="container px-4 md:px-0 mx-auto">
               <form onSubmit={handleSubmit}>
-                <Typography variant="lead" className="font-semibold text-base">Te han invitado a jugar el torneo de padel americano "{tournament.name}"</Typography>
-                <Typography variant="h4" className="mt-3">Crea tu cuenta</Typography>
+                <Typography variant="lead" className="font-semibold text-base">Te han invitado a jugar un torneo de padel americano. ¡Crea tu cuenta para apuntarte!</Typography>
                 <div className="mt-3">
                   <InputLabel htmlFor="name" value="Nombre" />
 
@@ -119,9 +118,7 @@ export default function Invitation({ squad, tournament }) {
             </div>
           </div>
         </section>
-        <section className="w-full bg-white border-t border-gray-200 px-8 py-4 flex items-center justify-start">
-          <Footer />
-        </section>
+        <Footer />
         <CookieConsent
           location="bottom"
           buttonText="Aceptar"

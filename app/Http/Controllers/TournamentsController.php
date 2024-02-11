@@ -21,9 +21,7 @@ class TournamentsController extends Controller
             },
             'groups.games',
             'groups.games.users',
-            'users' => function ($query) {
-                $query->inRandomOrder();
-            },
+            'users',
         ]);
 
         $has_leagues = Group::where('name', 'like', 'Liga%')->where('tournament_id', $tournament->id)->first() ? true : false;
@@ -45,22 +43,43 @@ class TournamentsController extends Controller
 
     public function create(Request $request)
     {
-        return Inertia::render('Tournament/Create');
+        $user = $request->user()->load(['tournaments', 'tournaments.users']);
+
+        $previous_players = $user->tournaments
+            ->flatMap(function ($tournament) {
+                return $tournament->users;
+            })
+            ->unique('name');
+
+        return Inertia::render('Tournament/Create', [
+            'previousPlayers' => $previous_players,
+        ]);
     }
 
-    public function store(Request $request, Squad $squad, Tournament $tournament)
+    public function store(Request $request)
     {
         $user = $request->user();
 
         $tournament = Tournament::create([
-            'name' => $request->input('name'),
-            'squad_id' => $squad->id,
             'user_id' => $user->id,
-            'mode' => $request->input('mode') ?? 'groups',
+            'mode' => 'groups',
         ]);
 
-        $tournament->createMatches($request->input('players'), $squad, intval($request->input('courts')));
+        $players = [];
+        $players[] = $user->id;
 
-        return Redirect::route('squads.show', ['squad' => $squad]);
+        for ($i=1; $i < $request->input('number_of_players'); $i++) {
+            // Needs to start from player number 2. The first one is the onboarded user
+            $position = $i +1;
+            $member = User::create([
+                'email' => null,
+                'name' => "Jugador {$position}",
+            ]);
+            $players[] = $member->id;
+        }
+
+        $tournament->createMatches($players, intval($request->input('courts')));
+
+        return Redirect::route('tournaments.list');
     }
 }

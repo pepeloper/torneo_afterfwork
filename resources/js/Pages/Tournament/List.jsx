@@ -34,7 +34,7 @@ export default function Show({ tournaments }) {
           return (
             <Card key={tournament.id} className={classNames("border-gray-200 rounded-none border-l-0 border-r-0 bg-gray-50", { 'border-t-0': key === 0, 'border-t': key > 0 })} shadow={false}>
               <CardBody>
-                <Typography variant="h4">Torneo {number_of_players} jugadores en {number_of_courts} {" "} {number_of_courts > 1 ? 'pistas' : 'pista'}</Typography>
+                <Typography variant="h5">Torneo {number_of_players} jugadores en {number_of_courts} {" "} {number_of_courts > 1 ? 'pistas' : 'pista'}</Typography>
                 <section className="flex -space-x-3 mt-3">
                   {tournament.users.map(u => <AppAvatar key={u.id} user={u} className="border-2 border-white hover:z-10 focus:z-10" />)}
                 </section>

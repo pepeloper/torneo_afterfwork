@@ -26,6 +26,7 @@
         "@tremor/react": "^3.12.1",
         "classnames": "^2.4.0",
         "react-cookie-consent": "^9.0.0",
-        "react-hotjar": "^6.2.0"
+        "react-hotjar": "^6.2.0",
+        "usehooks-ts": "^2.14.0"
     }
 }

@@ -17,6 +17,8 @@ import EditGame from "@/Components/Game/EditGame";
 import AppLayout from "@/Layouts/AppLayout";
 import AppAvatar from "@/Components/AppAvatar";
 import classNames from "classnames";
+import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { useCopyToClipboard } from "usehooks-ts";
 
 export default function Show({ tournament, ranking }) {
   const { auth } = usePage().props;
@@ -58,19 +60,24 @@ export default function Show({ tournament, ranking }) {
 
   const header = (
     <>
-      <div className="flex space-x-0.5">
-        {auth.user && <Link href={route('tournaments.list')} className="mt-2">
-          <ChevronLeftIcon className="w-6 h-6" />
-        </Link>}
-        <div>
-          <Typography variant="h5" className="break-words">Torneo Americano</Typography>
-          <Typography variant="small" className="-mt-1 text-gray-500">
-            {tournament.users.length} jugadores en {tournament.groups.length} {" "} {tournament.groups.length > 1 ? 'pistas' : 'pista'}
-          </Typography>
+      <div className="flex space-x-0.5 w-full justify-between items-center">
+        <div className="flex items-center">
+          {auth.user && <Link href={route('tournaments.list')}>
+            <ChevronLeftIcon className="w-6 h-6" />
+          </Link>}
+          <div className="ml-3">
+            <Typography variant="h5" className="break-words">Torneo Americano</Typography>
+            <Typography variant="small" className="-mt-1 text-gray-500">
+              {tournament.users.length} jugadores en {tournament.groups.length} {" "} {tournament.groups.length > 1 ? 'pistas' : 'pista'}
+            </Typography>
+          </div>
         </div>
       </div>
     </>
   );
+
+  const [value, copy] = useCopyToClipboard();
+  const [copied, setCopied] = useState(false);
 
   return (
     <>
@@ -90,6 +97,27 @@ export default function Show({ tournament, ranking }) {
                 +{tournament.users.length - AVATARS_TO_SHOW}
               </div>}
             </div>
+            <Button
+              size="sm"
+              variant="gradient"
+              fullWidth
+              className="mt-5 flex items-center justify-center space-x-4"
+              onMouseLeave={() => setCopied(false)}
+              onClick={() => {
+                copy(`${window.location.href}/invitacion`);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500)
+              }}>
+              <span>Copiar enlace de invitación</span>
+              {copied ? (
+                <CheckIcon className="h-4 w-4 text-white" />
+              ) : (
+                <DocumentDuplicateIcon className="h-4 w-4 text-white" />
+              )}
+            </Button>
+            <Button size="sm" variant="text" fullWidth className="mt-2">
+              Editar jugadores
+            </Button>
           </div>
 
           <div className="px-6 border-t border-gray-200 py-6">
@@ -112,12 +140,12 @@ export default function Show({ tournament, ranking }) {
                         <div className="grid grid-cols-3">
                           <div className="text-center py-2.5">
                             <p className="font-medium text-gray-800">PF</p>
-                            <p className="text-light-green-600 text-lg font-semibold">{u.points_in_favor}</p>
+                            <p className="text-light-green-600 text-lg font-semibold">{u.points_in_favor ?? 0}</p>
                           </div>
                           <div className="mx-auto h-full w-px bg-gray-300" />
                           <div className="text-center py-2.5">
                             <p className="font-medium text-gray-800">PC</p>
-                            <p className="text-gray-700 text-lg font-semibold">{u.points_against}</p>
+                            <p className="text-gray-700 text-lg font-semibold">{u.points_against ?? 0}</p>
                           </div>
                         </div>
                       </div>

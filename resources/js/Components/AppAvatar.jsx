@@ -27,7 +27,17 @@ export default function AppAvatar({ user, size = "md" }) {
   return (
     <div>
       {user.photo ?
-        <Avatar key={user.id} src={user.photo} size={size} className="border border-white hover:z-10 focus:z-10" /> :
+        <Avatar
+          key={user.id}
+          src={user.photo}
+          size={size}
+          className={
+            classNames("border border-white hover:z-10 focus:z-10",
+              {
+                "w-10 h-10 text-sm": size === "md",
+                "w-9 h-9 text-xs": size === "sm",
+              })}
+        /> :
         <div
           className={
             classNames(
