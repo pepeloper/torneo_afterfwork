@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import {
   Typography,
   Button,
@@ -9,6 +9,7 @@ import {
   TabsBody,
   TabPanel,
   Tab,
+  Dialog,
 } from "@material-tailwind/react";
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
@@ -19,6 +20,9 @@ import AppAvatar from "@/Components/AppAvatar";
 import classNames from "classnames";
 import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useCopyToClipboard } from "usehooks-ts";
+import InputError from "@/Components/InputError";
+import TextInput from "@/Components/TextInput";
+import InputLabel from "@/Components/InputLabel";
 
 export default function Show({ tournament, ranking }) {
   const { auth } = usePage().props;
@@ -78,6 +82,18 @@ export default function Show({ tournament, ranking }) {
 
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
+  const [showEditTournamentModal, setShowEditTournamentModal] = useState(false);
+  const { data, setData, post, processing, errors, reset } = useForm({
+    users: [],
+  });
+
+  const handleEditUsers = (event) => {
+    event.preventDefault();
+    console.log('data', data);
+    post(route('tournament.update', { tournament }), {
+      onSuccess: () => setShowEditTournamentModal(false),
+    });
+  }
 
   return (
     <>
@@ -101,7 +117,7 @@ export default function Show({ tournament, ranking }) {
               size="sm"
               variant="outlined"
               fullWidth
-              className="mt-5 flex items-center justify-center space-x-4"
+              className="mt-5 flex items-center justify-center space-x-2"
               onMouseLeave={() => setCopied(false)}
               onClick={() => {
                 copy(`${window.location.href}/invitacion`);
@@ -110,12 +126,12 @@ export default function Show({ tournament, ranking }) {
               }}>
               <span>Copiar enlace de invitación</span>
               {copied ? (
-                <CheckIcon className="h-4 w-4 text-white" />
+                <CheckIcon className="h-4 w-4 text-gray-900 -mt-0.5" />
               ) : (
-                <DocumentDuplicateIcon className="h-4 w-4 text-white" />
+                <DocumentDuplicateIcon className="h-4 w-4 text-gray-900 -mt-0.5" />
               )}
             </Button>
-            <Button size="sm" variant="text" fullWidth className="mt-2">
+            <Button size="sm" variant="text" fullWidth className="mt-2" onClick={() => setShowEditTournamentModal(true)}>
               Editar jugadores
             </Button>
           </div>
@@ -204,6 +220,44 @@ export default function Show({ tournament, ranking }) {
           }} open={open} overlayProps={{ className: 'fixed' }} onClose={handleCloseDrawer} placement="bottom" className="p-4 rounded-t-xl">
             <EditGame game={activeGame} handleClose={() => handleCloseDrawer()} />
           </Drawer>}
+          <Dialog
+            open={showEditTournamentModal}
+            onClose={() => {
+              setShowEditTournamentModal(false);
+              setData('users', []);
+            }}
+            placement="bottom"
+            size="xxl"
+            className="text-gray-900"
+          >
+            <div className="flex flex-col mt-6 px-6">
+              <Typography variant="h4">Editar jugadores</Typography>
+              <form onSubmit={handleEditUsers} className="space-y-4 pt-5">
+                {tournament.users.map(user => <TextInput
+                  key={user.id}
+                  id={`name_${user.id}`}
+                  name={`name_${user.id}`}
+                  placeholder={user.name}
+                  onChange={(e) => {
+                    setData((data) => {
+                      const index = data.users.findIndex(u => u.id === user.id);
+                      if (index > -1) {
+                        data.users[index].name = e.target.value
+                      } else {
+                        data.users.push({ id: user.id, name: e.target.value})
+                      }
+                      return { ...data };
+                    })
+                  }}
+                  className="disabled:bg-gray-100 w-full"
+                  disabled={!user.name.startsWith('Jugador')}
+                />
+                )}
+
+                <Button className="mt-6" type="submit" color="light-green" variant="gradient" fullWidth ripple>Guardar jugadores</Button>
+              </form>
+            </div>
+          </Dialog>
         </>
       </AppLayout>
     </>

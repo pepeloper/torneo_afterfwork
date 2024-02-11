@@ -82,4 +82,15 @@ class TournamentsController extends Controller
 
         return Redirect::route('tournaments.list');
     }
+
+    public function update(Request $request, Tournament $tournament)
+    {
+        foreach ($request->input('users') as $user) {
+            $userModel = User::find($user['id']);
+            $userModel->name = $user['name'];
+            $userModel->save();
+        }
+
+        return Redirect::route('tournament.show', ['tournament' => $tournament->id])->with(['success' => true]);
+    }
 }

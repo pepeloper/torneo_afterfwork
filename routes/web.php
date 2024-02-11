@@ -109,6 +109,9 @@ Route::get('/torneo/{tournament}', [TournamentsController::class, 'show'])->name
 // Store a tournament
 Route::post('/torneo', [TournamentsController::class, 'store'])->middleware(['auth'])->name('tournament.store');
 
+// Update tournament players
+Route::post('/torneo/{tournament}/jugadores', [TournamentsController::class, 'update'])->middleware(['auth'])->name('tournament.update');
+
 // Create leagues for a tournament
 Route::post('/clubs/{squad}/torneo/{tournament}', [GroupsController::class, 'store'])->middleware(['auth'])->name('league.create');
 

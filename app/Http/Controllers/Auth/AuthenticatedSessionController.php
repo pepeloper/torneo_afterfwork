@@ -36,8 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $squad = $request->user()->squads->first();
 
-        return redirect()->to("clubs/{$squad->id}");
-        // return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
