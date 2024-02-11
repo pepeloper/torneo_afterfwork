@@ -99,7 +99,7 @@ export default function Show({ tournament, ranking }) {
             </div>
             <Button
               size="sm"
-              variant="gradient"
+              variant="outlined"
               fullWidth
               className="mt-5 flex items-center justify-center space-x-4"
               onMouseLeave={() => setCopied(false)}
