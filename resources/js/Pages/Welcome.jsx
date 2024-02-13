@@ -135,8 +135,8 @@ export default function Welcome({ auth }) {
               </svg>
               <span className="inline-block text-base font-medium">Ranking en tiempo real</span>
             </div>
-            <div className="grid grid-cols-2 gap-x-2 mt-3">
-              <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" />
+            <div className="grid grid-cols-1 gap-x-2 mt-3">
+              {/* <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" /> */}
               <Typography className="text-gray-700 text-sm">
                 Cada vez que registres los resultados de un partido, el ranking se actualizará automáticamente.
                 Así, siempre tendrás la clasificación más reciente, manteniendo la emoción en cada partido.
@@ -154,11 +154,11 @@ export default function Welcome({ auth }) {
               </svg>
               <span className="inline-block text-base font-medium">Invita a tus compañeros</span>
             </div>
-            <div className="grid grid-cols-2 gap-x-2 mt-3">
+            <div className="grid grid-cols-1 gap-x-2 mt-3">
               <Typography className="text-gray-700 text-sm">
                 Invita a tus compañeros de pádel, por whatsapp, email o por dónde quieras. <br /> !Solo tendrás que enviarles en enlace del torneo! Así de fácil.
               </Typography>
-              <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" />
+              {/* <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" /> */}
             </div>
           </div>
         </section>
