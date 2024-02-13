@@ -31,6 +31,11 @@ class Tournament extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function games()
+    {
+        return $this->hasMany(Game::class);
+    }
+
     public function ranking()
     {
         $ranking = DB::table('users')

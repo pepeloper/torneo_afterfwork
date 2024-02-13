@@ -66,6 +66,6 @@ class RegisterUserController extends Controller
 
         Auth::login($user);
 
-        return redirect("/mis-torneos");
+        return redirect("/torneo/{$tournament->id}");
     }
 }

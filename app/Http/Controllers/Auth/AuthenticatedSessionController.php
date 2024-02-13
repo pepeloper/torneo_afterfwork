@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $squad = $request->user()->squads->first();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->to("/mis-torneos");
     }
 
     /**

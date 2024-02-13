@@ -244,7 +244,7 @@ export default function Show({ tournament, ranking }) {
                       if (index > -1) {
                         data.users[index].name = e.target.value
                       } else {
-                        data.users.push({ id: user.id, name: e.target.value})
+                        data.users.push({ id: user.id, name: e.target.value })
                       }
                       return { ...data };
                     })
@@ -255,6 +255,10 @@ export default function Show({ tournament, ranking }) {
                 )}
 
                 <Button className="mt-6" type="submit" color="light-green" variant="gradient" fullWidth ripple>Guardar jugadores</Button>
+                <Button className="mt-3" type="button" variant="text" fullWidth ripple onClick={() => {
+                  setShowEditTournamentModal(false);
+                  setData('users', []);
+                }}>Volver</Button>
               </form>
             </div>
           </Dialog>

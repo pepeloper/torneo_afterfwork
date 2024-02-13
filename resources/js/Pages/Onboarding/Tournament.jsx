@@ -75,18 +75,16 @@ export default function Welcome({ players, courts }) {
     <>
       <Head title="Bienvenido" />
 
-      <header className="text-gray-50 px-4 pt-7 pb-10 flex flex-col items-start bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
-        <Link href={route('index')} className="mx-auto -m-1.5 p-1.5 flex items-center space-x-2">
-          <span className="sr-only">Americano Padel</span>
-          <ApplicationLogo className="w-10 h-10" />
-          <p className="uppercase font-black text-xl">torneospadel.app</p>
-        </Link>
-        <h1 className="mt-9 text-[28px] font-black leading-7 uppercase">
-          Torneo americano
-        </h1>
+      <header className="text-gray-50 bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
+        <div className="max-w-2xl mx-auto w-full flex flex-col items-start px-4 pt-7 pb-10">
+          <ApplicationLogo />
+          <h1 className="mt-9 text-[28px] font-black leading-7 uppercase">
+            Torneo americano
+          </h1>
+        </div>
       </header>
-      <main className="">
-        <section className="flex -space-x-3 -mt-6 px-4">
+      <main className="max-w-2xl mx-auto">
+        <section className="container mx-auto flex -space-x-3 -mt-6 px-4">
           {playersArray.map(u => <AppAvatar key={u.id} user={u} className="border-2 border-white hover:z-10 focus:z-10" />)}
         </section>
         <section className="px-4 mt-5">

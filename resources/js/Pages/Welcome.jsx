@@ -23,21 +23,19 @@ export default function Welcome({ auth }) {
     <>
       <Head title="Bienvenido" />
 
-      <header className="text-gray-50 px-4 pt-7 pb-16 flex flex-col items-center bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
-        <Link href={route('index')} className="-m-1.5 p-1.5 flex items-center space-x-2">
-          <span className="sr-only">Americano Padel</span>
-          <ApplicationLogo className="w-10 h-10" />
-          <p className="uppercase font-black text-xl">torneospadel.app</p>
-        </Link>
-        <h1 className="mt-7 text-[28px] font-black leading-7 uppercase text-center">
-          Organiza torneos <br /> americanos de padel
-        </h1>
-        <h2 className="mt-3 font-semibold text-sm text-center">
-          Un Americano es un torneo de varios partidos cambiando de compañeros donde nos cruzaremos con todos los participantes en un circuito con puntuación
-        </h2>
+      <header className="text-gray-50 bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
+        <div className="max-w-2xl mx-auto w-full flex flex-col items-start px-4 pt-7 pb-16">
+          <ApplicationLogo />
+          <h1 className="mx-auto mt-7 text-[28px] font-black leading-7 uppercase text-center">
+            Organiza torneos <br /> americanos de padel
+          </h1>
+          <h2 className="mt-3 font-semibold text-sm text-center">
+            Un Americano es un torneo de varios partidos cambiando de compañeros donde nos cruzaremos con todos los participantes en un circuito con puntuación
+          </h2>
+        </div>
       </header>
       <main className="">
-        <section className="flex -mt-8 overflow-x-auto gap-x-2.5 pb-4 scroll-px-3 snap-x px-4">
+        <section className="max-w-5xl mx-auto flex -mt-8 overflow-x-auto gap-x-2.5 pb-4 scroll-px-3 snap-x px-4">
           <div className="snap-start rounded-md shadow-card border border-white bg-[#f2f2f2] p-4 text-gray-900 w-full min-w-[160px] space-y-3.5">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M20 20H4V4" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -73,52 +71,57 @@ export default function Welcome({ auth }) {
             <span className="inline-block text-base font-medium">Gratis, sin ningún coste</span>
           </div>
         </section>
-        <section className="px-4 border-t border-b py-7 mt-3 bg-white">
-          <Typography variant="h4">¡Crea tu primer torneo!</Typography>
-          <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
-            <div>
-              <InputLabel value="¿Cuántas personas vais a jugar?" />
+        <section className="px-4 border-t border-b py-7 mt-3 bg-white ">
+          <div className="max-w-xl mx-auto">
+            <Typography variant="h4">¡Crea tu primer torneo!</Typography>
+            <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
+              <div>
+                <InputLabel value="¿Cuántas personas vais a jugar?" />
 
-              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 4 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 4,
-                    courts: 1,
-                  };
-                  setData({ ...data, ...newData });
-                }}>4</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 8 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 8,
-                    courts: 2,
-                  };
-                  setData({ ...data, ...newData });
-                }}>8</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 12 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 12,
-                    courts: 3,
-                  };
-                  setData({ ...data, ...newData });
-                }}>12</Button>
-              </ButtonGroup>
-            </div>
+                <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 4 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 4,
+                      courts: 1,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>4</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 8 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 8,
+                      courts: 2,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>8</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 12 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 12,
+                      courts: 3,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>12</Button>
+                </ButtonGroup>
+              </div>
 
-            <div>
-              <InputLabel value="¿En cuántas pistas vais a jugar?" />
+              <div>
+                <InputLabel value="¿En cuántas pistas vais a jugar?" />
 
-              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
-              </ButtonGroup>
-              {data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en {data.number_of_players == 4 ? '1' : data.number_of_players === 8 ? '2' : '3'} {data.courts === 1 ? 'pista' : 'pistas'}</Typography>}
-            </div>
+                <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
+                </ButtonGroup>
+                {data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en {data.number_of_players == 4 ? '1' : data.number_of_players === 8 ? '2' : '3'} {data.courts === 1 ? 'pista' : 'pistas'}</Typography>}
+              </div>
 
-            <Button type="submit" variant="gradient" color="light-green" fullWidth disabled={data.name === '' || (data.number_of_players > 4 && data.courts === null)}>Organizar torneo</Button>
-          </form>
+              <Button type="submit" variant="gradient" color="light-green" fullWidth disabled={data.name === '' || (data.number_of_players > 4 && data.courts === null)}>Organizar torneo</Button>
+              <Link href="/login" className="mt-3 inline-block w-full">
+                <Button type="button" variant="outlined" color="light-green" fullWidth className="">Iniciar sesión</Button>
+              </Link>
+            </form>
+          </div>
         </section>
-        <section className="px-4 mt-4 pb-7">
+        <section className="max-w-2xl mx-auto px-4 mt-4 pb-7">
           <Typography className="text-light-green-800 font-medium">Simplifica la organización</Typography>
           <Typography variant="h4" className="text-gray-900 leading-7">Organiza torneos de una manera sencilla e intuitiva</Typography>
           <Typography className="mt-1 text-gray-700 text-sm font-normal">
