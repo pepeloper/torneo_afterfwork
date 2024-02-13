@@ -108,8 +108,8 @@ export default function Welcome({ auth }) {
 
                 <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
                   <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
-                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
-                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
+                  <Button disabled={ data.number_of_players === 4 } type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
+                  <Button disabled={ data.number_of_players === 8 || data.number_of_players === 4  } type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
                 </ButtonGroup>
                 {data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en {data.number_of_players == 4 ? '1' : data.number_of_players === 8 ? '2' : '3'} {data.courts === 1 ? 'pista' : 'pistas'}</Typography>}
               </div>

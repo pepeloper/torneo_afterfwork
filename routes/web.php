@@ -144,7 +144,22 @@ Route::get('/', function () {
 })->name('index');
 
 Route::get('/torneo-{players}-jugadores-{courts}-pistas', function ($players, $courts) {
-    // TODO: LANDING
+    if (!collect([4, 8, 12])->contains($players)) {
+        return redirect('/');
+    }
+
+    if ($players == 4 && ($courts !== null && $courts != 1)) {
+        return redirect('/');
+    }
+
+    if ($players == 8 && !collect([1, 2])->contains($courts)) {
+        return redirect('/');
+    }
+
+    if ($players == 12 && !collect([1, 2, 3])->contains($courts)) {
+        return redirect('/');
+    }
+
     return Inertia::render('Onboarding/Tournament', [
         'players' => $players,
         'courts' => $courts,
