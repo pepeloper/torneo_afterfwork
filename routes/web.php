@@ -45,21 +45,16 @@ Route::get('/crear-torneo-{number}-jugadores', function ($number) {
         return redirect('/');
     }
 
-    return Inertia::render('Onboarding', [
-        'players' => $number,
-    ]);
+    $court = ($number === 4) ? 1 : (($number === 8) ? 2 : 3);
+    return redirect("/torneo-{$number}-jugadores-{$court}-pistas");
 })->name('onboarding');
 
 Route::get('/crear-torneo', function () {
-    return Inertia::render('Onboarding', [
-        'players' => null,
-    ]);
+    return redirect("/");
 })->name('onboarding.create');
 
 Route::get('/organizar-torneo', function () {
-    return Inertia::render('Onboarding', [
-        'players' => null,
-    ]);
+    return redirect("/");
 })->name('onboarding.organize');
 
 Route::get('/crear-torneo-{number}-jugadores/jugadores', function ($number, Request $request) {
@@ -79,11 +74,8 @@ Route::get('/crear-torneo-{number}-jugadores/jugadores', function ($number, Requ
         return redirect('/');
     }
 
-    return Inertia::render('Onboarding/Players', [
-        'name' => $request->query('name'),
-        'number_of_players' => $number,
-        'courts' => $request->query('courts'),
-    ]);
+    $court = ($number === 4) ? 1 : (($number === 8) ? 2 : 3);
+    return redirect("/torneo-{$number}-jugadores-{$court}-pistas");
 })->name('onboarding.players');
 
 Route::post('/crear-torneo-{number}-jugadores', [RegisterUserController::class, 'store'])->name('onboarding.store');
