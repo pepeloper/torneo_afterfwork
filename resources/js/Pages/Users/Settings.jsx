@@ -1,18 +1,19 @@
 import AppLayout from "@/Layouts/AppLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { Button, Typography } from "@material-tailwind/react";
 import AppAvatar from "@/Components/AppAvatar";
 
-export default function Settings({ user, squad }) {
+export default function Settings({ user }) {
 
   const { post } = useForm();
+  const urlPrev = usePage().props.urlPrev;
 
 
   const header = (
     <>
       <div className="flex space-x-0.5">
-        <Link href={route('squads.show', { squad })} className="mt-2">
+        <Link href={urlPrev ?? route('tournaments.list')} className="mt-2">
           <ChevronLeftIcon className="w-6 h-6" />
         </Link>
         <div>

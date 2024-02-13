@@ -21,7 +21,7 @@ export default withMT({
     },
     extend: {
       fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         // light mode
@@ -94,6 +94,7 @@ export default withMT({
         "dark-tremor-input": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
         "dark-tremor-card": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
         "dark-tremor-dropdown": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "card": "0 0 2.5px 0 rgb(0 0 0 / 0.25)",
       },
       borderRadius: {
         "tremor-small": "0.375rem",

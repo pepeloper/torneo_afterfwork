@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('games', function (Blueprint $table) {
-            $table->unsignedBigInteger('squad_id')->nullable()->after('id');
-            $table->unsignedBigInteger('tournament_id')->after('squad_id');
+        Schema::table('tournaments', function (Blueprint $table) {
+            $table->string('name')->nullable()->change();
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('games', function (Blueprint $table) {
-            $table->dropColumn('squad_id');
-            $table->dropColumn('tournament_id');
+        Schema::table('tournaments', function (Blueprint $table) {
+            //
         });
     }
 };

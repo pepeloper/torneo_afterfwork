@@ -38,9 +38,13 @@ export default function Show({ squad, invitation }) {
       <AppLayout header={header}>
         <div className="px-6 py-5">
           <Typography variant="paragraph">
-            Has recibido una invitación para el grupo de padel {squad.name}, crea una contraseña para tu cuenta y así podrás acceder a los torneos
+            Has recibido una invitación para el grupo de padel {squad.name}, inicia sesión o crea tu cuenta para poder acceder al torneo.
+          </Typography>
+          <Typography variant="small">
+            Puedes jugar y ver los datos del torneo sin crear una cuenta, pero no podrás añadir resultados
           </Typography>
 
+          <Typography variant="h5">Crea tu cuenta</Typography>
           <form onSubmit={submit} className="mt-5">
             <div>
               <InputLabel htmlFor="email" value="Correo electrónico" />
@@ -97,6 +101,8 @@ export default function Show({ squad, invitation }) {
               </Button>
             </div>
           </form>
+
+          <Typography variant="h5">Inicia sesión</Typography>
         </div>
       </AppLayout>
     </>

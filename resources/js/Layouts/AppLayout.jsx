@@ -4,7 +4,7 @@ import classNames from "classnames";
 import CookieConsent from "react-cookie-consent";
 
 export default function AppLayout({ children, header }) {
-  const { auth, squad } = usePage().props
+  const { auth } = usePage().props
   const currentRoute = route().current();
 
   return (
@@ -21,11 +21,8 @@ export default function AppLayout({ children, header }) {
         {
           auth.user ?
             <>
-              <Link href={route('squads.show', { squad })}>
+              <Link href={route('tournaments.list')}>
                 <HomeIcon className={classNames('w-6', { 'text-light-green-700': !["users.show", "users.settings"].includes(currentRoute), 'text-gray-600': ["users.show", "users.settings"].includes(currentRoute) })} />
-              </Link>
-              <Link href={route('users.show', { squad })}>
-                <UserGroupIcon className={classNames('w-6', { 'text-light-green-700': currentRoute === "users.show", 'text-gray-600': currentRoute !== "users.show" })} />
               </Link>
               <Link href={route('users.settings')}>
                 <Cog6ToothIcon className={classNames('w-6', { 'text-light-green-700': currentRoute === "users.settings", 'text-gray-600': currentRoute !== "users.settings" })} />

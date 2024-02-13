@@ -1,151 +1,169 @@
-import { Link, Head, useForm } from '@inertiajs/react';
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useState } from "react";
+import { Link, Head, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import CookieConsent from "react-cookie-consent";
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import InputLabel from "@/Components/InputLabel";
-import InputError from "@/Components/InputError";
-import TextInput from "@/Components/TextInput";
 import classNames from "classnames";
+import Footer from "@/Components/Landing/Footer";
 
 export default function Welcome({ auth }) {
 
-  const { user } = auth;
-
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   const { data, setData, get, processing, errors, reset } = useForm({
-    name: '',
-    number_of_players: null,
-    courts: null,
+    number_of_players: 8,
+    courts: 2,
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (typeof fathom !== "undefined") fathom.trackEvent('onboarding next');
-    get(route('onboarding.players', { number: data.number_of_players }));
+    if (typeof fathom !== "undefined") fathom.trackEvent('onboarding started');
+    router.visit(route('onboarding.tournament', { players: data.number_of_players, courts: data.courts }));
   }
 
   return (
     <>
       <Head title="Bienvenido" />
 
-      <div className="bg-white">
-        <header className="inset-x-0 top-0 z-50">
-          <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-            <div className="flex lg:flex-1">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Americano Padel</span>
-                <ApplicationLogo className="w-10 h-10" />
-              </a>
-            </div>
-            <div className="flex lg:hidden">
-              <button
-                type="button"
-                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-                onClick={() => setMobileMenuOpen(true)}
-              >
-                <span className="sr-only">Open main menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-              {auth.user ?
-                <Link href={route('squads.show', { squad: auth.user.squads[0] })} className="text-sm font-semibold leading-6 text-gray-900">
-                  Mis torneos <span aria-hidden="true">&rarr;</span>
-                </Link>
-                : <Link href={route('login')} onClick={() => fathom && fathom.trackEvent('login')} className="text-sm font-semibold leading-6 text-gray-900">
-                  Iniciar sesión <span aria-hidden="true">&rarr;</span>
-                </Link>}
-            </div>
-          </nav>
-          <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-            <div className="fixed inset-0 z-50" />
-            <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-              <div className="flex items-center justify-between">
-                <a href="#" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Americano Padel</span>
-                  <ApplicationLogo className="w-10 h-10" />
-                </a>
-                <button
-                  type="button"
-                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="sr-only">Close menu</span>
-                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-6 flow-root">
-                <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="py-6">
-                    {auth.user ?
-                      <Link href={route('squads.show', { squad: auth.user.squads[0] })} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                        Mis torneos
-                      </Link>
-                      : <Link href={route('login')} onClick={() => fathom && fathom.trackEvent('login')} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                        Iniciar sesión
-                      </Link>}
-                  </div>
-                </div>
-              </div>
-            </Dialog.Panel>
-          </Dialog>
-        </header>
-        <main className="px-4">
-          <h1 className="mt-3 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-6xl uppercase">
-            Organiza tu torneo <br /> de padel americano
+      <header className="text-gray-50 bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/images/landing.png')" }}>
+        <div className="max-w-2xl mx-auto w-full flex flex-col items-start px-4 pt-7 pb-16">
+          <ApplicationLogo />
+          <h1 className="mx-auto mt-7 text-[28px] font-black leading-7 uppercase text-center">
+            Organiza torneos <br /> americanos de padel
           </h1>
-          <p className="mt-3 md:text-lg leading-7 text-gray-600 sm:max-w-md lg:max-w-none">
-            Un Americano es un torneo de varios partidos cambiando de pista y de compañeros donde nos cruzaremos con todos los participantes en un circuito con puntuación
-          </p>
-          <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
-            <div>
-              <InputLabel value="¿Cuántas personas vais a jugar?" />
+          <h2 className="mt-3 font-semibold text-sm text-center">
+            Un Americano es un torneo de varios partidos cambiando de compañeros donde nos cruzaremos con todos los participantes en un circuito con puntuación
+          </h2>
+        </div>
+      </header>
+      <main className="">
+        <section className="max-w-5xl mx-auto flex -mt-8 overflow-x-auto gap-x-2.5 pb-4 scroll-px-3 snap-x px-4">
+          <div className="snap-start rounded-md shadow-card border border-white bg-[#f2f2f2] p-4 text-gray-900 w-full min-w-[160px] space-y-3.5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 20H4V4" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M4 16.5L12 9L15 12L19.5 7.5" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="inline-block text-base font-medium">Ranking en tiempo real</span>
+          </div>
+          <div className="snap-start rounded-md shadow-card border border-white bg-[#f2f2f2] p-4 text-gray-900 w-full min-w-[160px] space-y-3.5">
+            <svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 18V17C7 14.2386 9.23858 12 12 12C14.7614 12 17 14.2386 17 17V18" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M1 18V17C1 15.3431 2.34315 14 4 14" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3431 6 9 7.34315 9 9C9 10.6569 10.3431 12 12 12Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M4 14C5.10457 14 6 13.1046 6 12C6 10.8954 5.10457 10 4 10C2.89543 10 2 10.8954 2 12C2 13.1046 2.89543 14 4 14Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M20 14C21.1046 14 22 13.1046 22 12C22 10.8954 21.1046 10 20 10C18.8954 10 18 10.8954 18 12C18 13.1046 18.8954 14 20 14Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
 
-              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 4 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 4,
-                    courts: 1,
-                  };
-                  setData({ ...data, ...newData });
-                }}>4</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 8 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 8,
-                    courts: null,
-                  };
-                  setData({ ...data, ...newData });
-                }}>8</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.number_of_players === 12 })} onClick={() => {
-                  const newData = {
-                    number_of_players: 12,
-                    courts: null,
-                  };
-                  setData({ ...data, ...newData });
-                }}>12</Button>
-              </ButtonGroup>
+            <span className="inline-block text-base font-medium">Invita a tus compañeros</span>
+          </div>
+          <div className="snap-start rounded-md shadow-card border border-white bg-[#f2f2f2] p-4 text-gray-900 w-full min-w-[160px] space-y-3.5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M19.6224 10.3954L18.5247 7.7448L20 6L18 4L16.2647 5.48295L13.5578 4.36974L12.9353 2H10.981L10.3491 4.40113L7.70441 5.51596L6 4L4 6L5.45337 7.78885L4.3725 10.4463L2 11V13L4.40111 13.6555L5.51575 16.2997L4 18L6 20L7.79116 18.5403L10.397 19.6123L11 22H13L13.6045 19.6132L16.2551 18.5155C16.6969 18.8313 18 20 18 20L20 18L18.5159 16.2494L19.6139 13.598L21.9999 12.9772L22 11L19.6224 10.3954Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+
+            <span className="inline-block text-base font-medium">Personaliza tu torneo</span>
+          </div>
+          <div className="snap-start rounded-md shadow-card border border-white bg-[#f2f2f2] p-4 text-gray-900 w-full min-w-[160px] space-y-3.5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 9V7C22 5.89543 21.1046 5 20 5H4C2.89543 5 2 5.89543 2 7V17C2 18.1046 2.89543 19 4 19H12M22 9H6M22 9V13" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M20.9995 16.05C20.3643 15.402 19.4791 15 18.5 15C16.567 15 15 16.567 15 18.5C15 19.4539 15.3816 20.3187 16.0005 20.95M20.9995 16.05C21.6184 16.6813 22 17.5461 22 18.5C22 20.433 20.433 22 18.5 22C17.5209 22 16.6357 21.598 16.0005 20.95M20.9995 16.05L16.0005 20.95" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+
+            <span className="inline-block text-base font-medium">Gratis, sin ningún coste</span>
+          </div>
+        </section>
+        <section className="px-4 border-t border-b py-7 mt-3 bg-white ">
+          <div className="max-w-xl mx-auto">
+            <Typography variant="h4">¡Crea tu primer torneo!</Typography>
+            <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
+              <div>
+                <InputLabel value="¿Cuántas personas vais a jugar?" />
+
+                <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 4 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 4,
+                      courts: 1,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>4</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 8 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 8,
+                      courts: 2,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>8</Button>
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.number_of_players === 12 })} onClick={() => {
+                    const newData = {
+                      number_of_players: 12,
+                      courts: 3,
+                    };
+                    setData({ ...data, ...newData });
+                  }}>12</Button>
+                </ButtonGroup>
+              </div>
+
+              <div>
+                <InputLabel value="¿En cuántas pistas vais a jugar?" />
+
+                <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
+                  <Button type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
+                  <Button disabled={ data.number_of_players === 4 } type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
+                  <Button disabled={ data.number_of_players === 8 || data.number_of_players === 4  } type="button" className={classNames("text-sm border-gray-300 hover:opacity-90 active:opacity-95", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
+                </ButtonGroup>
+                {data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en {data.number_of_players == 4 ? '1' : data.number_of_players === 8 ? '2' : '3'} {data.courts === 1 ? 'pista' : 'pistas'}</Typography>}
+              </div>
+
+              <Button type="submit" variant="gradient" color="light-green" fullWidth disabled={data.name === '' || (data.number_of_players > 4 && data.courts === null)}>Organizar torneo</Button>
+              <Link href="/login" className="mt-3 inline-block w-full">
+                <Button type="button" variant="outlined" color="light-green" fullWidth className="">Iniciar sesión</Button>
+              </Link>
+            </form>
+          </div>
+        </section>
+        <section className="max-w-2xl mx-auto px-4 mt-4 pb-7">
+          <Typography className="text-light-green-800 font-medium">Simplifica la organización</Typography>
+          <Typography variant="h4" className="text-gray-900 leading-7">Organiza torneos de una manera sencilla e intuitiva</Typography>
+          <Typography className="mt-1 text-gray-700 text-sm font-normal">
+            Con nuestra interfaz fácil de usar, organizar torneos americanos de padel es pan comido
+          </Typography>
+          <div>
+            <div className="flex items-center space-x-2 mt-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20H4V4" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 16.5L12 9L15 12L19.5 7.5" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="inline-block text-base font-medium">Ranking en tiempo real</span>
             </div>
-
-            <div>
-              <InputLabel value="¿En cuántas pistas vais a jugar?" />
-
-              <ButtonGroup fullWidth variant="outlined" ripple className="mt-1.5">
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 1 })} onClick={() => setData('courts', 1)}>1</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 2 })} onClick={() => setData('courts', 2)}>2</Button>
-                <Button type="button" className={classNames("text-sm border-gray-300", { "bg-gray-800 text-white": data.courts === 3 })} onClick={() => setData('courts', 3)}>3</Button>
-              </ButtonGroup>
-              { data.number_of_players && <Typography variant="small" className="mt-0.5" color="gray">Para {data.number_of_players} jugadores te recomendamos jugar en 3 pistas</Typography>}
+            <div className="grid grid-cols-2 gap-x-2 mt-3">
+              <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" />
+              <Typography className="text-gray-700 text-sm">
+                Cada vez que registres los resultados de un partido, el ranking se actualizará automáticamente.
+                Así, siempre tendrás la clasificación más reciente, manteniendo la emoción en cada partido.
+              </Typography>
             </div>
-
-
-            <Button type="submit" variant="gradient" color="light-green" fullWidth disabled={data.name === '' || (data.number_of_players > 4 && data.courts === null)}>Siguiente</Button>
-          </form>
-        </main>
-      </div>
+          </div>
+          <div>
+            <div className="flex items-center space-x-2 mt-5">
+              <svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 18V17C7 14.2386 9.23858 12 12 12C14.7614 12 17 14.2386 17 17V18" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M1 18V17C1 15.3431 2.34315 14 4 14" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3431 6 9 7.34315 9 9C9 10.6569 10.3431 12 12 12Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 14C5.10457 14 6 13.1046 6 12C6 10.8954 5.10457 10 4 10C2.89543 10 2 10.8954 2 12C2 13.1046 2.89543 14 4 14Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M20 14C21.1046 14 22 13.1046 22 12C22 10.8954 21.1046 10 20 10C18.8954 10 18 10.8954 18 12C18 13.1046 18.8954 14 20 14Z" stroke="#689F38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="inline-block text-base font-medium">Invita a tus compañeros</span>
+            </div>
+            <div className="grid grid-cols-2 gap-x-2 mt-3">
+              <Typography className="text-gray-700 text-sm">
+                Invita a tus compañeros de pádel, por whatsapp, email o por dónde quieras. <br /> !Solo tendrás que enviarles en enlace del torneo! Así de fácil.
+              </Typography>
+              <div className="w-full h-44 bg-gray-800 rounded-md border border-gray-300" />
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
       <CookieConsent
         location="bottom"
         buttonText="Aceptar"
