@@ -32,9 +32,7 @@ export default function Login({ status, canResetPassword }) {
 
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col">
-          <Link href={route('index')} className="mx-auto">
-            <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-          </Link>
+          <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Accede a tu cuenta
           </h2>
@@ -97,8 +95,11 @@ export default function Login({ status, canResetPassword }) {
               >
                 Iniciar sesión
               </Button>
-              <Link href="#" className="text-center w-full mt-3 inline-block text-sm">
-                ¿No tienes cuenta? Regístrate
+              <Link
+                href={route('password.request')}
+                className=" text-center mx-auto block mt-4 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Olvidé mi contraseña
               </Link>
             </div>
           </form>

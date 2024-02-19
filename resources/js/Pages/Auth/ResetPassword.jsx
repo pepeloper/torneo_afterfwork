@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, useForm } from '@inertiajs/react';
+import { Button } from "@material-tailwind/react";
 
 export default function ResetPassword({ token, email }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,7 +31,7 @@ export default function ResetPassword({ token, email }) {
         <GuestLayout>
             <Head title="Reset Password" />
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} className="max-w-xl w-full mx-auto pt-12">
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -40,7 +41,7 @@ export default function ResetPassword({ token, email }) {
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
-                        autoComplete="username"
+                        autoComplete="email"
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
@@ -48,7 +49,7 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Contraseña" />
 
                     <TextInput
                         id="password"
@@ -65,7 +66,7 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirma tu contraseña" />
 
                     <TextInput
                         type="password"
@@ -80,9 +81,9 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Reset Password
-                    </PrimaryButton>
+                    <Button disabled={processing} fullWidth>
+                        Restablecer contraseña
+                    </Button>
                 </div>
             </form>
         </GuestLayout>
